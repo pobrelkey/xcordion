@@ -1,19 +1,19 @@
 package test.concordion;
 
-import java.io.IOException;
-
 import org.concordion.Concordion;
 import org.concordion.api.EvaluatorFactory;
 import org.concordion.api.Resource;
 import org.concordion.api.ResultSummary;
 import org.concordion.internal.ConcordionBuilder;
-import org.concordion.internal.SimpleEvaluatorFactory;
+import org.concordion.internal.OgnlValidatingEvaluator;
+
+import java.io.IOException;
 
 
 public class TestRig {
 
     private Object fixture = null;
-    private EvaluatorFactory evaluatorFactory = new SimpleEvaluatorFactory();
+    private EvaluatorFactory evaluatorFactory = new OgnlValidatingEvaluator.Factory();
     private StubSource stubSource = new StubSource();
 
     public TestRig withFixture(Object fixture) {

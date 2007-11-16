@@ -6,18 +6,22 @@ import ognl.OgnlContext;
 import ognl.OgnlException;
 
 import org.concordion.api.Evaluator;
+import org.concordion.api.EvaluatorFactory;
 import org.concordion.internal.util.Check;
 
-public class OgnlEvaluator implements Evaluator {
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
+public class OgnlPermissiveEvaluator implements Evaluator {
 
     private Object rootObject;
     private final OgnlContext ognlContext = new OgnlContext();
 
 
-    public OgnlEvaluator() {
+    public OgnlPermissiveEvaluator() {
     }
 
-    public OgnlEvaluator(Object rootObject) {
+    public OgnlPermissiveEvaluator(Object rootObject) {
         this.rootObject = rootObject;
     }
 
@@ -33,6 +37,15 @@ public class OgnlEvaluator implements Evaluator {
         } catch (OgnlException e) {
             throw invalidExpressionException(e);
         }
+    }
+
+    public String[] verifyIterationExpression(String expression) {
+        Pattern pattern = Pattern.compile("(#.+?) *: *(.+)");
+        Matcher matcher = pattern.matcher(expression);
+        if (!matcher.matches()) {
+            throw new RuntimeException("The expression for a \"verifyRows\" should be of the form: #var : collectionExpr");
+        }
+        return new String[]{matcher.group(1), matcher.group(2)};
     }
 
     private InvalidExpressionException invalidExpressionException(OgnlException e) {
@@ -82,4 +95,12 @@ public class OgnlEvaluator implements Evaluator {
     public Object getVariable(String variableName) {
         return ognlContext.get(variableName);
     }
+
+    static public class Factory implements EvaluatorFactory {
+        public Evaluator createEvaluator(Object fixture) {
+            return new OgnlPermissiveEvaluator(fixture);
+        }
+    }
+
+
 }

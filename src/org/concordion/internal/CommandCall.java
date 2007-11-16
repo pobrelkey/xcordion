@@ -7,6 +7,8 @@ import org.concordion.api.Resource;
 import org.concordion.api.ResultRecorder;
 import org.concordion.internal.util.Check;
 
+import java.util.List;
+
 /**
  * Nested CommandCalls form an abstract syntax tree. (The XML is the concrete
  * syntax tree.)
@@ -18,14 +20,14 @@ public class CommandCall {
     private final String expression;
     private final Resource resource;
     private Element element;
-    
+
     public CommandCall(Command command, Element element, String expression, Resource resource) {
         this.command = command;
         this.element = element;
         this.expression = expression;
         this.resource = resource;
     }
-    
+
     public void setUp(Evaluator evaluator, ResultRecorder resultRecorder) {
         command.setUp(this, evaluator, resultRecorder);
     }
@@ -65,9 +67,25 @@ public class CommandCall {
     public boolean hasChildCommands() {
         return !children.isEmpty();
     }
-    
+
     public void setElement(Element element) {
         Check.notNull(element, "element is null");
         this.element = element;
+    }
+
+    public CommandCall clone() {
+        if (!children.isEmpty()) {
+            throw new IllegalStateException("cannot duplicate a CommandCall with children");
+        }
+        return new CommandCall(command, element, expression, resource);
+    }
+
+    public void setChildren(List<CommandCall> commandCalls) {
+        children.clear();
+        children.appendAll(commandCalls);
+    }
+
+    public void removeChildren() {
+        children.clear();
     }
 }

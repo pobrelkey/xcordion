@@ -7,4 +7,6 @@ public interface Evaluator {
     void setVariable(String variableName, Object value);
 
     Object evaluate(String expression);
+
+    String[] verifyIterationExpression(String expression);
 }

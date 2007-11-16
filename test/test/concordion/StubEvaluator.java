@@ -18,6 +18,10 @@ public class StubEvaluator implements Evaluator, EvaluatorFactory {
         return evaluationResult;
     }
 
+    public String[] verifyIterationExpression(String expression) {
+        throw new UnsupportedOperationException("Not yet implemented!");
+    }
+
     public Object getVariable(String variableName) {
         return null;
     }

@@ -1,12 +1,12 @@
 package org.concordion.api;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import nu.xom.Attribute;
 import nu.xom.Elements;
 import nu.xom.Node;
 import nu.xom.Nodes;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class Element {
 
@@ -73,7 +73,7 @@ public final class Element {
         }
         return childNodes;
     }
-    
+
     public void moveChildrenTo(Element element) {
         for (Node childNode : getChildNodes()) {
             childNode.detach();
@@ -94,7 +94,7 @@ public final class Element {
     public String getAttributeValue(String name) {
         return xomElement.getAttributeValue(name);
     }
-    
+
     private boolean isBlank() {
         return getText().trim().equals("");
     }
@@ -149,7 +149,7 @@ public final class Element {
     public String getLocalName() {
         return xomElement.getLocalName();
     }
-    
+
     public boolean isNamed(String name) {
         return getLocalName().equals(name);
     }
@@ -163,7 +163,7 @@ public final class Element {
         descendants.remove(this);
         return descendants.toArray(new Element[0]);
     }
-    
+
     public Element[] getChildElements(String name) {
         return wrapXomElements(xomElement.getChildElements(name));
     }
@@ -184,5 +184,32 @@ public final class Element {
     public Element getFirstDescendantNamed(String name) {
         Element[] descendantElements = getDescendantElements(name);
         return descendantElements.length == 0 ? null : descendantElements[0];
+    }
+
+    public void removeChildren() {
+        xomElement.removeChildren();
+    }
+
+    public Element copy() {
+        return new Element((nu.xom.Element) xomElement.copy());
+    }
+
+    public Element getParent() {
+        Node n = xomElement.getParent();
+        return (n instanceof nu.xom.Element) ? new Element((nu.xom.Element) n) : null;
+    }
+
+    public void insertChildAfter(Element afterWhat, Element toBeInserted) {
+        xomElement.insertChild(toBeInserted.xomElement, xomElement.indexOf(afterWhat.xomElement)+1);
+    }
+
+    public nu.xom.Element getXomElement() {
+        return xomElement;
+    }
+
+    public void appendContent(Element newContent) {
+        for (int i = 0; i < newContent.xomElement.getChildCount(); i++) {
+            xomElement.appendChild(newContent.xomElement.getChild(i).copy());
+        }
     }
 }

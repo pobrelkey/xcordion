@@ -1,10 +1,11 @@
 package org.concordion.internal;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.concordion.api.Evaluator;
 import org.concordion.api.ResultRecorder;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Collection;
 
 public class CommandCallList {
 
@@ -44,5 +45,13 @@ public class CommandCallList {
     
     public CommandCall get(int index) {
         return commandCalls.get(index);
+    }
+
+    public void clear() {
+        commandCalls.clear();
+    }
+
+    public void appendAll(Collection<CommandCall> calls) {
+        commandCalls.addAll(calls);
     }
 }

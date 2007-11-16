@@ -1,11 +1,11 @@
 package spec.examples;
 
+import org.concordion.integration.junit3.ConcordionTestCase;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
-import org.concordion.integration.junit3.ConcordionTestCase;
 
 public class PartialMatchesTest extends ConcordionTestCase {
 
@@ -23,5 +23,14 @@ public class PartialMatchesTest extends ConcordionTestCase {
             }
         }
         return matches;
+    }
+
+    public String getMatchFromResults(Set<String> results, String match) {
+        for (String s : results) {
+            if (s.equals(match)) {
+                return match;
+            }
+        }
+        return null;
     }
 }

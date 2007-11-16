@@ -16,7 +16,7 @@ public class DocumentParser {
 
     private final CommandFactory commandFactory;
     private final Announcer<DocumentParsingListener> listeners = Announcer.to(DocumentParsingListener.class);
-    
+
     public DocumentParser(CommandFactory commandFactory) {
         this.commandFactory = commandFactory;
     }
@@ -28,7 +28,7 @@ public class DocumentParser {
     public void removeDocumentParsingListener(DocumentParsingListener listener) {
         listeners.removeListener(listener);
     }
-    
+
     private void announceBeforeParsing(Document document) {
         listeners.announce().beforeParsing(document);
     }
@@ -46,7 +46,7 @@ public class DocumentParser {
         for (int i = 0; i < xomElement.getAttributeCount(); i++) {
             Attribute attribute = xomElement.getAttribute(i);
             String namespaceURI = attribute.getNamespaceURI();
-            
+
             if (!namespaceURI.equals("")) {
                 String commandName = attribute.getLocalName();
                 Command command = createCommand(namespaceURI, commandName);
@@ -60,7 +60,7 @@ public class DocumentParser {
                 }
             }
         }
-        
+
         Elements children = xomElement.getChildElements();
         for (int i = 0; i < children.size(); i++) {
             generateCommandCallTree(children.get(i), parentCommandCall, resource);
@@ -74,4 +74,9 @@ public class DocumentParser {
     private Command createCommand(String namespaceURI, String commandName) {
         return commandFactory.createCommand(namespaceURI, commandName);
     }
+
+    public void generateCommandCallTree(Element element, CommandCall parentCommandCall, Resource resource) {
+        generateCommandCallTree(element.getXomElement(), parentCommandCall, resource);
+    }
+
 }

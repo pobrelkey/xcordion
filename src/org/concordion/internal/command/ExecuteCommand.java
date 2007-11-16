@@ -2,26 +2,12 @@ package org.concordion.internal.command;
 
 import org.concordion.api.Evaluator;
 import org.concordion.api.ResultRecorder;
-import org.concordion.internal.CommandCall;
-import org.concordion.internal.CommandCallList;
-import org.concordion.internal.ExpressionValidator;
-import org.concordion.internal.Row;
-import org.concordion.internal.TableSupport;
+import org.concordion.internal.*;
 
 public class ExecuteCommand extends AbstractCommand {
 
-    private ExpressionValidator expressionValidator;
-    
-    public void setExpressionValidator(ExpressionValidator expressionValidator) {
-        this.expressionValidator = expressionValidator;
-    }
-    
     @Override
     public void execute(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
-        if (expressionValidator != null) {
-            expressionValidator.validate(commandCall.getExpression());
-        }
-        
         Strategy strategy;
         if (commandCall.getElement().isNamed("table")) {
             strategy = new TableStrategy();
@@ -53,11 +39,9 @@ public class ExecuteCommand extends AbstractCommand {
             TableSupport tableSupport = new TableSupport(commandCall);
             Row[] detailRows = tableSupport.getDetailRows();
             for (Row detailRow : detailRows) {
-                if (detailRow.getCells().length != tableSupport.getColumnCount()) {
-                    throw new RuntimeException("The <table> 'execute' command only supports rows with an equal number of columns.");
-                }
                 commandCall.setElement(detailRow.getElement());
-                tableSupport.copyCommandCallsTo(detailRow);
+                //tableSupport.copyCommandCallsTo(detailRow);
+                commandCall.setChildren(tableSupport.getCommandCallsFor(detailRow));
                 commandCall.execute(evaluator, resultRecorder);
             }
         }

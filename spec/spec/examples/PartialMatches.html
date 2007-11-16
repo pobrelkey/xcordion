@@ -20,7 +20,7 @@
         <tr><td>john.lennon</td></tr>
         <tr><td>ringo.starr</td></tr>
         <tr><td>george.harrison</td></tr>
-        <tr><td>paul.mcartney</td></tr>
+        <tr><td>paul.mccartney</td></tr>
     </table>
 
     <p>Searching for "<b concordion:set="#searchString">arr</b>" will return:</p>
@@ -31,7 +31,35 @@
         <tr><td>ringo.starr</td></tr>
     </table>        
 
-</div>    
+    <p>Here's a table with gratuitous use of COLSPAN and ROWSPAN:</p>
+
+    <table concordion:execute="#results = getSearchResultsFor(#searchString)">
+        <thead>
+            <tr>
+                <th concordion:set="#searchString">Search String</th>
+                <th concordion:assertEquals="getMatchFromResults(#results, #TEXT)" colspan="3">Possible Matches</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>ar</td>
+                <td>george.harrison</td>
+                <td>paul.mccartney</td>
+                <td rowspan="3">ringo.starr</td>
+            </tr>
+            <tr>
+               <td>s</td>
+               <td colspan="2">george.harrison</td>
+            </tr>
+            <tr>
+                <td>n</td>
+                <td>george.harrison</td>
+                <td>john.lennon</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
 
 </body>
 </html>

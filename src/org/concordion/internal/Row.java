@@ -1,32 +1,25 @@
 package org.concordion.internal;
 
+import org.concordion.api.Element;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.concordion.api.Element;
-
 public class Row {
     private final Element rowElement;
+    private final Element[] cells;
 
     Row(Element rowElement) {
+        this(rowElement, getCellsFromElement(rowElement));
+    }
+
+    Row(Element rowElement, Element[] cells) {
+        this.cells = cells;
         assert rowElement.isNamed("tr");
         this.rowElement = rowElement;
     }
-    
-    public boolean isHeaderRow() {
-        for (Element cell : getCells()) {
-            if (cell.isNamed("td")) {
-                return false;
-            }
-        }
-        return getCells().length > 0;
-    }
 
-    public Element getElement() {
-        return rowElement;
-    }
-    
-    public Element[] getCells() {
+    private static Element[] getCellsFromElement(Element rowElement) {
         List<Element> cells = new ArrayList<Element>();
         for (Element childElement : rowElement.getChildElements()){
             if (childElement.isNamed("td") || childElement.isNamed("th")) {
@@ -35,14 +28,22 @@ public class Row {
         }
         return cells.toArray(new Element[0]);
     }
-
-    public int getIndexOfCell(Element cell) {
-        Element[] cells = getCells();
-        for (int i = 0; i < cells.length; i++) {
-            if (cells[i].equals(cell)) {
-                return i;
+    
+    public boolean isHeaderRow() {
+        for (Element cell : cells) {
+            if (cell.isNamed("td")) {
+                return false;
             }
         }
-        return -1;
+        return cells.length > 0;
     }
+
+    public Element getElement() {
+        return rowElement;
+    }
+    
+    public Element[] getCells() {
+        return cells;
+    }
+
 }

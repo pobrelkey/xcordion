@@ -1,31 +1,30 @@
 package org.concordion.internal.listener;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import ognl.OgnlException;
-
 import org.concordion.api.Element;
 import org.concordion.internal.command.ThrowableCaughtEvent;
 import org.concordion.internal.command.ThrowableCaughtListener;
 import org.concordion.internal.util.Check;
 import org.concordion.internal.util.IOUtil;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class ThrowableRenderer implements ThrowableCaughtListener {
 
     private static final String TOGGLING_SCRIPT_RESOURCE_PATH = "/org/concordion/internal/resource/visibility-toggler.js";
     private long buttonId = 0;
     private Set<Element> rootElementsWithScript = new HashSet<Element>();
-    
+
     public void throwableCaught(ThrowableCaughtEvent event) {
         buttonId++;
-        
+
         Element element = event.getElement();
         element.appendChild(expectedSpan(element));
         element.appendChild(exceptionMessage(event.getThrowable().getMessage()));
         element.appendChild(stackTraceTogglingButton());
         element.appendChild(stackTrace(event.getThrowable(), event.getExpression()));
-        
+
         ensureDocumentHasTogglingScript(element);
     }
 
@@ -41,7 +40,7 @@ public class ThrowableRenderer implements ThrowableCaughtListener {
             Element script = new Element("script").addAttribute("type", "text/javascript");
             head.prependChild(script);
             script.appendText(IOUtil.readResourceAsString(TOGGLING_SCRIPT_RESOURCE_PATH, "UTF-8"));
-            
+
         }
     }
 
@@ -68,16 +67,16 @@ public class ThrowableRenderer implements ThrowableCaughtListener {
                 .addAttribute("onclick", "javascript:toggleStackTrace('" + buttonId + "')")
                 .addAttribute("value", "View Stack");
     }
-    
+
     private Element stackTrace(Throwable t, String expression) {
         Element stackTrace = new Element("span").addStyleClass("stackTrace");
         stackTrace.setId("stackTrace" + buttonId);
-        
+
         Element p = new Element("p")
                 .appendText("While evaluating expression: ");
         p.appendChild(new Element("code").appendText(expression));
         stackTrace.appendChild(p);
-        
+
         recursivelyAppendStackTrace(t, stackTrace);
 
         return stackTrace;
@@ -99,7 +98,7 @@ public class ThrowableRenderer implements ThrowableCaughtListener {
                 recursivelyAppendStackTrace(reason, stackTrace);
             }
         }
-        
+
         if (t.getCause() != null) {
             recursivelyAppendStackTrace(t.getCause(), stackTrace);
         }

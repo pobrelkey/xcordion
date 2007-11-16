@@ -1,11 +1,11 @@
 package org.concordion.internal;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.concordion.api.Result;
 import org.concordion.api.ResultRecorder;
 import org.concordion.api.ResultSummary;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SummarizingResultRecorder implements ResultRecorder, ResultSummary {
 
@@ -14,7 +14,7 @@ public class SummarizingResultRecorder implements ResultRecorder, ResultSummary 
     public void record(Result result) {
         recordedResults.add(result);
     }
-    
+
     public void assertIsSatisfied() {
         if (hasFailures()) {
             throw new AssertionError("Specification has failure(s). See output HTML for details.");
