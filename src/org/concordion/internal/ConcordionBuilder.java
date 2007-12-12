@@ -27,7 +27,7 @@ public class ConcordionBuilder {
     private EvaluatorFactory evaluatorFactory = new OgnlValidatingEvaluator.Factory();
     private SpecificationCommand specificationCommand = new SpecificationCommand();
     private AssertEqualsCommand assertEqualsCommand = new AssertEqualsCommand();
-    private ExecuteCommand executeCommand = new ExecuteCommand();
+    private ExecuteCommand executeCommand = new ExecuteCommand(documentParser);
     private VerifyRowsCommand verifyRowsCommand = new VerifyRowsCommand(documentParser);
     private File baseOutputDir;
     private ThrowableCaughtPublisher throwableListenerPublisher = new ThrowableCaughtPublisher();

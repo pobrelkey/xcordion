@@ -31,7 +31,7 @@ public class VerifyRowsCommand extends AbstractCommand {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void verify(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
+    public void execute(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
         // TODO: make less ugly
         String[] splitIterationExpression = evaluator.verifyIterationExpression(commandCall.getExpression());
         String loopVariableName = splitIterationExpression[0];
@@ -66,7 +66,7 @@ public class VerifyRowsCommand extends AbstractCommand {
 
     private class TableStrategy implements Strategy {
         public void execute(CommandCall commandCall, Iterable<Object> iterable, Evaluator evaluator, String loopVariableName, ResultRecorder resultRecorder) {
-            TableSupport tableSupport = new TableSupport(commandCall);
+            TableSupport tableSupport = new TableSupport(commandCall, documentParser);
 
             Row[] detailRows = tableSupport.getDetailRows();
 
@@ -81,7 +81,7 @@ public class VerifyRowsCommand extends AbstractCommand {
                     announceSurplusRow(detailRow.getElement());
                 }
                 //tableSupport.copyCommandCallsTo(detailRow);
-                commandCall.setChildren(tableSupport.getCommandCallsFor(detailRow));
+                commandCall.setChildren(tableSupport.getCommandCallsFor(detailRow, commandCall.getResource()));
                 commandCall.getChildren().setUp(evaluator, resultRecorder);
                 commandCall.getChildren().execute(evaluator, resultRecorder);
                 commandCall.getChildren().verify(evaluator, resultRecorder);

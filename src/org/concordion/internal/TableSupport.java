@@ -1,6 +1,7 @@
 package org.concordion.internal;
 
 import org.concordion.api.Element;
+import org.concordion.api.Resource;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,9 +16,11 @@ public class TableSupport {
     private ArrayList<Row> rows = new ArrayList<Row>();
     private ArrayList<CommandCall> commandsByColumn = new ArrayList<CommandCall>();
     private HashMap<Element, CommandCall> commandsByElement;
+    private DocumentParser documentParser;
 
-    public TableSupport(CommandCall tableCommandCall) {
+    public TableSupport(CommandCall tableCommandCall, DocumentParser documentParser) {
         assert tableCommandCall.getElement().isNamed("table");
+        this.documentParser = documentParser;
         this.tableCommandCall = tableCommandCall;
         parseTableStructure(tableCommandCall.getElement());
         populateCommandCallByColumnList();
@@ -125,7 +128,7 @@ public class TableSupport {
         return result.toArray(new Row[result.size()]);
     }
 
-    public List<CommandCall> getCommandCallsFor(Row detailRow) {
+    public List<CommandCall> getCommandCallsFor(Row detailRow, Resource rowResource) {
         ArrayList<CommandCall> calls = new ArrayList<CommandCall>();
         Element[] cells = detailRow.getCells();
         for (int columnIndex = 0; columnIndex < cells.length || columnIndex < commandsByColumn.size(); columnIndex++) {
@@ -136,12 +139,24 @@ public class TableSupport {
             } else {
                 cell = detailRow.addCell();
             }
+
+            CommandCall resultCall = null;
             if (commandsByElement.containsKey(cell)) {
-                calls.add(commandsByElement.get(cell));
+                resultCall = commandsByElement.get(cell);
             } else if (cellCall != null) {
-                calls.add(new CommandCall(cellCall.getCommand(), cell, cellCall.getExpression(), cellCall.getResource()));
+                resultCall = new CommandCall(cellCall.getCommand(), cell, cellCall.getExpression(), cellCall.getResource());
             }
 
+            if (resultCall != null) {
+                for (Element child : cell.getChildElements()) {
+                    documentParser.generateCommandCallTree(child, resultCall, resultCall.getResource());
+                }
+                calls.add(resultCall);
+            } else {
+                CommandCall dummy = new CommandCall(null, cell, "", rowResource);
+                documentParser.generateCommandCallTree(cell, dummy, rowResource);
+                calls.addAll(dummy.getChildren());                
+            }
         }
         return calls;
     }

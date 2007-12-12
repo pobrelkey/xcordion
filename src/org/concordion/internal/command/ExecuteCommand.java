@@ -6,6 +6,12 @@ import org.concordion.internal.*;
 
 public class ExecuteCommand extends AbstractCommand {
 
+    private DocumentParser documentParser;
+
+    public ExecuteCommand(DocumentParser documentParser) {
+        this.documentParser = documentParser;
+    }
+
     @Override
     public void execute(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
         Strategy strategy;
@@ -36,12 +42,12 @@ public class ExecuteCommand extends AbstractCommand {
     private class TableStrategy implements Strategy {
 
         public void execute(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
-            TableSupport tableSupport = new TableSupport(commandCall);
+            TableSupport tableSupport = new TableSupport(commandCall, documentParser);
             Row[] detailRows = tableSupport.getDetailRows();
             for (Row detailRow : detailRows) {
                 commandCall.setElement(detailRow.getElement());
                 //tableSupport.copyCommandCallsTo(detailRow);
-                commandCall.setChildren(tableSupport.getCommandCallsFor(detailRow));
+                commandCall.setChildren(tableSupport.getCommandCallsFor(detailRow, commandCall.getResource()));
                 commandCall.execute(evaluator, resultRecorder);
             }
         }

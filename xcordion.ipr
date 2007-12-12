@@ -31,6 +31,8 @@
       <entry name="?*.html" />
       <entry name="?*.dtd" />
       <entry name="?*.tld" />
+      <entry name="?*.css" />
+      <entry name="?*.js" />
     </wildcardResourcePatterns>
   </component>
   <component name="DependenciesAnalyzeManager">

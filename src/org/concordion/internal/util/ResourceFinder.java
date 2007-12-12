@@ -19,7 +19,7 @@ public class ResourceFinder {
         } else {
             String trailingPart = relativePath;
             String leadingPart = "/" + baseClass.getName().replace('.', '/');
-            leadingPart = leadingPart.substring(0, leadingPart.lastIndexOf('.'));
+            leadingPart = leadingPart.substring(0, leadingPart.lastIndexOf('/'));
             while (true) {
                 if (trailingPart.startsWith("./")) {
                     trailingPart = trailingPart.substring(2);

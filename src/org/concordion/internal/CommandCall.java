@@ -41,7 +41,7 @@ public class CommandCall {
     }
 
     public void appendChild(CommandCall commandNode) {
-        children.append(commandNode);
+        children.add(commandNode);
     }
 
     public CommandCallList getChildren() {
@@ -82,7 +82,7 @@ public class CommandCall {
 
     public void setChildren(List<CommandCall> commandCalls) {
         children.clear();
-        children.appendAll(commandCalls);
+        children.addAll(commandCalls);
     }
 
     public void removeChildren() {

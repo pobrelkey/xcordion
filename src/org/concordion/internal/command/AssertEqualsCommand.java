@@ -34,7 +34,7 @@ public class AssertEqualsCommand extends AbstractCommand {
     
     @Override
     public void verify(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
-        Check.isFalse(commandCall.hasChildCommands(), "Nesting commands inside an 'assertEquals' is not supported");
+        //Check.isFalse(commandCall.hasChildCommands(), "Nesting commands inside an 'assertEquals' is not supported");
         
         Element element = commandCall.getElement();
         
