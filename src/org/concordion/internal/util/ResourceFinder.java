@@ -12,12 +12,12 @@ public class ResourceFinder {
         this.baseClass = baseClass;
     }
 
-    public String getResourceAsString(String relativeResourcePathOfXmlFile) {
+    private URL getResourceAsURL(String relativePath) {
         URL resourceUrl;
-        if (relativeResourcePathOfXmlFile.startsWith("/")) {
-            resourceUrl = baseClass.getResource(relativeResourcePathOfXmlFile);
+        if (relativePath.startsWith("/")) {
+            resourceUrl = baseClass.getResource(relativePath);
         } else {
-            String trailingPart = relativeResourcePathOfXmlFile;
+            String trailingPart = relativePath;
             String leadingPart = "/" + baseClass.getName().replace('.', '/');
             leadingPart = leadingPart.substring(0, leadingPart.lastIndexOf('.'));
             while (true) {
@@ -37,6 +37,11 @@ public class ResourceFinder {
             }
             resourceUrl = baseClass.getResource(leadingPart + '/' + trailingPart);
         }
+        return resourceUrl;
+    }
+
+    public String getResourceAsString(String relativeResourcePathOfXmlFile) {
+        URL resourceUrl = getResourceAsURL(relativeResourcePathOfXmlFile);
 
         StringBuffer result = new StringBuffer();
         try {
@@ -54,5 +59,14 @@ public class ResourceFinder {
 
         return result.toString();
     }
+
+    public boolean canFind(String relativePath) {
+        try {
+            return getResourceAsURL(relativePath).getContent() != null;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 
 }

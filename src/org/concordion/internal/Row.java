@@ -3,11 +3,12 @@ package org.concordion.internal;
 import org.concordion.api.Element;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Row {
     private final Element rowElement;
-    private final Element[] cells;
+    private Element[] cells;
 
     Row(Element rowElement) {
         this(rowElement, getCellsFromElement(rowElement));
@@ -44,6 +45,17 @@ public class Row {
     
     public Element[] getCells() {
         return cells;
+    }
+
+    public Element addCell() {
+        Element cell = new Element("td");
+        rowElement.appendChild(cell);
+
+        ArrayList<Element> newCells = new ArrayList<Element>(Arrays.asList(cells));
+        newCells.add(cell);
+        cells = newCells.toArray(new Element[newCells.size()]);
+
+        return cell;
     }
 
 }

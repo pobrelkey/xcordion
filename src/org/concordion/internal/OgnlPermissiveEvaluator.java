@@ -75,14 +75,12 @@ public class OgnlPermissiveEvaluator implements Evaluator {
     }
 
     public void setVariable(String expression, Object value) {
-        if (!expression.startsWith("#")) {
-            throw new InvalidExpressionException("Variable for concordion:set must start"
-                    + " with '#'\n (i.e. change concordion:set=\"" + expression + "\" to concordion:set=\"#" + expression + "\".");
-        }
-        if (expression.contains("=")) {
+        if (expression.contains("=") || expression.contains(",") || expression.contains("(")) {
             evaluate(expression);
-        } else {
+        } else if (expression.startsWith("#")) {
             putVariable(expression.substring(1), value);
+        } else {
+            putVariable(expression, value);
         }
     }
 

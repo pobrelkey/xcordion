@@ -100,9 +100,10 @@ public class VerifyRowsCommand extends AbstractCommand {
         public void execute(CommandCall commandCall, Iterable<Object> iterable, Evaluator evaluator, String loopVariableName, ResultRecorder resultRecorder) {
             Element element = commandCall.getElement();
             Element prototype = element.copy();
-            element.removeChildren();
+            element.removeChildren();                                                                             
             for (Object loopVar : iterable) {
                 Element newContent = prototype.copy();
+                element.getParent().insertChildAfter(element, newContent);
 
                 // TODO: fugly!
                 CommandCall dummy = new CommandCall(VerifyRowsCommand.this, newContent, commandCall.getExpression(), commandCall.getResource());
@@ -110,12 +111,8 @@ public class VerifyRowsCommand extends AbstractCommand {
                 CommandCall duplicateOfThisVerifyRowsCommand = dummy.getChildren().get(0);
                 CommandCallList children = duplicateOfThisVerifyRowsCommand.getChildren();
 
-                element.appendContent(newContent);
-
                 evaluator.setVariable(loopVariableName, loopVar);
-                children.setUp(evaluator, resultRecorder);
-                children.execute(evaluator, resultRecorder);
-                children.verify(evaluator, resultRecorder);
+                children.processSequentially(evaluator, resultRecorder);
             }
         }
     }

@@ -1,8 +1,8 @@
 <project name="concordion" default="build" basedir=".">
 
-    <property name="version" value="1.0.0"/>
-    <property name="productName" value="concordion"/>
-    <property name="ProductName" value="Concordion"/>
+    <property name="version" value="1.0.0-1"/>
+    <property name="productName" value="xcordion"/>
+    <property name="ProductName" value="XCordion"/>
 
     <property name="dir.build" value="${basedir}/build"/>
     <property name="dir.classes" value="${dir.build}/classes"/>

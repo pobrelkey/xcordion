@@ -128,13 +128,20 @@ public class TableSupport {
     public List<CommandCall> getCommandCallsFor(Row detailRow) {
         ArrayList<CommandCall> calls = new ArrayList<CommandCall>();
         Element[] cells = detailRow.getCells();
-        for (int columnIndex = 0; columnIndex < cells.length && columnIndex < commandsByColumn.size(); columnIndex++) {
-            CommandCall cellCall = commandsByColumn.get(columnIndex);
-            if (cellCall != null) {
-                calls.add(new CommandCall(cellCall.getCommand(), cells[columnIndex], cellCall.getExpression(), cellCall.getResource()));
-            } else if (commandsByElement.containsKey(cells[columnIndex])) {
-                calls.add(commandsByElement.get(cells[columnIndex]));
+        for (int columnIndex = 0; columnIndex < cells.length || columnIndex < commandsByColumn.size(); columnIndex++) {
+            CommandCall cellCall = (columnIndex < commandsByColumn.size()) ? commandsByColumn.get(columnIndex) : null;
+            Element cell;
+            if (columnIndex < cells.length) {
+                cell = cells[columnIndex];
+            } else {
+                cell = detailRow.addCell();
             }
+            if (commandsByElement.containsKey(cell)) {
+                calls.add(commandsByElement.get(cell));
+            } else if (cellCall != null) {
+                calls.add(new CommandCall(cellCall.getCommand(), cell, cellCall.getExpression(), cellCall.getResource()));
+            }
+
         }
         return calls;
     }

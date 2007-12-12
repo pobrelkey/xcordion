@@ -207,9 +207,4 @@ public final class Element {
         return xomElement;
     }
 
-    public void appendContent(Element newContent) {
-        for (int i = 0; i < newContent.xomElement.getChildCount(); i++) {
-            xomElement.appendChild(newContent.xomElement.getChild(i).copy());
-        }
-    }
 }

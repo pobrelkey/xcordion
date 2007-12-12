@@ -1,6 +1,7 @@
 package org.concordion.internal.command;
 
 import org.concordion.internal.CommandCall;
+import org.concordion.internal.CommandCallList;
 import org.concordion.internal.util.Check;
 import org.concordion.internal.util.Announcer;
 import org.concordion.api.Evaluator;
@@ -17,10 +18,17 @@ public class AssertBooleanCommand extends AbstractCommand {
     }
 
     public void verify(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
-        Check.isFalse(commandCall.hasChildCommands(), "Nesting commands inside an 'assert" + (expected ? "True" : "False") + "' is not supported");
+        //Check.isFalse(commandCall.hasChildCommands(), "Nesting commands inside an 'assert" + (expected ? "True" : "False") + "' is not supported");
+        CommandCallList childCommands = commandCall.getChildren();
 
         Element element = commandCall.getElement();
+        childCommands.setUp(evaluator, resultRecorder);
+        childCommands.execute(evaluator, resultRecorder);
+        evaluate(commandCall, evaluator, resultRecorder, element);
+        childCommands.verify(evaluator, resultRecorder);
+    }
 
+    private void evaluate(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder, Element element) {
         Object actualObject = evaluator.evaluate(commandCall.getExpression());
         boolean actual;
         if (actualObject instanceof Boolean) {
