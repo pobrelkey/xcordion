@@ -28,7 +28,7 @@ public class SummarizingResultRecorder implements ResultRecorder, ResultSummary 
         return getExceptionCount() > 0;
     }
 
-    private boolean hasFailures() {
+    public boolean hasFailures() {
         return getFailureCount() > 0;
     }
 

@@ -33,9 +33,10 @@ public class ConcordionBuilder {
     private ThrowableCaughtPublisher throwableListenerPublisher = new ThrowableCaughtPublisher();
     private AssertBooleanCommand assertTrueCommand = new AssertBooleanCommand(true);
     private AssertBooleanCommand assertFalseCommand = new AssertBooleanCommand(false);
-    ThrowableCatchingDecorator throwableCatchingDecorator = new ThrowableCatchingDecorator();
+    private ThrowableCatchingDecorator throwableCatchingDecorator = new ThrowableCatchingDecorator();
 
     {
+        baseOutputDir = getBaseOutputDir();
         throwableListenerPublisher.addThrowableListener(new ThrowableRenderer());
 
         withApprovedCommand("", "specification", specificationCommand);
@@ -116,9 +117,14 @@ public class ConcordionBuilder {
         return this;
     }
 
+    public ConcordionBuilder withBaseOutputDir(File baseOutputDir) {
+        this.baseOutputDir = baseOutputDir;
+        return this;
+    }
+
     public Concordion build() {
         if (target == null) {
-            target = new FileTarget(getBaseOutputDir());
+            target = new FileTarget(baseOutputDir);
         }
         XMLParser xmlParser = new XMLParser();
 
@@ -131,7 +137,7 @@ public class ConcordionBuilder {
         return new Concordion(specificationLocator, specificationReader, evaluatorFactory);
     }
 
-    private File getBaseOutputDir() {
+    public File getBaseOutputDir() {
         if (baseOutputDir != null) {
             return baseOutputDir;
         }

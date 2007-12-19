@@ -6,6 +6,8 @@ public interface ResultSummary {
 
     boolean hasExceptions();
 
+    boolean hasFailures();
+
     long getSuccessCount();
     
     long getFailureCount();
