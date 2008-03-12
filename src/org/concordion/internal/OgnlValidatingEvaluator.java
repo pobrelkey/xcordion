@@ -47,27 +47,27 @@ public class OgnlValidatingEvaluator extends OgnlPermissiveEvaluator {
         }
     }
 
-    private static void validateEvaluationExpression(String expression) {
+    public static void validateEvaluationExpression(String expression) {
 
         // myProp
         // myMethod()
-        // myMethod(var1)
-        // myMethod(var1, var2)
+        // myMethod(#var1)
+        // myMethod(#var1, #var2)
         // #var
         // #var.myProp
         // #var.myProp.myProp
         // #var = myProp
         // #var = myMethod()
-        // #var = myMethod(var1)
-        // #var = myMethod(var1, var2)
+        // #var = myMethod(#var1)
+        // #var = myMethod(#var1, #var2)
         // #var ? 's1' : 's2'
         // myProp ? 's1' : 's2'
         // myMethod() ? 's1' : 's2'
-        // myMethod(var1) ? 's1' : 's2'
-        // myMethod(var1, var2) ? 's1' : 's2'
+        // myMethod(#var1) ? 's1' : 's2'
+        // myMethod(#var1, #var2) ? 's1' : 's2'
 
-        String METHOD_CALL_PARAMS = METHOD_NAME_PATTERN + "\\(" + RHS_VARIABLE_PATTERN + "(, " + RHS_VARIABLE_PATTERN + ")*\\)";
-        String METHOD_CALL_NO_PARAMS = METHOD_NAME_PATTERN + "\\(\\)";
+        String METHOD_CALL_PARAMS = METHOD_NAME_PATTERN + " *\\( *" + RHS_VARIABLE_PATTERN + "(, *" + RHS_VARIABLE_PATTERN + " *)*\\)";
+        String METHOD_CALL_NO_PARAMS = METHOD_NAME_PATTERN + " *\\( *\\)";
         String TERNARY_STRING_RESULT = " \\? " + STRING_PATTERN + " : " + STRING_PATTERN;
 
         List<String> regexs = new ArrayList<String>();
@@ -76,14 +76,15 @@ public class OgnlValidatingEvaluator extends OgnlPermissiveEvaluator {
         regexs.add(METHOD_CALL_PARAMS);
         regexs.add(RHS_VARIABLE_PATTERN);
         regexs.add(LHS_VARIABLE_PATTERN + "\\." + PROPERTY_NAME_PATTERN);
-        regexs.add(LHS_VARIABLE_PATTERN + " = " + PROPERTY_NAME_PATTERN);
-        regexs.add(LHS_VARIABLE_PATTERN + " = " + METHOD_CALL_NO_PARAMS);
-        regexs.add(LHS_VARIABLE_PATTERN + " = " + METHOD_CALL_PARAMS);
+        regexs.add(LHS_VARIABLE_PATTERN + " *= *" + PROPERTY_NAME_PATTERN);
+        regexs.add(LHS_VARIABLE_PATTERN + " *= *" + METHOD_CALL_NO_PARAMS);
+        regexs.add(LHS_VARIABLE_PATTERN + " *= *" + METHOD_CALL_PARAMS);
         regexs.add(LHS_VARIABLE_PATTERN + TERNARY_STRING_RESULT);
         regexs.add(PROPERTY_NAME_PATTERN + TERNARY_STRING_RESULT);
         regexs.add(METHOD_CALL_NO_PARAMS + TERNARY_STRING_RESULT);
         regexs.add(METHOD_CALL_PARAMS + TERNARY_STRING_RESULT);
 
+        expression = expression.trim();
         for (String regex : regexs) {
             if (expression.matches(regex)) {
                 return;
@@ -92,7 +93,7 @@ public class OgnlValidatingEvaluator extends OgnlPermissiveEvaluator {
         throw new RuntimeException("Invalid expression [" + expression + "]");
     }
 
-    private static void validateSetVariableExpression(String expression) {
+    public static void validateSetVariableExpression(String expression) {
         // #var                         VARIABLE
         // #var = myProp                VARIABLE = PROPERTY
         // #var = myMethod()            VARIABLE = METHOD
@@ -102,10 +103,11 @@ public class OgnlValidatingEvaluator extends OgnlPermissiveEvaluator {
         List<String> regexs = new ArrayList<String>();
         regexs.add(RHS_VARIABLE_PATTERN);
         regexs.add(LHS_VARIABLE_PATTERN + "\\." + PROPERTY_NAME_PATTERN);
-        regexs.add(LHS_VARIABLE_PATTERN + " = " + PROPERTY_NAME_PATTERN);
-        regexs.add(LHS_VARIABLE_PATTERN + " = " + METHOD_NAME_PATTERN + "\\(\\)");
-        regexs.add(LHS_VARIABLE_PATTERN + " = " + METHOD_NAME_PATTERN + "\\(" + RHS_VARIABLE_PATTERN + "(, " + RHS_VARIABLE_PATTERN + ")*\\)");
+        regexs.add(LHS_VARIABLE_PATTERN + " *= *" + PROPERTY_NAME_PATTERN);
+        regexs.add(LHS_VARIABLE_PATTERN + " *= *" + METHOD_NAME_PATTERN + " *\\( *\\)");
+        regexs.add(LHS_VARIABLE_PATTERN + " *= *" + METHOD_NAME_PATTERN + " *\\( *" + RHS_VARIABLE_PATTERN + "(, *" + RHS_VARIABLE_PATTERN + " *)*\\)");
 
+        expression = expression.trim();
         for (String regex : regexs) {
             if (expression.matches(regex)) {
                 return;

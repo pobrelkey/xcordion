@@ -1,6 +1,6 @@
 <project name="concordion" default="build" basedir=".">
 
-    <property name="version" value="1.0.0-1"/>
+    <property name="version" value="1.1.0-1"/>
     <property name="productName" value="xcordion"/>
     <property name="ProductName" value="XCordion"/>
 
@@ -13,7 +13,6 @@
     <path id="compile.classpath">
         <fileset dir="lib" includes="*.jar" excludes="*-src.jar"/>
     </path>
-
 
     <target name="build"
         description="Builds everything from scratch"
@@ -95,12 +94,12 @@
     </target>
 
     <target name="dist" depends="clean,build">
-        <zip destfile="${dir.dist}/${productName}-${version}.zip"
-                basedir="."
-                compress="true">
-            <exclude name="dist/*-src.zip"/>
-            <exclude name="build/**"/>
-            <exclude name="bin/**"/>
+        <zip destfile="${dir.dist}/${productName}-${version}.zip" compress="true">
+        	<zipfileset prefix="${productName}-${version}" dir=".">
+	            <exclude name="dist/*-src.zip"/>
+	            <exclude name="build/**"/>
+	            <exclude name="bin/**"/>
+        	</zipfileset>
         </zip>
     </target>
 

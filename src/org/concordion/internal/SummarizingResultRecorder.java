@@ -4,6 +4,7 @@ import org.concordion.api.Result;
 import org.concordion.api.ResultRecorder;
 import org.concordion.api.ResultSummary;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +53,15 @@ public class SummarizingResultRecorder implements ResultRecorder, ResultSummary 
 
     public long getSuccessCount() {
         return getCount(Result.SUCCESS);
+    }
+
+    public void print(PrintStream out) {
+        out.print("Successes: " + getSuccessCount());
+        out.print(", Failures: " + getFailureCount());
+        if (hasExceptions()) {
+            out.print(", Exceptions: " + getExceptionCount());
+        }
+        out.println("\n");
     }
 
 }

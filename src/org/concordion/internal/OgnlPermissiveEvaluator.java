@@ -91,6 +91,9 @@ public class OgnlPermissiveEvaluator implements Evaluator {
     }
 
     public Object getVariable(String variableName) {
+        if (variableName.startsWith("#")) {
+            variableName = variableName.substring(1);
+        }
         return ognlContext.get(variableName);
     }
 

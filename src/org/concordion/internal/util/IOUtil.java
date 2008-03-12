@@ -25,7 +25,7 @@ public class IOUtil {
 
     public static String readResourceAsString(String resourcePath, String charsetName) {
         try {
-            InputStream in = Object.class.getResourceAsStream(resourcePath);
+            InputStream in = getResourceAsStream(resourcePath);
             if (in == null) {
                 throw new IOException("Resource not found");
             }
@@ -48,5 +48,10 @@ public class IOUtil {
             sb.append(line).append("\n");
         }
         return sb.toString();
+    }
+
+    public static InputStream getResourceAsStream(String resourcePath) {
+        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+        return contextClassLoader.getResourceAsStream(resourcePath.replaceFirst("/", ""));
     }
 }

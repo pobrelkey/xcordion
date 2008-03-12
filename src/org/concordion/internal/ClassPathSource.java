@@ -5,23 +5,20 @@ import java.io.InputStream;
 
 import org.concordion.api.Resource;
 import org.concordion.api.Source;
+import org.concordion.internal.util.IOUtil;
 
 public class ClassPathSource implements Source {
 
     public InputStream createInputStream(Resource resource) throws IOException {
-        InputStream inputStream = getResourceAsStream(resource);
+        InputStream inputStream = IOUtil.getResourceAsStream(resource.getPath());
         if (inputStream == null) {
             throw new IOException("Resource '" + resource.getPath() + "' not found");
         }
         return inputStream;
     }
 
-    private InputStream getResourceAsStream(Resource resource) {
-        return getClass().getResourceAsStream(resource.getPath());
-    }
-
     public boolean canFind(Resource resource) {
-        InputStream stream = getResourceAsStream(resource);
+        InputStream stream = IOUtil.getResourceAsStream(resource.getPath());
         if (stream == null) {
             return false;
         }

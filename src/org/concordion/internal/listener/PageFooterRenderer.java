@@ -12,6 +12,7 @@ import org.concordion.api.Resource;
 import org.concordion.api.Target;
 import org.concordion.internal.command.SpecificationProcessingEvent;
 import org.concordion.internal.command.SpecificationProcessingListener;
+import org.concordion.internal.util.IOUtil;
 
 public class PageFooterRenderer implements SpecificationProcessingListener {
 
@@ -71,6 +72,7 @@ public class PageFooterRenderer implements SpecificationProcessingListener {
     }
 
     private void copyLogoToTarget() {
+        IOUtil.getResourceAsStream(SOURCE_LOGO_RESOURCE_PATH);
         InputStream inputStream = getClass().getResourceAsStream(SOURCE_LOGO_RESOURCE_PATH);
         try {
             target.copyTo(TARGET_LOGO_RESOURCE, inputStream);

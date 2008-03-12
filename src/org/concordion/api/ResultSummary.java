@@ -1,5 +1,7 @@
 package org.concordion.api;
 
+import java.io.PrintStream;
+
 public interface ResultSummary {
 
     void assertIsSatisfied();
@@ -13,4 +15,6 @@ public interface ResultSummary {
     long getFailureCount();
 
     long getExceptionCount();
+
+    void print(PrintStream out);
 }
