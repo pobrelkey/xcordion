@@ -44,6 +44,8 @@ public class ConcordionBuilder {
         withApprovedCommand(NAMESPACE_CONCORDION_2007, "set", new SetCommand());
         withApprovedCommand(NAMESPACE_CONCORDION_2007, "assertEquals", assertEqualsCommand);
         withApprovedCommand(NAMESPACE_CONCORDION_2007, "verifyRows", verifyRowsCommand);
+        withApprovedCommand(NAMESPACE_CONCORDION_2007, "assertFalse", assertFalseCommand);
+        withApprovedCommand(NAMESPACE_CONCORDION_2007, "assertTrue",  assertTrueCommand);
 
         withApprovedCommand(NAMESPACE_CONCORDION_OLD, "execute", executeCommand);
         withApprovedCommand(NAMESPACE_CONCORDION_OLD, "set", new SetCommand());

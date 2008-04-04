@@ -5,12 +5,12 @@ import org.concordion.api.Element;
 public class AssertBooleanFailureEvent {
     private Element element;
     private String expression;
-    private boolean expected;
+    private Object actual;
 
-    public AssertBooleanFailureEvent(Element element, String expression, boolean expected) {
+    public AssertBooleanFailureEvent(Element element, String expression, Object actual) {
         this.element = element;
         this.expression = expression;
-        this.expected = expected;
+        this.actual = actual;
     }
 
     public Element getElement() {
@@ -21,8 +21,7 @@ public class AssertBooleanFailureEvent {
         return expression;
     }
 
-    public boolean getExpected() {
-        return expected;
+    public Object getActual() {
+        return actual;
     }
-
 }

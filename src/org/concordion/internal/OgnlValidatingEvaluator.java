@@ -65,6 +65,9 @@ public class OgnlValidatingEvaluator extends OgnlPermissiveEvaluator {
         // myMethod() ? 's1' : 's2'
         // myMethod(#var1) ? 's1' : 's2'
         // myMethod(#var1, #var2) ? 's1' : 's2'
+        // #var.myMethod()
+        // #var.myMethod(#var1)
+        // #var.myMethod(#var1, #var2)
 
         String METHOD_CALL_PARAMS = METHOD_NAME_PATTERN + " *\\( *" + RHS_VARIABLE_PATTERN + "(, *" + RHS_VARIABLE_PATTERN + " *)*\\)";
         String METHOD_CALL_NO_PARAMS = METHOD_NAME_PATTERN + " *\\( *\\)";
@@ -83,6 +86,8 @@ public class OgnlValidatingEvaluator extends OgnlPermissiveEvaluator {
         regexs.add(PROPERTY_NAME_PATTERN + TERNARY_STRING_RESULT);
         regexs.add(METHOD_CALL_NO_PARAMS + TERNARY_STRING_RESULT);
         regexs.add(METHOD_CALL_PARAMS + TERNARY_STRING_RESULT);
+        regexs.add(LHS_VARIABLE_PATTERN + "\\." + METHOD_CALL_NO_PARAMS);
+        regexs.add(LHS_VARIABLE_PATTERN + "\\." + METHOD_CALL_PARAMS);
 
         expression = expression.trim();
         for (String regex : regexs) {

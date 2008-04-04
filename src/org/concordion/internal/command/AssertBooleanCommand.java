@@ -44,7 +44,7 @@ public class AssertBooleanCommand extends AbstractCommand {
             announceSuccess(element);
         } else {
             resultRecorder.record(Result.FAILURE);
-            announceFailure(element, commandCall.getExpression());
+            announceFailure(element, commandCall.getExpression(), actual);
         }
     }
 
@@ -60,8 +60,8 @@ public class AssertBooleanCommand extends AbstractCommand {
         listeners.announce().successReported(new AssertBooleanSuccessEvent(element));
     }
 
-    private void announceFailure(Element element, String expression) {
-        listeners.announce().failureReported(new AssertBooleanFailureEvent(element, expression, expected));
+    private void announceFailure(Element element, String expression, Object actual) {
+        listeners.announce().failureReported(new AssertBooleanFailureEvent(element, expression, actual));
     }
 
 

@@ -19,20 +19,18 @@ public class AssertBooleanResultRenderer implements AssertBooleanListener {
         Element spanExpected = new Element("del");
         spanExpected.addStyleClass("expected");
         element.moveChildrenTo(spanExpected);
-        element.appendChild(spanExpected);
         spanExpected.appendNonBreakingSpaceIfBlank();
 
         Element spanActual = new Element("ins");
         spanActual.addStyleClass("actual");
-        spanActual.appendText(event.getExpression());
+        spanActual.appendText("== " + event.getActual());
         spanActual.appendNonBreakingSpaceIfBlank();
 
-        Element kicker = new Element("b");
-        kicker.appendText(" != " + event.getExpected());
-        spanActual.appendChild(kicker);
-
-        element.appendText("\n");
+//        element.appendText("\n");
+        element.appendChild(spanExpected);
+//        element.appendText("\n");
         element.appendChild(spanActual);
+//        element.appendText("\n");
 
     }
 }
