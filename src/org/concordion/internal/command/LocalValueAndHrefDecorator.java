@@ -1,6 +1,8 @@
 package org.concordion.internal.command;
 
 import org.concordion.internal.CommandCall;
+import org.concordion.internal.util.XmlFunctional;
+import static org.concordion.internal.util.XmlFunctional.*;
 import org.concordion.api.Evaluator;
 import org.concordion.api.ResultRecorder;
 
@@ -13,7 +15,7 @@ public class LocalValueAndHrefDecorator extends AbstractCommandDecorator {
         String href = null;
         try {
             evaluator.setVariable("#VALUE", commandCall.getElement().getText());
-            href = commandCall.getElement().getAttributeValue("href");
+            href = getElementOrChildsAttributeValue(commandCall.getElement(), "href");
             if (href != null) {
                 evaluator.setVariable("#HREF", href);
             }
@@ -25,4 +27,5 @@ public class LocalValueAndHrefDecorator extends AbstractCommandDecorator {
             }
         }
     }
+
 }
