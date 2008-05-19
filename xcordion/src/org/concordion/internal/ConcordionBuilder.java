@@ -34,6 +34,7 @@ public class ConcordionBuilder {
     private AssertBooleanCommand assertTrueCommand = new AssertBooleanCommand(true);
     private AssertBooleanCommand assertFalseCommand = new AssertBooleanCommand(false);
     private ThrowableCatchingDecorator throwableCatchingDecorator = new ThrowableCatchingDecorator();
+    private SetCommand setCommand = new SetCommand();
 
     {
         baseOutputDir = getBaseOutputDir();
@@ -41,14 +42,14 @@ public class ConcordionBuilder {
 
         withApprovedCommand("", "specification", specificationCommand);
         withApprovedCommand(NAMESPACE_CONCORDION_2007, "execute", executeCommand);
-        withApprovedCommand(NAMESPACE_CONCORDION_2007, "set", new SetCommand());
+        withApprovedCommand(NAMESPACE_CONCORDION_2007, "set", setCommand);
         withApprovedCommand(NAMESPACE_CONCORDION_2007, "assertEquals", assertEqualsCommand);
         withApprovedCommand(NAMESPACE_CONCORDION_2007, "verifyRows", verifyRowsCommand);
         withApprovedCommand(NAMESPACE_CONCORDION_2007, "assertFalse", assertFalseCommand);
         withApprovedCommand(NAMESPACE_CONCORDION_2007, "assertTrue",  assertTrueCommand);
 
         withApprovedCommand(NAMESPACE_CONCORDION_OLD, "execute", executeCommand);
-        withApprovedCommand(NAMESPACE_CONCORDION_OLD, "set", new SetCommand());
+        withApprovedCommand(NAMESPACE_CONCORDION_OLD, "set", setCommand);
         withApprovedCommand(NAMESPACE_CONCORDION_OLD, "assertEquals", assertEqualsCommand);
 
         withApprovedCommand(NAMESPACE_CONCORDION_OLD, "assertFalse", assertFalseCommand);
@@ -150,5 +151,8 @@ public class ConcordionBuilder {
         return new File(outputPath);
     }
 
-
+    public ConcordionBuilder withValueGetter(SetCommand.ValueGetter valueGetter) {
+        setCommand.setGetter(valueGetter);
+        return this;
+    }
 }
