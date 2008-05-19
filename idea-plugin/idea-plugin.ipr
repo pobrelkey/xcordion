@@ -225,10 +225,10 @@
   <component name="ProjectFileVersion" converted="true" />
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Xcordion-plugin.iml" filepath="$PROJECT_DIR$/Xcordion-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/idea-plugin.iml" filepath="$PROJECT_DIR$/idea-plugin.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="IDEA 7757 (1)" project-jdk-type="IDEA JDK">
+  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="IDEA 7757" project-jdk-type="IDEA JDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="ResourceManagerContainer">
@@ -249,5 +249,15 @@
     <mapping directory="" vcs="" />
   </component>
   <component name="WebServicesPlugin" addRequiredLibraries="true" />
+  <component name="libraryTable">
+    <library name="TestJars">
+      <CLASSES>
+        <root url="jar:///Users/dev/trunk/netstream/libraries/compilation-jars/jmock-2.4.0.jar!/" />
+        <root url="jar:///Users/dev/trunk/netstream/libraries/compilation-jars/jmock-junit4-2.4.0.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+  </component>
 </project>
 

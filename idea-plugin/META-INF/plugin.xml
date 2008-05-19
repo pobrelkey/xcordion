@@ -1,0 +1,13 @@
+<!DOCTYPE idea-plugin PUBLIC "Plugin/DTD" "http://plugins.intellij.net/plugin.dtd">
+<idea-plugin>
+  <name>Xcordion plugin</name>
+  <description>Xcordion plugin</description>
+  <version>0.9</version>
+  <vendor>Self</vendor>
+  <idea-version since-build="7757"/>
+    <project-components>
+        <component>
+            <implementation-class>org.xcordion.ide.intellij.XcordionProject</implementation-class>
+        </component>
+    </project-components>
+</idea-plugin>
