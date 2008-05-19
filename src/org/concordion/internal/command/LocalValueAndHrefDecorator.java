@@ -15,9 +15,11 @@ public class LocalValueAndHrefDecorator extends AbstractCommandDecorator {
         String href = null;
         try {
             evaluator.setVariable("#VALUE", commandCall.getElement().getText());
-            href = getElementOrChildsAttributeValue(commandCall.getElement(), "href");
-            if (href != null) {
-                evaluator.setVariable("#HREF", href);
+            if (commandCall.getExpression().indexOf("HREF") != -1) {
+                href = getElementOrChildsAttributeValue(commandCall.getElement(), "href");
+                if (href != null) {
+                    evaluator.setVariable("#HREF", href);
+                }
             }
             runnable.run();
         } finally {
