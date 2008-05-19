@@ -58,7 +58,7 @@ public class ConcordionBuilder {
         withApprovedCommand(NAMESPACE_CONCORDION_OLD, "insertText",  new InsertTextCommand());
 
         withApprovedCommand(NAMESPACE_CONCORDION_ANCIENT, "execute", executeCommand);
-        withApprovedCommand(NAMESPACE_CONCORDION_ANCIENT, "param",   new SetCommand());
+        withApprovedCommand(NAMESPACE_CONCORDION_ANCIENT, "param",   setCommand);
         withApprovedCommand(NAMESPACE_CONCORDION_ANCIENT, "verify",  assertEqualsCommand);
 
         withCommandDecorator(throwableCatchingDecorator);
