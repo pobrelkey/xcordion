@@ -33,7 +33,7 @@ public class XcordionProject implements ProjectComponent {
 
     @NonNls
     public String getComponentName() {
-        return "XcordionProjoect";
+        return "XcordionProject";
     }
 
     public void initComponent() {

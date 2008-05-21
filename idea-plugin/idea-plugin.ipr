@@ -31,6 +31,7 @@
       <entry name="?*.html" />
       <entry name="?*.dtd" />
       <entry name="?*.tld" />
+      <entry name="?*MyFirstXcordionSpecTestClass.java" />
     </wildcardResourcePatterns>
   </component>
   <component name="DependenciesAnalyzeManager">
@@ -247,16 +248,21 @@
   </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="" />
+    <mapping directory="$PROJECT_DIR$" vcs="svn" />
   </component>
   <component name="WebServicesPlugin" addRequiredLibraries="true" />
   <component name="libraryTable">
     <library name="TestJars">
       <CLASSES>
-        <root url="jar:///Users/dev/trunk/netstream/libraries/compilation-jars/jmock-2.4.0.jar!/" />
         <root url="jar:///Users/dev/trunk/netstream/libraries/compilation-jars/jmock-junit4-2.4.0.jar!/" />
+        <root url="jar:///Users/dev/trunk/netstream/libraries/compilation-jars/jmock-2.4.0.jar!/" />
+        <root url="jar:///Users/dev/trunk/netstream/libraries/compilation-jars/hamcrest-core-1.1.jar!/" />
+        <root url="jar:///Users/dev/trunk/netstream/libraries/compilation-jars/hamcrest-library-1.1.jar!/" />
       </CLASSES>
       <JAVADOC />
-      <SOURCES />
+      <SOURCES>
+        <root url="jar:///System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/src.jar!/src" />
+      </SOURCES>
     </library>
   </component>
 </project>
