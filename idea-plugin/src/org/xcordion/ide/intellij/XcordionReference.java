@@ -2,6 +2,7 @@ package org.xcordion.ide.intellij;
 
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
@@ -10,9 +11,12 @@ import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.xml.XmlAttributeValue;
+import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -53,7 +57,7 @@ public class XcordionReference extends PsiReferenceBase<XmlAttributeValue> {
     }
 
     private String getValueLeftOfCursor() {
-        return getElement().getText().substring(0,getElement().getText().indexOf(INTELLIJ_IDEA_RULEZZZ));
+        return getElement().getText().substring(this.getRangeInElement().getStartOffset(),Math.min(getElement().getText().indexOf(INTELLIJ_IDEA_RULEZZZ), this.getRangeInElement().getEndOffset()));
     }
 
 
@@ -77,12 +81,13 @@ public class XcordionReference extends PsiReferenceBase<XmlAttributeValue> {
             return new Object[0];
         }
 
+        //TODO also need to autocomplete on fields and ognl pseudo fields i.e., getXyz as xyz
         for(PsiMethod method:clazz.getAllMethods()){
             if((suffix == null || method.getName().toLowerCase().startsWith(suffix.toLowerCase()))
                     && !method.isConstructor()
                     && !excludedMethods.contains(method.getName())
                     && !displayValues.contains(method.getName())) {
-                displayValues.add(method.getName());
+                displayValues.add(baseExpression+method.getName());
             }
         }
         return displayValues.toArray();
@@ -164,5 +169,33 @@ public class XcordionReference extends PsiReferenceBase<XmlAttributeValue> {
         }
     }
 
+
+
+        public TextRange getRangeInElement() {
+            return super.getRangeInElement();  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+
+
+        public String getCanonicalText() {
+            return super.getCanonicalText();  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
+            return super.handleElementRename(newElementName);  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
+            return super.bindToElement(element);  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public boolean isReferenceTo(PsiElement element) {
+            return super.isReferenceTo(element);  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+
+        public boolean isSoft() {
+            return super.isSoft();  //To change body of implemented methods use File | Settings | File Templates.
+        }
 
 }
