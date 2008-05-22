@@ -27,7 +27,7 @@ class XcordionAttributeValueKeywordChooser implements KeywordChooser {
             add("registerNatives");
         }
     };
-
+    private static final String INTELLIJ_IDEA_RULEZZZ = "IntellijIdeaRulezzz ";
     static private final Pattern SUFFIX_PATTERN = Pattern.compile("^(.*)\\b(\\w+)$");
     static private final Pattern LAST_DOT_PATTERN = Pattern.compile("^(.*)\\.\\s*$");
     static private final Pattern LEFT_HAND_EXPRESSION_PATTERN = Pattern.compile("^(.*)\\b(\\w+)(\\(" + parenInnards(6) + "\\))?\\s*$");
@@ -36,40 +36,67 @@ class XcordionAttributeValueKeywordChooser implements KeywordChooser {
     public String[] getKeywords(CompletionContext completionContext, PsiElement psiElement) {
         if (psiElement.getParent() instanceof XmlAttributeValue) {
             XmlAttributeValue attributeValueElement = (XmlAttributeValue) psiElement.getParent();
-            List<String> displayValues = getMethodNameVariants(attributeValueElement, completionContext);
-            displayValues.addAll(getXcordionFieldNameVariants(attributeValueElement, completionContext));
+            String suffix = null;
+            String baseExpression = getValueLeftOfCursor(attributeValueElement);
+            Matcher suffixMatcher = SUFFIX_PATTERN.matcher(baseExpression);
+            if (suffixMatcher.matches()) {
+                baseExpression = suffixMatcher.group(1);
+                suffix = suffixMatcher.group(2);
+            }
+            List<String> displayValues = getMethodNameVariants(attributeValueElement, baseExpression, suffix);
+            displayValues.addAll(getXcordionFieldNameVariants(attributeValueElement, baseExpression, suffix));
             return displayValues.toArray(new String[0]);
         }
         return EMPTY_KEYWORD_LIST;
     }
 
-    private List<String> getMethodNameVariants(XmlAttributeValue attributeValueElement, CompletionContext completionContext) {
+    private List<String> getMethodNameVariants(XmlAttributeValue attributeValueElement, String baseExpression, String suffix) {
         List<String> displayValues = new ArrayList<String>();
+        if (!baseExpression.endsWith("#")) {
+            PsiClass clazz = findMember(baseExpression, attributeValueElement);
+            if (clazz != null) {
 
-        String suffix = null;
-        String baseExpression = completionContext.getPrefix();
-        Matcher suffixMatcher = SUFFIX_PATTERN.matcher(baseExpression);
-        if (suffixMatcher.matches()) {
-            baseExpression = suffixMatcher.group(1);
-            suffix = suffixMatcher.group(2);
-        }
-
-        PsiClass clazz = findMember(baseExpression, attributeValueElement);
-        if (clazz != null) {
-
-            //TODO also need to autocomplete on fields and ognl pseudo fields i.e., getXyz as xyz
-            for (PsiMethod method : clazz.getAllMethods()) {
-                if ((suffix == null || method.getName().toLowerCase().startsWith(suffix.toLowerCase()))
-                        && !method.isConstructor()
-                        && !excludedMethods.contains(method.getName())
-                        && !displayValues.contains(method.getName())) {
-                    displayValues.add(baseExpression + method.getName() + "()");
+                //TODO also need to autocomplete on fields and ognl pseudo fields i.e., getXyz as xyz
+                for (PsiMethod method : clazz.getAllMethods()) {
+                    if ((suffix == null || method.getName().toLowerCase().startsWith(suffix.toLowerCase()))
+                            && !method.isConstructor()
+                            && !excludedMethods.contains(method.getName())
+                            && !displayValues.contains(method.getName())) {
+                        displayValues.add(baseExpression + method.getName() + "()");
+                    }
                 }
             }
         }
         return displayValues;
     }
 
+
+    private List<String> getXcordionFieldNameVariants(PsiElement attributeValueElement, String baseExpression, String suffix) {
+        Matcher matcher = XCORDION_FIELD_NAMES.matcher(attributeValueElement.getContainingFile().getText());
+        List<String> displayValues = new ArrayList<String>();
+        String prefix;
+        if (baseExpression.endsWith("#")) {
+            prefix = baseExpression.substring(0, baseExpression.length() - 1);
+            suffix = "#" + (suffix==null?"":suffix);
+        } else {
+            prefix = baseExpression;
+        }
+        while (matcher.find()) {
+            String fieldName = matcher.group(1);
+            if (suffix == null || fieldName.startsWith(suffix)) {
+                if(prefix.length()==0 && suffix.startsWith("#")){
+                    fieldName = fieldName.substring(1);
+                }
+                displayValues.add(prefix + fieldName);
+            }
+        }
+        return displayValues;
+    }
+
+
+    private String getValueLeftOfCursor(PsiElement psiElement) {
+        return psiElement.getText().substring(1, psiElement.getText().indexOf(INTELLIJ_IDEA_RULEZZZ));
+    }
 
     private PsiClass getXcordionTestBackingClass(PsiElement psiElement) {
         //TODO: Look properly at name spaces
@@ -88,15 +115,6 @@ class XcordionAttributeValueKeywordChooser implements KeywordChooser {
             return psiClass;
         }
         return null;
-    }
-
-    private List<String> getXcordionFieldNameVariants(PsiElement attributeValueElement, CompletionContext completionContext) {
-        Matcher matcher = XCORDION_FIELD_NAMES.matcher(attributeValueElement.getContainingFile().getText());
-        List<String> displayValues = new ArrayList<String>();
-        while (matcher.find()) {
-            displayValues.add(completionContext.getPrefix() + matcher.group(1));
-        }
-        return displayValues;
     }
 
     static private String parenInnards(int howManyDeep) {
