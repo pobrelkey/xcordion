@@ -17,14 +17,10 @@ public class XcordionProject implements ProjectComponent {
 
     public XcordionProject(ReferenceProvidersRegistry registry) {
         this.registry = registry;
-//        //registry.registerReferenceProvider(XmlTag.class, new XcordionReferenceProvider(psiManager));
     }
 
     public void projectOpened() {
-        registry.registerXmlAttributeValueReferenceProvider(
-                null,
-                TrueFilter.INSTANCE,
-                new XcordionReferenceProvider());
+
     }
 
 

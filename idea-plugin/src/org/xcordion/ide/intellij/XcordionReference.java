@@ -24,16 +24,10 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-/**
- * Created by IntelliJ IDEA.
- * User: timt
- * Date: 16-May-2008
- * Time: 13:55:50
- * To change this template use File | Settings | File Templates.
- */
+@Deprecated //This is now being done using a CompletionVariant
 public class XcordionReference extends PsiReferenceBase<XmlAttributeValue> {
     private PsiClass psiClass;
-    private XmlAttributeValue attributeValue;
+    private PsiManager psiManager;
     List<String> excludedMethods = new ArrayList<String>(){{
             add("clone");
             add("finalize");
@@ -45,19 +39,13 @@ public class XcordionReference extends PsiReferenceBase<XmlAttributeValue> {
     public XcordionReference(XmlAttributeValue element, PsiClass psiClass) {
         super(element);
         this.psiClass = psiClass;
-        attributeValue = (XmlAttributeValue) getElement();
-
-
+        psiManager = PsiManager.getInstance(getModule().getProject());
     }
 
     @Nullable
     public PsiElement resolve() {
         PsiMethod[] methods = psiClass.findMethodsByName(getValueLeftOfCursor(), true);
         return methods.length > 0 ? methods[0] : null;
-    }
-
-    private String getValueLeftOfCursor() {
-        return getElement().getText().substring(this.getRangeInElement().getStartOffset(),Math.min(getElement().getText().indexOf(INTELLIJ_IDEA_RULEZZZ), this.getRangeInElement().getEndOffset()));
     }
 
 
@@ -91,6 +79,11 @@ public class XcordionReference extends PsiReferenceBase<XmlAttributeValue> {
             }
         }
         return displayValues.toArray();
+    }
+
+
+    private String getValueLeftOfCursor() {
+        return getElement().getText().substring(this.getRangeInElement().getStartOffset(),Math.min(getElement().getText().indexOf(INTELLIJ_IDEA_RULEZZZ), this.getRangeInElement().getEndOffset()));
     }
 
     static private final Pattern SUFFIX_PATTERN = Pattern.compile("^(.*)\\b(\\w+)$");
@@ -172,7 +165,9 @@ public class XcordionReference extends PsiReferenceBase<XmlAttributeValue> {
 
 
         public TextRange getRangeInElement() {
-            return super.getRangeInElement();  //To change body of implemented methods use File | Settings | File Templates.
+            TextRange rangeInElement = super.getRangeInElement();
+            System.out.println("rangeInElement = " + rangeInElement);
+            return rangeInElement;  //To change body of implemented methods use File | Settings | File Templates.
         }
 
 

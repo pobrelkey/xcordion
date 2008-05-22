@@ -7,25 +7,21 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.PsiReferenceProvider;
 import com.intellij.psi.impl.source.resolve.reference.ReferenceType;
+import com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlAttributeValue;
+import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created by IntelliJ IDEA.
- * User: timt
- * Date: 16-May-2008
- * Time: 13:53:03
- * To change this template use File | Settings | File Templates.
- */
+@Deprecated //This is now being done using a CompletionVariant
 public class XcordionReferenceProvider implements PsiReferenceProvider {
 
     @NotNull
     public PsiReference[] getReferencesByElement(PsiElement psiElement) {
         XmlAttribute attribute = ((XmlAttribute) psiElement.getParent());
         //TODO: Look properly at name spaces
-        //TODO: Move this check into a filter
+        //TODO: Move this check into a filter in the XcordionProject when registering
         if(attribute.getName().startsWith("concordion:")){
             PsiFile file = psiElement.getContainingFile().getOriginalFile();
             if(file==null){
@@ -39,8 +35,14 @@ public class XcordionReferenceProvider implements PsiReferenceProvider {
                     .findClass(qualifiedClassName, attribute.getResolveScope());
             if(psiClass != null){
                 //TODO: Investigate if can use PsiReferenceExpressionImpl that is part of idea, instead of customer PsiReference implementation for java completions
-//                PsiReferenceExpressionImpl javaExpressionReference = new PsiReferenceExpressionImpl();
-//                javaExpressionReference.bindToElement(psiClass);
+                PsiReferenceExpressionImpl javaExpressionReference = new PsiReferenceExpressionImpl();
+                try {
+                    javaExpressionReference.bindToElement(psiClass);
+                } catch (IncorrectOperationException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 //                return new PsiReference[]{javaExpressionReference};
                 return new PsiReference[]{new XcordionReference((XmlAttributeValue) psiElement, psiClass)};
             }
