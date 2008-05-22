@@ -14,7 +14,8 @@ import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 
-@Deprecated //This is now being done using a CompletionVariant
+@Deprecated
+//This is now being done using a CompletionVariant
 public class XcordionReferenceProvider implements PsiReferenceProvider {
 
     @NotNull
@@ -22,18 +23,18 @@ public class XcordionReferenceProvider implements PsiReferenceProvider {
         XmlAttribute attribute = ((XmlAttribute) psiElement.getParent());
         //TODO: Look properly at name spaces
         //TODO: Move this check into a filter in the XcordionProject when registering
-        if(attribute.getName().startsWith("concordion:")){
+        if (attribute.getName().startsWith("concordion:")) {
             PsiFile file = psiElement.getContainingFile().getOriginalFile();
-            if(file==null){
+            if (file == null) {
                 file = psiElement.getOriginalElement().getContainingFile();
             }
             //TODO: Align test naming conventions with those used by xcordion
             String qualifiedPackageName = file.getContainingDirectory().getPackage().getQualifiedName();
-            String className = file.getName().substring(0, file.getName().length()-5) + "Test";
+            String className = file.getName().substring(0, file.getName().length() - 5) + "Test";
             String qualifiedClassName = qualifiedPackageName + "." + className;
             final PsiClass psiClass = PsiManager.getInstance(psiElement.getProject())
                     .findClass(qualifiedClassName, attribute.getResolveScope());
-            if(psiClass != null){
+            if (psiClass != null) {
                 //TODO: Investigate if can use PsiReferenceExpressionImpl that is part of idea, instead of customer PsiReference implementation for java completions
                 PsiReferenceExpressionImpl javaExpressionReference = new PsiReferenceExpressionImpl();
                 try {

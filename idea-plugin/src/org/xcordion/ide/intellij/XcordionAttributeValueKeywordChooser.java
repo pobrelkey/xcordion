@@ -13,7 +13,6 @@ import com.intellij.psi.PsiType;
 import com.intellij.psi.xml.XmlAttributeValue;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

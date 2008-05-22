@@ -4,13 +4,13 @@ import com.intellij.codeInsight.completion.BasicInsertHandler;
 import com.intellij.codeInsight.completion.CompletionContext;
 import com.intellij.codeInsight.completion.LookupData;
 import com.intellij.codeInsight.lookup.LookupItem;
-import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.psi.PsiDocumentManager;
-import com.intellij.xml.util.HtmlUtil;
 import com.intellij.util.text.CharArrayUtil;
+import com.intellij.xml.util.HtmlUtil;
 
 class XmlAttributeInsertHandler extends BasicInsertHandler {
 
