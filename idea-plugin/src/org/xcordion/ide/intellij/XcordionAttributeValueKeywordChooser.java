@@ -55,17 +55,16 @@ class XcordionAttributeValueKeywordChooser implements KeywordChooser {
         }
 
         PsiClass clazz = findMember(baseExpression, attributeValueElement);
-        if (clazz == null) {
-            //return EMPTY_KEYWORD_LIST;
-        }
+        if (clazz != null) {
 
-        //TODO also need to autocomplete on fields and ognl pseudo fields i.e., getXyz as xyz
-        for (PsiMethod method : clazz.getAllMethods()) {
-            if ((suffix == null || method.getName().toLowerCase().startsWith(suffix.toLowerCase()))
-                    && !method.isConstructor()
-                    && !excludedMethods.contains(method.getName())
-                    && !displayValues.contains(method.getName())) {
-                displayValues.add(baseExpression + method.getName() + "()");
+            //TODO also need to autocomplete on fields and ognl pseudo fields i.e., getXyz as xyz
+            for (PsiMethod method : clazz.getAllMethods()) {
+                if ((suffix == null || method.getName().toLowerCase().startsWith(suffix.toLowerCase()))
+                        && !method.isConstructor()
+                        && !excludedMethods.contains(method.getName())
+                        && !displayValues.contains(method.getName())) {
+                    displayValues.add(baseExpression + method.getName() + "()");
+                }
             }
         }
         return displayValues;
@@ -166,9 +165,8 @@ class XcordionAttributeValueKeywordChooser implements KeywordChooser {
     private PsiClass resolveTypeToClass(PsiType returnType) {
         if (returnType instanceof PsiClassType) {
             return ((PsiClassType) returnType).resolve();
-        } else {
-            return null;
         }
+        return null;
     }
 
 }
