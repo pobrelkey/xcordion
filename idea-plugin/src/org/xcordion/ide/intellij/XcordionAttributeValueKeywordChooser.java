@@ -84,7 +84,7 @@ class XcordionAttributeValueKeywordChooser implements KeywordChooser {
         while (matcher.find()) {
             String fieldName = matcher.group(1);
             if (suffix == null || fieldName.startsWith(suffix)) {
-                if(prefix.length()==0 && suffix.startsWith("#")){
+                if(prefix.length()==0 && suffix!=null && suffix.startsWith("#")){
                     fieldName = fieldName.substring(1);
                 }
                 displayValues.add(prefix + fieldName);
