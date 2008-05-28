@@ -14,6 +14,7 @@ import com.intellij.xml.util.HtmlUtil;
 
 class XmlAttributeInsertHandler extends BasicInsertHandler {
 
+    //TODO: Default # symbol in for set 
     public void handleInsert(CompletionContext completioncontext, int i, LookupData lookupdata, LookupItem lookupitem, boolean flag, char c) {
         super.handleInsert(completioncontext, i, lookupdata, lookupitem, flag, c);
         Editor editor = completioncontext.editor;

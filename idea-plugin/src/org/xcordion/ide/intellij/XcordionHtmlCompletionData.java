@@ -8,7 +8,6 @@ import com.intellij.psi.PsiElement;
 import java.util.Set;
 
 //TODO: Handle ognl style methods
-//TODO: Filter attributeValue completions based on namespace prefix
 //TODO: Click through to java on method names
 //TODO: Completions after dot on variable names, i.e. #foo. should list bar()
 //TODO: Handle carriage returns in attributevalue

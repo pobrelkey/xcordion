@@ -10,13 +10,17 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiType;
-import com.intellij.psi.xml.XmlAttributeValue;
+import com.intellij.psi.xml.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+//TODO: This should also include values for properties on the Test class
+//TODO: Handle completions for assignments i.e. #foo=bar()
 class XcordionAttributeValueKeywordChooser implements KeywordChooser {
     public static final String[] EMPTY_KEYWORD_LIST = new String[0];
     List<String> excludedMethods = new ArrayList<String>() {
@@ -31,10 +35,10 @@ class XcordionAttributeValueKeywordChooser implements KeywordChooser {
     static private final Pattern SUFFIX_PATTERN = Pattern.compile("^(.*)\\b(\\w+)$");
     static private final Pattern LAST_DOT_PATTERN = Pattern.compile("^(.*)\\.\\s*$");
     static private final Pattern LEFT_HAND_EXPRESSION_PATTERN = Pattern.compile("^(.*)\\b(\\w+)(\\(" + parenInnards(6) + "\\))?\\s*$");
-    static private final Pattern XCORDION_FIELD_NAMES = Pattern.compile("set=\"([#a-zA-Z0-9]+)\"");
+    static private final Pattern VARIABLE_NAME_PATTERN = Pattern.compile("(#\\w+)");
 
     public String[] getKeywords(CompletionContext completionContext, PsiElement psiElement) {
-        if (psiElement.getParent() instanceof XmlAttributeValue) {
+        if (interestingElement(psiElement)) {
             XmlAttributeValue attributeValueElement = (XmlAttributeValue) psiElement.getParent();
             String suffix = null;
             String baseExpression = getValueLeftOfCursor(attributeValueElement);
@@ -48,6 +52,15 @@ class XcordionAttributeValueKeywordChooser implements KeywordChooser {
             return displayValues.toArray(new String[0]);
         }
         return EMPTY_KEYWORD_LIST;
+    }
+
+    private boolean interestingElement(PsiElement psiElement) {
+        PsiElement parent = psiElement.getParent();
+        if (!(parent instanceof XmlAttributeValue)) {
+            return false;
+        }
+        XmlAttribute attribute = (XmlAttribute) parent.getParent();
+        return XcordionAttribute.isXcordionAttribute(attribute);
     }
 
     private List<String> getMethodNameVariants(XmlAttributeValue attributeValueElement, String baseExpression, String suffix) {
@@ -72,25 +85,43 @@ class XcordionAttributeValueKeywordChooser implements KeywordChooser {
 
 
     private List<String> getXcordionFieldNameVariants(PsiElement attributeValueElement, String baseExpression, String suffix) {
-        Matcher matcher = XCORDION_FIELD_NAMES.matcher(attributeValueElement.getContainingFile().getText());
-        List<String> displayValues = new ArrayList<String>();
-        String prefix;
+        XmlFile doc = (XmlFile) attributeValueElement.getContainingFile();
+        TreeSet<String> ognlVariableNames = new TreeSet<String>();
+        recursivelyScanXcordionTags(ognlVariableNames, doc, attributeValueElement);
+
+        String prefix = baseExpression;
         if (baseExpression.endsWith("#")) {
             prefix = baseExpression.substring(0, baseExpression.length() - 1);
             suffix = "#" + (suffix==null?"":suffix);
-        } else {
-            prefix = baseExpression;
         }
-        while (matcher.find()) {
-            String fieldName = matcher.group(1);
-            if (suffix == null || fieldName.startsWith(suffix)) {
+
+        List<String> displayValues = new ArrayList<String>();
+        for (String variable : ognlVariableNames) {
+            if (suffix == null || variable.startsWith(suffix)) {
                 if(prefix.length()==0 && suffix!=null && suffix.startsWith("#")){
-                    fieldName = fieldName.substring(1);
+                    variable = variable.substring(1);
                 }
-                displayValues.add(prefix + fieldName);
+                displayValues.add(prefix + variable);
             }
         }
         return displayValues;
+    }
+
+    private void recursivelyScanXcordionTags(Set<String> ognlVariableNames, PsiElement element, PsiElement attributeValueElement) {
+        for (PsiElement psiChild : element.getChildren()) {
+            if (psiChild instanceof XmlTag) {
+                XmlTag tag = (XmlTag) psiChild;
+                for (XmlAttribute attribute : tag.getAttributes()) {
+                    if (XcordionAttribute.isXcordionAttribute(attribute) && attribute.getValueElement() != attributeValueElement) {
+                        Matcher matcher = VARIABLE_NAME_PATTERN.matcher(attribute.getValue());
+                        while (matcher.find()) {
+                            ognlVariableNames.add(matcher.group(1));
+                        }
+                    }
+                }
+            }
+            recursivelyScanXcordionTags(ognlVariableNames, psiChild, attributeValueElement);
+        }
     }
 
 
@@ -99,8 +130,6 @@ class XcordionAttributeValueKeywordChooser implements KeywordChooser {
     }
 
     private PsiClass getXcordionTestBackingClass(PsiElement psiElement) {
-        //TODO: Look properly at name spaces
-        //TODO: Move this check into a filter in the XcordionProject when registering
         if (psiElement instanceof XmlAttributeValue) {
             PsiFile htmlFile = psiElement.getContainingFile().getOriginalFile();
             if (htmlFile == null) {
