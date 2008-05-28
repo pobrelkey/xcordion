@@ -15,12 +15,6 @@ import java.util.Set;
  * To change this template use File | Settings | File Templates.
  */
 public class XcordionHtmlCompletionData extends HtmlCompletionData {
-    //TODO the prefix on these needs to be based on the containing documents namespace for concordion
-    private static final String[] XCORDION_ATTRIBUTES = new String[]{
-            "concordion:execute",
-            "concordion:assertEquals",
-            "concordion:set"
-    };
 
     private CompletionVariant attributeCompletionVariant;
     private CompletionVariant attributeValueCompeletionVariant;
