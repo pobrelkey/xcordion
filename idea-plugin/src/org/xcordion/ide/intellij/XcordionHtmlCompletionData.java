@@ -7,13 +7,10 @@ import com.intellij.psi.PsiElement;
 
 import java.util.Set;
 
-/**
- * Created by IntelliJ IDEA.
- * User: timt
- * Date: 16-May-2008
- * Time: 10:16:03
- * To change this template use File | Settings | File Templates.
- */
+//TODO: Handle ognl style methods
+//TODO: Filter attributeValue completions based on namespace prefix
+//TODO: Click through to java on method names
+//TODO: Completions after dot on variable names, i.e. #foo. should list bar()
 public class XcordionHtmlCompletionData extends HtmlCompletionData {
 
     private CompletionVariant attributeCompletionVariant;

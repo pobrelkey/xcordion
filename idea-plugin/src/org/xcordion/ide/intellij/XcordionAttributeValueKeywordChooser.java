@@ -56,7 +56,7 @@ class XcordionAttributeValueKeywordChooser implements KeywordChooser {
             PsiClass clazz = findMember(baseExpression, attributeValueElement);
             if (clazz != null) {
 
-                //TODO also need to autocomplete on fields and ognl pseudo fields i.e., getXyz as xyz
+                //TODO also need to autocomplete ognl pseudo fields i.e., getXyz as xyz
                 for (PsiMethod method : clazz.getAllMethods()) {
                     if ((suffix == null || method.getName().toLowerCase().startsWith(suffix.toLowerCase()))
                             && !method.isConstructor()
