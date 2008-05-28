@@ -13,20 +13,14 @@ class XcordionAttributeKeywordChooser implements KeywordChooser {
 
     public static final String XCORDION_NAMESPACE = "http://concordion.org";
     public static final String DEFAULT_XCORDION_NAMESPACE_PREFIX = "concordion";
-    public static final String[] XCORDION_ATTRIBUTES = new String[]{
-            "assertEquals",
-            "assertTrue",
-            "execute",
-            "forEach",
-            "set"
-    };
+
 
     public String[] getKeywords(CompletionContext completionContext, PsiElement psiElement) {
         if (isNonNullHtmlAttribute(psiElement)) {
             String namespacePrefix = ((HtmlTag) psiElement.getParent().getParent()).getPrefixByNamespace(XCORDION_NAMESPACE);
             namespacePrefix = namespacePrefix==null? DEFAULT_XCORDION_NAMESPACE_PREFIX : namespacePrefix;
             List<String> qualifiedAttributes = new ArrayList<String>();
-            for(String attribute: XCORDION_ATTRIBUTES){
+            for(XcordionAttribute attribute: XcordionAttribute.values()){
                 qualifiedAttributes.add(namespacePrefix + ":" + attribute);
             }
             return qualifiedAttributes.toArray(new String[0]);
