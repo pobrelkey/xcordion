@@ -21,9 +21,8 @@ public class XcordionReferenceProvider implements PsiReferenceProvider {
     @NotNull
     public PsiReference[] getReferencesByElement(PsiElement psiElement) {
         XmlAttribute attribute = ((XmlAttribute) psiElement.getParent());
-        //TODO: Look properly at name spaces
         //TODO: Move this check into a filter in the XcordionProject when registering
-        if (attribute.getName().startsWith("concordion:")) {
+        if (XcordionAttribute.isXcordionAttribute(attribute)) {
             PsiFile file = psiElement.getContainingFile().getOriginalFile();
             if (file == null) {
                 file = psiElement.getOriginalElement().getContainingFile();

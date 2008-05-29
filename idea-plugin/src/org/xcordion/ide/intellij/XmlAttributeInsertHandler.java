@@ -9,26 +9,50 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.text.CharArrayUtil;
 import com.intellij.xml.util.HtmlUtil;
 
 class XmlAttributeInsertHandler extends BasicInsertHandler {
 
-    //TODO: Default # symbol in for set 
     public void handleInsert(CompletionContext completioncontext, int i, LookupData lookupdata, LookupItem lookupitem, boolean flag, char c) {
         super.handleInsert(completioncontext, i, lookupdata, lookupitem, flag, c);
         Editor editor = completioncontext.editor;
         Document document = editor.getDocument();
         int caretModelOffset = editor.getCaretModel().getOffset();
-        if (PsiDocumentManager.getInstance(editor.getProject()).getPsiFile(document).getFileType() == StdFileTypes.HTML && HtmlUtil.isSingleHtmlAttribute((String) lookupitem.getObject()))
+        PsiFile psiFile = PsiDocumentManager.getInstance(editor.getProject()).getPsiFile(document);
+        String qualifiedAttributeName = lookupitem.getObject().toString();
+        if (psiFile.getFileType() == StdFileTypes.HTML && HtmlUtil.isSingleHtmlAttribute(qualifiedAttributeName)) {
             return;
+        }
+
+        PsiElement psiElement = psiFile.findElementAt(caretModelOffset);
+        while (psiElement != null && !(psiElement instanceof XmlTag)) {
+            psiElement = psiElement.getParent();
+        }
+        XmlTag tag = (XmlTag) psiElement;
+        int whereColon = qualifiedAttributeName.indexOf(':');
+        String namespace = tag.getNamespace();
+        String localName = qualifiedAttributeName;
+        if (whereColon != -1) {
+            namespace = tag.getNamespaceByPrefix(qualifiedAttributeName.substring(0,whereColon));
+            localName = qualifiedAttributeName.substring(whereColon+1);
+        }
+        XcordionAttribute attribute = XcordionAttribute.forNamespaceAndName(namespace, localName);
+        boolean insertHash = (attribute != null && attribute.getSyntax() != XcordionAttributeSyntax.EXECUTE);
+
         CharSequence charsequence = document.getCharsSequence();
-        if (!CharArrayUtil.regionMatches(charsequence, caretModelOffset, "=\"") && !CharArrayUtil.regionMatches(charsequence, caretModelOffset, "='"))
-            if (caretModelOffset >= document.getTextLength() || "/> \n\t\r".indexOf(document.getCharsSequence().charAt(caretModelOffset)) < 0)
-                document.insertString(caretModelOffset, "=\"\" ");
-            else
-                document.insertString(caretModelOffset, "=\"\"");
-        editor.getCaretModel().moveToOffset(caretModelOffset + 2);
+        if (!CharArrayUtil.regionMatches(charsequence, caretModelOffset, "=\"") && !CharArrayUtil.regionMatches(charsequence, caretModelOffset, "='")) {
+            if (caretModelOffset >= document.getTextLength() || "/> \n\t\r".indexOf(document.getCharsSequence().charAt(caretModelOffset)) < 0) {
+                document.insertString(caretModelOffset, insertHash ? "=\"#\" " : "=\"\" ");
+            } else {
+                document.insertString(caretModelOffset, insertHash ? "=\"#\"" : "=\"\"");
+            }
+        }
+        editor.getCaretModel().moveToOffset(caretModelOffset + (insertHash ? 3 : 2));
         editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
         editor.getSelectionModel().removeSelection();
     }
