@@ -12,7 +12,6 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//TODO: This should also include values for properties on the Test class
 //TODO: Handle completions for assignments i.e. #foo=bar() - Rob: this is a bug in IntelliJ, we return values but they get swallowed, perhaps solvable by going back to OpenAPI?
 class XcordionAttributeValueKeywordChooser implements KeywordChooser {
     public static final String[] EMPTY_KEYWORD_LIST = new String[0];
