@@ -8,6 +8,7 @@ import org.concordion.api.Result;
 import org.concordion.api.ResultRecorder;
 import org.concordion.internal.BrowserStyleWhitespaceComparator;
 import org.concordion.internal.CommandCall;
+import org.concordion.internal.CommandCallList;
 import org.concordion.internal.util.Announcer;
 import org.concordion.internal.util.Check;
 
@@ -38,8 +39,14 @@ public class AssertEqualsCommand extends AbstractCommand {
         
         Element element = commandCall.getElement();
         
-        Object actual = evaluator.evaluate(commandCall.getExpression());
         String expected = element.getText();
+
+        CommandCallList childCommands = commandCall.getChildren();
+
+        childCommands.setUp(evaluator, resultRecorder);
+        childCommands.execute(evaluator, resultRecorder);
+        Object actual = evaluator.evaluate(commandCall.getExpression());
+        childCommands.verify(evaluator, resultRecorder);
         
         if (comparator.compare(actual, expected) == 0) {
             resultRecorder.record(Result.SUCCESS);

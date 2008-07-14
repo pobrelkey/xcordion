@@ -99,11 +99,18 @@ public class VerifyRowsCommand extends AbstractCommand {
     private class DefaultStrategy implements Strategy {
         public void execute(CommandCall commandCall, Iterable<Object> iterable, Evaluator evaluator, String loopVariableName, ResultRecorder resultRecorder) {
             Element element = commandCall.getElement();
+
+            Element parent = element.getParent();
+            Element placeholder = new Element("span");
+            parent.insertChildAfter(element, placeholder);
+
+            Element lastSibling = placeholder;
             Element prototype = element.copy();
-            element.removeChildren();                                                                             
+            parent.remove(element);
+
             for (Object loopVar : iterable) {
                 Element newContent = prototype.copy();
-                element.getParent().insertChildAfter(element, newContent);
+                element.getParent().insertChildAfter(lastSibling, newContent);
 
                 // TODO: fugly!
                 CommandCall dummy = new CommandCall(VerifyRowsCommand.this, newContent, commandCall.getExpression(), commandCall.getResource());
@@ -113,7 +120,10 @@ public class VerifyRowsCommand extends AbstractCommand {
 
                 evaluator.setVariable(loopVariableName, loopVar);
                 children.processSequentially(evaluator, resultRecorder);
+
+                lastSibling = newContent;
             }
+            parent.remove(placeholder);
         }
     }
 }

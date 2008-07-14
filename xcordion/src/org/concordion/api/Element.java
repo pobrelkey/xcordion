@@ -207,4 +207,7 @@ public final class Element {
         return xomElement;
     }
 
+    public void remove(Element element) {
+        xomElement.removeChild(element.xomElement);
+    }
 }
