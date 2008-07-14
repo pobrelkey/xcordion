@@ -110,7 +110,7 @@ public class VerifyRowsCommand extends AbstractCommand {
 
             for (Object loopVar : iterable) {
                 Element newContent = prototype.copy();
-                element.getParent().insertChildAfter(lastSibling, newContent);
+                parent.insertChildAfter(lastSibling, newContent);
 
                 // TODO: fugly!
                 CommandCall dummy = new CommandCall(VerifyRowsCommand.this, newContent, commandCall.getExpression(), commandCall.getResource());
