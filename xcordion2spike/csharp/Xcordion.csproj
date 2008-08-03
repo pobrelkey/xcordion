@@ -1,0 +1,117 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C1B428A5-834B-4A62-9410-36A440FB8A92}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>lang\Properties</AppDesignerFolder>
+    <RootNamespace>Xcordion</RootNamespace>
+    <AssemblyName>Xcordion</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.JScript" />
+    <Reference Include="OGNL, Version=1.0.2095.31323, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\OGNL.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="core\xcordion\api\Command.cs" />
+    <Compile Include="core\xcordion\api\CommandAndExpression.cs" />
+    <Compile Include="core\xcordion\api\CommandRepository.cs" />
+    <Compile Include="core\xcordion\api\CommandType.cs" />
+    <Compile Include="core\xcordion\api\EvaluationContext.cs" />
+    <Compile Include="core\xcordion\api\EvaluationContextFactory.cs" />
+    <Compile Include="core\xcordion\api\ResourceReference.cs" />
+    <Compile Include="core\xcordion\api\Xcordion.cs" />
+    <Compile Include="core\xcordion\api\XcordionEvents.cs" />
+    <Compile Include="core\xcordion\api\RowNavigator.cs" />
+    <Compile Include="core\xcordion\api\TestAttribute.cs" />
+    <Compile Include="core\xcordion\api\TestDocument.cs" />
+    <Compile Include="core\xcordion\api\TestElement.cs" />
+    <Compile Include="core\xcordion\impl\AbstractCommand.cs" />
+    <Compile Include="core\xcordion\impl\AbstractTableCommand.cs" />
+    <Compile Include="core\xcordion\impl\CommandFactory.cs" />
+    <Compile Include="core\xcordion\impl\command\AssertBooleanCommand.cs" />
+    <Compile Include="core\xcordion\impl\command\AssertContainsCommand.cs" />
+    <Compile Include="core\xcordion\impl\command\AssertEqualsCommand.cs" />
+    <Compile Include="core\xcordion\impl\command\ChildrenInDocumentOrderCommand.cs" />
+    <Compile Include="core\xcordion\impl\command\ChildrenInSetupRunVerifyOrderCommand.cs" />
+    <Compile Include="core\xcordion\impl\command\ExecCommand.cs" />
+    <Compile Include="core\xcordion\impl\command\ForEachCommand.cs" />
+    <Compile Include="core\xcordion\impl\command\InsertTextCommand.cs" />
+    <Compile Include="core\xcordion\impl\command\NoOpCommand.cs" />
+    <Compile Include="core\xcordion\impl\command\SetCommand.cs" />
+    <Compile Include="core\xcordion\impl\command\TableExecuteCommand.cs" />
+    <Compile Include="core\xcordion\impl\command\TableForEachCommand.cs" />
+    <Compile Include="core\xcordion\impl\DefaultCommandFactory.cs" />
+    <Compile Include="core\xcordion\impl\DefaultCommandRepository.cs" />
+    <Compile Include="core\xcordion\impl\events\ResultSummariser.cs" />
+    <Compile Include="core\xcordion\impl\events\XcordionEventsAdapter.cs" />
+    <Compile Include="core\xcordion\impl\events\XcordionEventsBroadcaster.cs" />
+    <Compile Include="core\xcordion\impl\XcordionImpl.cs" />
+    <Compile Include="core\xcordion\impl\RowNavigatorImpl.cs" />
+    <Compile Include="core\xcordion\impl\TableCommandFactory.cs" />
+    <Compile Include="core\xcordion\impl\TableNavigator.cs" />
+    <Compile Include="core\xcordion\impl\theme\ConcordionMarkupTheme.cs" />
+    <Compile Include="lang\Properties\AssemblyInfo.cs" />
+    <Compile Include="lang\xcordion\lang\csharp\FileUtils.cs" />
+    <Compile Include="lang\xcordion\lang\csharp\MarkupWriter.cs" />
+    <Compile Include="lang\xcordion\lang\csharp\ResourceFinder.cs" />
+    <Compile Include="lang\xcordion\lang\csharp\SimpleXcordionRunner.cs" />
+    <Compile Include="lang\xcordion\lang\csharp\JScript.cs" />
+    <Compile Include="lang\xcordion\lang\csharp\JScriptContext.cs" />
+    <Compile Include="lang\xcordion\lang\csharp\OgnlContextFactory.cs" />
+    <Compile Include="lang\xcordion\lang\csharp\OgnlEvaluationContext.cs" />
+    <Compile Include="lang\xcordion\lang\csharp\XmlTestDocument.cs" />
+    <Compile Include="lang\xcordion\lang\csharp\XmlTestElement.cs" />
+    <Compile Include="lang\xcordion\util\Coercions.cs" />
+    <Compile Include="lang\xcordion\util\ICompatibleList.cs" />
+    <Compile Include="lang\xcordion\util\ICompatibleMap.cs" />
+    <Compile Include="lang\xcordion\util\Iterable.cs" />
+    <Compile Include="lang\xcordion\util\Iterator.cs" />
+    <Compile Include="lang\xcordion\util\WrappingIterable.cs" />
+    <Compile Include="lang\xcordion\util\XcordionBug.cs" />
+    <Compile Include="lang\xcordion\util\SimpleIterator.cs" />
+    <Compile Include="lang\xcordion\util\SimpleList.cs" />
+    <Compile Include="lang\xcordion\util\SimpleMap.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="core\xcordion\impl\theme\embedded.css" />
+    <EmbeddedResource Include="core\xcordion\impl\theme\logo.png" />
+    <EmbeddedResource Include="core\xcordion\impl\theme\visibility-toggler.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="lang\xcordion\lang\csharp\JScriptEvaluator.js" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

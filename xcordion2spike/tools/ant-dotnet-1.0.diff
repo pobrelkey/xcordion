@@ -1,0 +1,21 @@
+diff -urN apache-ant-dotnet-1.0/src/main/org/apache/ant/dotnet/build/MSBuildTask.java apache-ant-dotnet-1.0-LOCAL/src/main/org/apache/ant/dotnet/build/MSBuildTask.java
+--- apache-ant-dotnet-1.0/src/main/org/apache/ant/dotnet/build/MSBuildTask.java	2006-10-30 06:00:10.000000000 +0000
++++ apache-ant-dotnet-1.0-LOCAL/src/main/org/apache/ant/dotnet/build/MSBuildTask.java	2008-06-10 12:20:12.000000000 +0100
+@@ -27,6 +27,8 @@
+ import org.w3c.dom.Node;
+ import org.w3c.dom.NodeList;
+ 
++import org.apache.tools.ant.taskdefs.condition.Os;
++
+ /**
+  * Runs a MSBuild build process.
+  */
+@@ -42,7 +44,7 @@
+     }
+ 
+     protected String getExecutable() {
+-        return "MSBuild.exe";
++        return Os.isFamily("windows") ? "MSBuild.exe" : "xbuild.exe";
+     }
+ 
+     protected String[] getBuildfileArguments(File buildFile) {

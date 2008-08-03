@@ -1,0 +1,166 @@
+<project name="xcordion-java" default="all">
+
+    <property name="version" value="1.99.0"/>
+    <property name="productName" value="xcordion"/>
+
+    <patternset id="ignored.files">
+        <exclude name="**/CVS/**"/>
+        <exclude name="**/SCCS/**"/>
+        <exclude name="**/RCS/**"/>
+        <exclude name="**/rcs/**"/>
+        <exclude name="**/.DS_Store/**"/>
+        <exclude name="**/.svn/**"/>
+        <exclude name="**/.sbas/**"/>
+        <exclude name="**/.IJI.*/**"/>
+        <exclude name="**/vssver.scc/**"/>
+        <exclude name="**/vssver2.scc/**"/>
+    </patternset>
+    <patternset id="compiler.resources">
+        <patternset refid="ignored.files"/>
+        <exclude name="**/?*.java"/>
+    </patternset>
+
+
+    <dirname property="basedir" file="${ant.file}"/>
+
+    <property name="dist.dir" value="${basedir}/dist"/>
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="classes.dir" value="${build.dir}/classes/production"/>
+    <property name="testclasses.dir" value="${build.dir}/classes/test"/>
+    <property name="junit.output.dir" value="${build.dir}/test-output/junit"/>
+    <property name="xcordion.output.dir" value="${build.dir}/test-output/xcordion"/>
+
+    <path id="build.classpath">
+        <pathelement location="${basedir}/lib/junit-4.4-src.jar"/>
+        <pathelement location="${basedir}/lib/jdom.jar"/>
+        <pathelement location="${basedir}/lib/ognl-2.6.9.jar"/>
+        <pathelement location="${basedir}/lib/junit-4.4.jar"/>
+        <pathelement location="${basedir}/lib/jdom-contrib.jar"/>
+    </path>
+
+    <path id="buildtest.classpath">
+        <path refid="build.classpath"/>
+        <pathelement location="${classes.dir}"/>
+        <pathelement location="${basedir}/testlib/jmock-junit4-2.4.0.jar"/>
+        <pathelement location="${basedir}/testlib/jmock-junit3-2.4.0.jar"/>
+        <pathelement location="${basedir}/testlib/jmock-legacy-2.4.0.jar"/>
+        <pathelement location="${basedir}/testlib/jmock-2.4.0.jar"/>
+        <pathelement location="${basedir}/testlib/hamcrest-core-1.1.jar"/>
+        <pathelement location="${basedir}/testlib/hamcrest-library-1.1.jar"/>
+        <pathelement location="${basedir}/testlib/cglib-nodep-2.1_3.jar"/>
+        <pathelement location="${basedir}/testlib/cglib-2.1_3-src.jar"/>
+        <pathelement location="${basedir}/testlib/objenesis-1.0.jar"/>
+    </path>
+
+    <path id="runtest.classpath">
+        <path refid="buildtest.classpath"/>
+        <pathelement location="${testclasses.dir}"/>
+    </path>
+
+
+    <path id="sourcepath">
+        <dirset dir="${basedir}">
+            <include name="core"/>
+            <include name="lang"/>
+        </dirset>
+    </path>
+
+    <path id="test.sourcepath">
+        <dirset dir="${basedir}">
+            <include name="test"/>
+        </dirset>
+    </path>
+
+
+    <target name="compile" description="Compile production classes">
+        <mkdir dir="${classes.dir}"/>
+        <javac destdir="${classes.dir}"
+               nowarn="no"
+               memorymaximumsize="128m"
+               debug="yes"
+               failonerror="yes"
+               source="1.5"
+               target="1.5"
+               fork="true">
+            <classpath refid="build.classpath"/>
+            <src refid="sourcepath"/>
+            <patternset refid="ignored.files"/>
+        </javac>
+
+        <copy todir="${classes.dir}">
+            <fileset dir="${basedir}/core">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+            <fileset dir="${basedir}/lang">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="compile.tests" depends="compile"
+            description="Compile test classes" unless="skip.tests">
+        <mkdir dir="${testclasses.dir}"/>
+        <javac destdir="${testclasses.dir}"
+               nowarn="no"
+               memorymaximumsize="128m"
+               debug="yes"
+               failonerror="yes"
+               source="1.5"
+               target="1.5"
+               fork="true">
+            <classpath refid="buildtest.classpath"/>
+            <src refid="test.sourcepath"/>
+            <patternset refid="ignored.files"/>
+        </javac>
+
+        <copy todir="${testclasses.dir}">
+            <fileset dir="${basedir}/test">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="test" description="Run unit tests" depends="compile.tests" unless="skip.tests">
+        <mkdir dir="${junit.output.dir}"/>
+        <mkdir dir="${xcordion.output.dir}"/>
+
+        <junit fork="yes" forkmode="once" printsummary="yes" haltonfailure="yes" showoutput="yes">
+            <jvmarg value="-Dxcordion.output.dir=${xcordion.output.dir}"/>
+
+            <classpath>
+                <path refid="runtest.classpath"/>
+            </classpath>
+
+            <formatter type="plain"/>
+
+            <batchtest todir="${junit.output.dir}">
+                <fileset dir="${basedir}/test">
+                    <patternset refid="ignored.files"/>
+                    <include name="**/*Test.java"/>
+                    <exclude name="**/Abstract*"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    <target name="clean" description="Remove output directories">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+
+    <target name="package" description="Build JAR/ZIP files for deployment" depends="clean, compile">
+        <mkdir dir="${dist.dir}"/>
+        <jar destfile="${dist.dir}/${productName}-${version}.jar"
+             basedir="${classes.dir}"
+             compress="false"/>
+        <zip destfile="${dist.dir}/${productName}-src-${version}.zip" compress="false">
+            <zipfileset dir="${basedir}/core" prefix=""/>
+            <zipfileset dir="${basedir}/lang" prefix=""/>
+        </zip>
+    </target>
+
+    <target name="all" depends="clean, compile, test, package" description="build"/>
+</project>

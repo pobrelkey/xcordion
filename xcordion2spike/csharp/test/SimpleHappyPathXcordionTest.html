@@ -1,0 +1,82 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:r="urn:xcordion:v1"><head>
+    <title>Simple Happy Path Xcordion Test</title>
+</head><body>
+    <h1>Hello World</h1>
+
+    <p>My name is <b r:is-equal="Name">Billy</b>.</p>
+
+    <p>The Pope <b r:is-true="Pope.Religion.Catholic">is Catholic</b>, and wears a <b r:is-equal="Pope.HatType">pointy</b> hat.</p>
+
+    <p r:is-false="Hell.TemperatureCelsius &lt; 0">Hell has not frozen over.</p>
+
+    <p r:do="#dummy = new System.Object()">
+        There is no <b r:does-not-contain="#var1">i</b> in <i r:set="#var1">team</i>,
+        but there is a <b r:contains="#var2">u</b> in <i r:set="#var2">suck</i>.
+    </p>
+
+    <p r:do="Hell.turnOnAirCon()">
+        After we've turned on the aircon in Hell...
+    </p>
+
+    <p r:is-false="Hell.TemperatureCelsius &gt; 0">...it will have frozen over.</p>
+
+    <p>The four monsters from Pac-Man were named:</p>
+    <ul>
+        <li r:for="#monster : MonstersFromPacMan"><span r:show="#monster" /></li>
+    </ul>
+
+    <table r:do="#c = hypotenuse(#a, #b)" border="1">
+        <tr><th colspan="3">Testing a function, Fit TableFixture-style</th></tr>
+        <tr>
+            <th r:set="#a">side A length</th>
+            <th r:set="#b">side B length</th>
+            <th r:is-equal="#c">hypotenuse length</th>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>4</td>
+            <td>5</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>8</td>
+            <td>10</td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>24</td>
+            <td>25</td>
+        </tr>
+    </table>
+
+    <table r:for="#stooge : Stooges" border="1">
+        <tr><th colspan="3">Verifying the contents of a list</th></tr>
+        <tr>
+            <th r:is-equal="#stooge.Nickname">Nickname</th>
+            <th r:is-equal="#stooge.BirthName">Birth Name</th>
+            <th r:is-equal="#stooge.DateOfBirth">Date of Birth</th>
+        </tr>
+        <tr>
+            <td>Moe</td>
+            <td>Harry Moses Horwitz</td>
+            <td>19 June 1897</td>
+        </tr>
+        <tr>
+            <td>Larry</td>
+            <td>Louis Feinberg</td>
+            <td>5 October 1902</td>
+        </tr>
+        <tr>
+            <td>Curly</td>
+            <td>Jerome Lester Horwitz</td>
+            <td>22 October 1903</td>
+        </tr>
+        <tr>
+            <td>Shemp</td>
+            <td>Samuel Horwitz</td>
+            <td>4 March 1895</td>
+        </tr>
+    </table>
+
+
+</body></html>

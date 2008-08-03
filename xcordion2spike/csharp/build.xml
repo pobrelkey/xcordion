@@ -1,0 +1,58 @@
+<project name="xcordion-csharp" default="all">
+          
+    <dirname property="basedir" file="${ant.file}"/>
+
+    <property name="dist.dir" value="${basedir}/dist"/>
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="junit.output.dir" value="${build.dir}/test-output/junit"/>
+    <property name="xcordion.output.dir" value="${build.dir}/test-output/xcordion"/>
+
+    <taskdef resource="org/apache/ant/dotnet/antlib.xml">
+        <classpath>
+            <pathelement location="${basedir}/../tools/ant-dotnet-1.0.jar"/>
+        </classpath>
+    </taskdef>
+
+    <target name="clean" description="Remove output directories">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+        <delete dir="${basedir}/bin"/>
+        <delete dir="${basedir}/obj"/>
+    </target>
+
+    <target name="compile" description="Compile production classes">
+        <delete dir="${basedir}/core"/>
+        
+        <exec executable="ruby">
+            <arg value="${basedir}/../tools/java-to-csharp.rb" /> 
+            <arg value="${basedir}/../java/core" /> 
+            <arg value="${basedir}/core" /> 
+        </exec>
+    
+        <msbuild buildfile="${basedir}/Xcordion.csproj">
+            <target name="Build" />
+        </msbuild>
+    </target>
+
+    <target name="compile.test" description="Compile test classes">
+        <msbuild buildfile="${basedir}/test/test.csproj">
+            <target name="Build" />
+        </msbuild>
+    </target>
+    
+    <target name="test" description="Run NUnit tests">
+        <nunit>
+            <!-- TODO: test output etc. -->
+            <testassembly name="${basedir}/test/bin/debug/test.dll"/>
+        </nunit>
+    </target>
+
+
+    <target name="package">
+        <!-- TODO -->
+    </target>
+
+    <target name="all" depends="clean, compile, test, package" description="build"/>
+
+
+</project>
