@@ -25,6 +25,15 @@ public class TestRig {
         return process(wrapFragment(fragment));
     }
 
+    public ExceptionResult processExceptionThrowingFragment(String fragment) {
+        try {
+            process(wrapFragment(fragment));
+            throw new RuntimeException("No exception was thrown in executed fragment");
+        } catch (Exception e) {
+            return new ExceptionResult(e);
+        }
+    }
+
     public ProcessingResult process(Resource resource) {
         EventRecorder eventRecorder = new EventRecorder();
         StubTarget stubTarget = new StubTarget();

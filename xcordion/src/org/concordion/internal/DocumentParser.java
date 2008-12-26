@@ -50,14 +50,13 @@ public class DocumentParser {
             if (!namespaceURI.equals("")) {
                 String commandName = attribute.getLocalName();
                 Command command = createCommand(namespaceURI, commandName);
-                if (command != null) {
-                    Check.isFalse(commandIsAssigned, "Multiple commands per element is currently not supported.");
-                    commandIsAssigned = true;
-                    String expression = attribute.getValue();
-                    CommandCall commandCall = new CommandCall(command, new Element(xomElement), expression, resource);
-                    parentCommandCall.appendChild(commandCall);
-                    parentCommandCall = commandCall;
-                }
+                Check.notNull(command, "No such command '" + commandName + "'");
+                Check.isFalse(commandIsAssigned, "Multiple commands per element is currently not supported.");
+                commandIsAssigned = true;
+                String expression = attribute.getValue();
+                CommandCall commandCall = new CommandCall(command, new Element(xomElement), expression, resource);
+                parentCommandCall.appendChild(commandCall);
+                parentCommandCall = commandCall;
             }
         }
 

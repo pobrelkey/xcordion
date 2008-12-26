@@ -1,0 +1,27 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+<link href="../../../../concordion.css" rel="stylesheet" type="text/css" />
+<body>
+
+    <h1>Mispelled or unknown command</h1>
+
+    <p>
+        If you mistype a command in your document, for example <code>concordion:azrtEqlz</code>
+        it will be highlighted as an unknwon command and cause a failure.
+    </p>
+
+    <div class="example">
+
+        <h3>Example</h3>
+
+        <p>Given this instrumented snippet:</p>
+
+        <pre concordion:set="#snippet">&lt;span concordion:azrtEqlz="#user.firstName"&gt;Fred&lt;/span&gt;</pre>
+
+        <span concordion:execute="#exception = exceptionExpected(#snippet)"/>
+        <p>Concordion will fail the to execute the test with a <span concordion:assertEquals="#exception.name">java.lang.RuntimeException</span>
+           with message of <span concordion:assertEquals="#exception.message">No such command 'azrtEqlz'</span></p>
+        
+    </div>
+
+</body>
+</html>
