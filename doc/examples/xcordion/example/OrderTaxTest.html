@@ -1,0 +1,59 @@
+<html xmlns:x="http://concordion.org">
+<head>
+    <title>Order Tax Test</title>
+</head>
+<body>
+    <h1>Order Tax Test</h1>
+
+<h3>Given</h3>
+<p x:execute="
+        #order = new xcordion.example.Order(),
+        #order.takeaway = true
+    ">
+    We have a takeaway order with the following items:
+</p>
+<table x:execute="
+            #item = new xcordion.example.Item(),
+            #item.description = #description,
+            #item.quantity = #quantity,
+            #item.price = #price,
+            #order.items.add(#item)
+        ">
+    <tr>
+        <th x:set="#description">Description</th>
+        <th x:set="#quantity">Quantity</th>
+        <th x:set="#price">Price</th>
+    </tr>
+    <tr>
+        <td>SludgeBurger</td>
+        <td>1</td>
+        <td>0.99</td>
+    </tr>
+    <tr>
+        <td>Sludge Fries</td>
+        <td>2</td>
+        <td>0.39</td>
+    </tr>
+    <tr>
+        <td>Extra Sludge</td>
+        <td>1</td>
+        <td>0.19</td>
+    </tr>
+</table>
+
+<h3>Then</h3>
+
+<p>The total of this order will be <b x:assertEquals="#order.total">1.96</b>.</p>
+
+<h3>When</h3>
+
+<p x:execute="#order.takeaway = false">
+    The same order is sold as an eat-in order
+</p>
+
+<h3>Then</h3>
+
+<p>The total of this order will be <b x:assertEquals="#order.total">2.30</b>.</p>
+
+</body>
+</html>
