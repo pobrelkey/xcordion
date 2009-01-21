@@ -27,7 +27,7 @@ public class XcordionTestCase extends TestCase {
             return;
         }
 
-        new SimpleXcordionRunner(testClass).runTest(isExpectedToPass());
+        new SimpleXcordionRunner(testClass.newInstance()).runTest(isExpectedToPass());
     }
 
 
