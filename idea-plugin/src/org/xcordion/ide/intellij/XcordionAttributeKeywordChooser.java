@@ -1,13 +1,12 @@
 package org.xcordion.ide.intellij;
 
-import com.intellij.codeInsight.completion.KeywordChooser;
 import com.intellij.codeInsight.completion.CompletionContext;
+import com.intellij.codeInsight.completion.KeywordChooser;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.xml.XmlTag;
-import com.intellij.psi.html.HtmlTag;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 
 class XcordionAttributeKeywordChooser implements KeywordChooser {
@@ -35,5 +34,4 @@ class XcordionAttributeKeywordChooser implements KeywordChooser {
                 && psiElement.getParent().getParent() != null
                 && (psiElement.getParent().getParent() instanceof XmlTag);
     }
-
 }

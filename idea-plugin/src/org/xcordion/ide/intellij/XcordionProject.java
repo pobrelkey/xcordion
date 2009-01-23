@@ -6,12 +6,8 @@ See http://intellij.net/forums/thread.jspa?messageID=5157247&#5157247
 import com.intellij.codeInsight.completion.CompletionUtil;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.fileTypes.StdFileTypes;
-import com.intellij.psi.filters.TrueFilter;
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
-import com.intellij.psi.PsiManager;
-import com.intellij.codeInsight.completion.CompletionUtil;
 import org.jetbrains.annotations.NonNls;
-import org.xcordion.ide.intellij.XcordionHtmlCompletionData;
 
 public class XcordionProject implements ProjectComponent {
     private ReferenceProvidersRegistry registry;
@@ -36,7 +32,7 @@ public class XcordionProject implements ProjectComponent {
         return "XcordionProject";
     }
 
-    public void initComponent() {
+    public void initComponent() { 
         CompletionUtil.registerCompletionData(StdFileTypes.HTML, new XcordionHtmlCompletionData());
     }
 

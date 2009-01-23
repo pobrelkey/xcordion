@@ -1,9 +1,9 @@
 package org.xcordion.ide.intellij;
 
-import com.intellij.codeInsight.completion.CompletionContext;
 import com.intellij.codeInsight.completion.CompletionVariant;
 import com.intellij.codeInsight.completion.HtmlCompletionData;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 
 import java.util.Set;
 
@@ -20,10 +20,15 @@ public class XcordionHtmlCompletionData extends HtmlCompletionData {
         this.attributeValueCompeletionVariant = new XcordionAttributeValueCompetionVariant();
     }
 
-    public void addKeywordVariants(Set<CompletionVariant> completionVariants, CompletionContext completionContext, PsiElement psiElement) {
-        super.addKeywordVariants(completionVariants, completionContext, psiElement);    //To change body of overridden methods use File | Settings | File Templates.
-        addCustomCompletionVariant(attributeCompletionVariant, completionVariants, psiElement);
-        addCustomCompletionVariant(attributeValueCompeletionVariant, completionVariants, psiElement);
+    public void addKeywordVariants(Set<CompletionVariant> completionVariants, PsiElement psiElement, PsiFile psiFile) {
+        super.addKeywordVariants(completionVariants, psiElement, psiFile);
+        addCustomCompletionVariant(attributeCompletionVariant, completionVariants, psiFile);
+        addCustomCompletionVariant(attributeValueCompeletionVariant, completionVariants, psiFile);
+    }
+
+    @Override
+    public void registerVariant(CompletionVariant completionVariant) {
+        super.registerVariant(completionVariant);    
     }
 
     private void addCustomCompletionVariant(CompletionVariant completionVariant, Set<CompletionVariant> completionVariants, PsiElement psiElement) {
@@ -31,5 +36,4 @@ public class XcordionHtmlCompletionData extends HtmlCompletionData {
             completionVariants.add(completionVariant);
         }
     }
-
 }

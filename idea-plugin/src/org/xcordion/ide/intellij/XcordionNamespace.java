@@ -1,12 +1,11 @@
 package org.xcordion.ide.intellij;
 
-import java.util.List;
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 
-enum XcordionNamespace {
+public enum XcordionNamespace {
     NAMESPACE_CONCORDION_2007("http://www.concordion.org/2007/concordion"),
     NAMESPACE_CONCORDION_OLD("http://concordion.org"),
     NAMESPACE_CONCORDION_ANCIENT("http://concordion.org/namespace/concordion-1.0");

@@ -1,30 +1,29 @@
 package org.xcordion.ide.intellij;
 
 import com.intellij.codeInsight.completion.BasicInsertHandler;
-import com.intellij.codeInsight.completion.CompletionContext;
-import com.intellij.codeInsight.completion.LookupData;
-import com.intellij.codeInsight.lookup.LookupItem;
+import com.intellij.codeInsight.completion.InsertionContext;
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.text.CharArrayUtil;
 import com.intellij.xml.util.HtmlUtil;
 
 class XmlAttributeInsertHandler extends BasicInsertHandler {
 
-    public void handleInsert(CompletionContext completioncontext, int i, LookupData lookupdata, LookupItem lookupitem, boolean flag, char c) {
-        super.handleInsert(completioncontext, i, lookupdata, lookupitem, flag, c);
-        Editor editor = completioncontext.editor;
+    @Override
+    public void handleInsert(InsertionContext insertionContext, LookupElement lookupElement) {
+        super.handleInsert(insertionContext, lookupElement);
+        Editor editor = insertionContext.getEditor();
         Document document = editor.getDocument();
         int caretModelOffset = editor.getCaretModel().getOffset();
         PsiFile psiFile = PsiDocumentManager.getInstance(editor.getProject()).getPsiFile(document);
-        String qualifiedAttributeName = lookupitem.getObject().toString();
+        String qualifiedAttributeName = lookupElement.getObject().toString();
         if (psiFile.getFileType() == StdFileTypes.HTML && HtmlUtil.isSingleHtmlAttribute(qualifiedAttributeName)) {
             return;
         }
@@ -38,8 +37,8 @@ class XmlAttributeInsertHandler extends BasicInsertHandler {
         String namespace = tag.getNamespace();
         String localName = qualifiedAttributeName;
         if (whereColon != -1) {
-            namespace = tag.getNamespaceByPrefix(qualifiedAttributeName.substring(0,whereColon));
-            localName = qualifiedAttributeName.substring(whereColon+1);
+            namespace = tag.getNamespaceByPrefix(qualifiedAttributeName.substring(0, whereColon));
+            localName = qualifiedAttributeName.substring(whereColon + 1);
         }
         XcordionAttribute attribute = XcordionAttribute.forNamespaceAndName(namespace, localName);
         boolean insertHash = (attribute != null && attribute.getSyntax() != XcordionAttributeSyntax.EXECUTE);
@@ -56,5 +55,4 @@ class XmlAttributeInsertHandler extends BasicInsertHandler {
         editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
         editor.getSelectionModel().removeSelection();
     }
-
 }

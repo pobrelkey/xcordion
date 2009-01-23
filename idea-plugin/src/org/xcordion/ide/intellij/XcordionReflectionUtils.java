@@ -1,14 +1,17 @@
 package org.xcordion.ide.intellij;
 
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.*;
+import com.intellij.psi.impl.source.html.HtmlFileImpl;
+import static com.intellij.psi.search.GlobalSearchScope.allScope;
+import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
-import com.intellij.psi.xml.XmlAttribute;
-import com.intellij.psi.*;
 
 import java.util.*;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class XcordionReflectionUtils {
     private static final List<String> EXCLUDED_METHODS = Arrays.asList(
@@ -137,11 +140,14 @@ public class XcordionReflectionUtils {
 
     static private PsiClass getXcordionTestBackingClass(PsiElement psiElement) {
         if (psiElement instanceof XmlAttributeValue) {
-            PsiFile htmlFile = psiElement.getContainingFile().getOriginalFile();
+            HtmlFileImpl htmlFile = (HtmlFileImpl)psiElement.getContainingFile().getOriginalFile();
             if (htmlFile == null) {
-                htmlFile = psiElement.getOriginalElement().getContainingFile();
+                htmlFile = (HtmlFileImpl)psiElement.getOriginalElement().getContainingFile();
             }
-            String qualifiedPackageName = htmlFile.getContainingDirectory().getPackage().getQualifiedName();
+
+            final PsiPackage psiPackage = JavaDirectoryService.getInstance().getPackage(htmlFile.getContainingDirectory());
+            String qualifiedPackageName = psiPackage.getQualifiedName();
+
             PsiClass psiClass = findTestClass(psiElement, htmlFile, qualifiedPackageName, "Test");
             if (psiClass == null) {
                 psiClass = findTestClass(psiElement, htmlFile, qualifiedPackageName, "");
@@ -154,9 +160,7 @@ public class XcordionReflectionUtils {
     private static PsiClass findTestClass(PsiElement psiElement, PsiFile htmlFile, String qualifiedPackageName, String suffix) {
         String className = htmlFile.getName().substring(0, htmlFile.getName().length() - 5) + suffix;
         String qualifiedClassName = qualifiedPackageName + "." + className;
-        PsiClass psiClass = PsiManager.getInstance(psiElement.getProject())
-                .findClass(qualifiedClassName, psiElement.getResolveScope());
-        return psiClass;
+        return JavaPsiFacade.getInstance(psiElement.getProject()).findClass(qualifiedClassName, psiElement.getResolveScope());
     }
 
     static private String parenInnards(int howManyDeep) {
@@ -282,7 +286,8 @@ public class XcordionReflectionUtils {
             if (!hasIndexer) {
                 return clazz;
             }
-            PsiClass listClazz = psiManager.findClass("java.util.List");
+            Project project = psiManager.getProject();
+            PsiClass listClazz = JavaPsiFacade.getInstance(project).findClass("java.util.List", allScope(project));
             if ((listClazz.equals(clazz) || clazz.isInheritor(listClazz, true)) && classType.hasNonTrivialParameters()) {
                 PsiClassType.ClassResolveResult classResolveResult = classType.resolveGenerics();
                 if (classResolveResult.isValidResult()) {

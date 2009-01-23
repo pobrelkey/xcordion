@@ -2,13 +2,11 @@ package org.xcordion.ide.intellij;
 
 import com.intellij.codeInsight.completion.CompletionContext;
 import com.intellij.codeInsight.completion.KeywordChooser;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.xml.*;
+import com.intellij.psi.xml.XmlAttribute;
+import com.intellij.psi.xml.XmlAttributeValue;
 
-import java.util.*;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,7 +47,4 @@ class XcordionAttributeValueKeywordChooser implements KeywordChooser {
     private String getValueLeftOfCursor(PsiElement psiElement) {
         return psiElement.getText().substring(1, psiElement.getText().indexOf(INTELLIJ_IDEA_RULEZZZ));
     }
-
-
-
 }

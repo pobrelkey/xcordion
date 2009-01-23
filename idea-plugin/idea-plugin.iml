@@ -7,11 +7,19 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
     </content>
-    <orderEntry type="jdk" jdkName="IDEA 7757" jdkType="IDEA JDK" />
+    <orderEntry type="jdk" jdkName="IDEA 9164" jdkType="IDEA JDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="TestJars" level="project" />
-    <orderEntry type="library" name="Testing" level="application" />
-    <orderEntryProperties />
+    <orderEntry type="module-library">
+      <library name="Jedi">
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/../../../trunk/netstream/libraries/deployment-jars/jedi-2" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/../../../trunk/netstream/libraries/deployment-jars/jedi-2" recursive="false" />
+      </library>
+    </orderEntry>
   </component>
 </module>
 

@@ -4,7 +4,6 @@ import com.intellij.codeInsight.completion.CompletionVariant;
 import com.intellij.codeInsight.completion.DefaultInsertHandler;
 import com.intellij.codeInsight.completion.KeywordChooser;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
-import com.intellij.psi.filters.ElementFilter;
 
 public class XcordionAttributeValueCompetionVariant extends CompletionVariant {
     public XcordionAttributeValueCompetionVariant() {
@@ -14,6 +13,4 @@ public class XcordionAttributeValueCompetionVariant extends CompletionVariant {
         setInsertHandler(new DefaultInsertHandler());
         addCompletion(keywordChooser);
     }
-
-
 }
