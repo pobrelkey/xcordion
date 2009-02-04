@@ -20,6 +20,7 @@ import org.hiro.psi.BasePsiClassBuilder;
 import org.hiro.psi.PsiHelper;
 import org.hiro.psi.PsiMethodBuilder;
 import org.xcordion.ide.intellij.XcordionNamespace;
+import static org.xcordion.ide.intellij.settings.XcordionSettingsContext.getConfiguration;
 
 public class ToggleTestHtmlJavaActionHandler extends EditorActionHandler {
     private static final String XCORDION_TEST_CASE = "XcordionTestCase";
@@ -124,7 +125,7 @@ public class ToggleTestHtmlJavaActionHandler extends EditorActionHandler {
                             .withMethod(new PsiMethodBuilder(elementFactory, psiHelper.getCodeStyleManager())
                                     .withMethodText("public boolean isExpectedToPass() {return false;}")
                                     .build())
-                            .withSuperClass(getXcordionTestCasePackage() + getXcordionTestCaseName())
+                            .withSuperClass(getXcordionTestCaseName())
                             .build();
                 }
             });
@@ -140,11 +141,6 @@ public class ToggleTestHtmlJavaActionHandler extends EditorActionHandler {
     }
 
     private String getXcordionTestCaseName() {
-        //TODO:  Add configuration so this class name can be set by the user, default it to "xcordion.junit3.XcordionTestCase" once the new version is in use
-        return moduleName + XCORDION_TEST_CASE;
-    }
-
-    private String getXcordionTestCasePackage() {
-        return "some.where.";
+        return getConfiguration(moduleName).getXcordionBackingClassName();
     }
 }

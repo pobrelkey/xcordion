@@ -19,6 +19,11 @@
             <implementation-class>org.xcordion.ide.intellij.XcordionProject</implementation-class>
         </component>
     </project-components>
+    <module-components>
+        <component>
+            <implementation-class>org.xcordion.ide.intellij.settings.XcordionModuleComponent</implementation-class>
+        </component>
+    </module-components>
     <actions>
         <action id="xcordion.Xcordion" class="org.xcordion.ide.intellij.actions.ToggleTestHtmlJavaAction"
                 text="toggle html/java files" description="Toggles between html spec and java test class. If java test class does not exist, generates a java test class for the current html spec.">

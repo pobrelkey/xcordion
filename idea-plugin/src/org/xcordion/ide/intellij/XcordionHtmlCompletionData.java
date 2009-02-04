@@ -13,22 +13,20 @@ import java.util.Set;
 public class XcordionHtmlCompletionData extends HtmlCompletionData {
 
     private CompletionVariant attributeCompletionVariant;
-    private CompletionVariant attributeValueCompeletionVariant;
+    private CompletionVariant attributeValueCompletionVariant;
 
     public XcordionHtmlCompletionData() {
+        super();
         this.attributeCompletionVariant = new XcordionAttributeCompletionVariant();
-        this.attributeValueCompeletionVariant = new XcordionAttributeValueCompetionVariant();
+        this.attributeValueCompletionVariant = new XcordionAttributeValueCompetionVariant();
+        registerVariant(attributeCompletionVariant);
+        registerVariant(attributeValueCompletionVariant);
     }
 
     public void addKeywordVariants(Set<CompletionVariant> completionVariants, PsiElement psiElement, PsiFile psiFile) {
         super.addKeywordVariants(completionVariants, psiElement, psiFile);
         addCustomCompletionVariant(attributeCompletionVariant, completionVariants, psiFile);
-        addCustomCompletionVariant(attributeValueCompeletionVariant, completionVariants, psiFile);
-    }
-
-    @Override
-    public void registerVariant(CompletionVariant completionVariant) {
-        super.registerVariant(completionVariant);    
+        addCustomCompletionVariant(attributeValueCompletionVariant, completionVariants, psiFile);
     }
 
     private void addCustomCompletionVariant(CompletionVariant completionVariant, Set<CompletionVariant> completionVariants, PsiElement psiElement) {

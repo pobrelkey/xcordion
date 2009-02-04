@@ -8,35 +8,28 @@ import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
 import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 
 public class XcordionProject implements ProjectComponent {
-    private ReferenceProvidersRegistry registry;
-
-    public XcordionProject(ReferenceProvidersRegistry registry) {
-        this.registry = registry;
+    public XcordionProject() {
     }
 
     public void projectOpened() {
-//        registry.registerXmlAttributeValueReferenceProvider(
-//                null,
-//                TrueFilter.INSTANCE,
-//                new XcordionReferenceProvider());
     }
-
 
     public void projectClosed() {
     }
 
+    @NotNull
     @NonNls
     public String getComponentName() {
         return "XcordionProject";
     }
 
-    public void initComponent() { 
+    public void initComponent() {
         CompletionUtil.registerCompletionData(StdFileTypes.HTML, new XcordionHtmlCompletionData());
     }
 
     public void disposeComponent() {
     }
-
 }
