@@ -23,7 +23,7 @@ class XcordionAttributeKeywordChooser implements KeywordChooser {
                     qualifiedAttributes.add(namespacePrefix + ":" + attribute.getLocalName());
                 }
             }
-            return qualifiedAttributes.toArray(new String[0]);
+            return qualifiedAttributes.toArray(new String[qualifiedAttributes.size()]);
         }
         return new String[0];
     }

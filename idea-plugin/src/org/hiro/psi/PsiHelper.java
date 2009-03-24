@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ex.ProjectRootManagerEx;
 import com.intellij.openapi.startup.StartupManager;
@@ -18,8 +19,8 @@ import com.intellij.util.messages.impl.MessageBusImpl;
 
 public class PsiHelper {
 
-    private PsiElementFactory elementFactory;
     private final Project project;
+    private PsiElementFactory elementFactory;
 
     public PsiHelper(Project project) {
         this.project = project;
@@ -31,6 +32,10 @@ public class PsiHelper {
 
     public Project getProject() {
         return project;
+    }
+
+    public Module getModule(DataContext dataContext) {
+        return DataKeys.MODULE.getData(dataContext);
     }
 
     public Editor getEditor() {
@@ -65,7 +70,7 @@ public class PsiHelper {
     }
 
     private PsiElement getPsiElement() {
-        return getCurrentJavaFile().findElementAt(getEditor().getCaretModel().getOffset());
+        return getCurrentFile().findElementAt(getEditor().getCaretModel().getOffset());
     }
 
     public PsiElementFactory getElementFactory() {

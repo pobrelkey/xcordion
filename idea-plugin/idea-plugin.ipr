@@ -34,6 +34,9 @@
       <entry name="?*MyFirstXcordionSpecTestClass.java" />
     </wildcardResourcePatterns>
   </component>
+  <component name="CopyrightManager" default="">
+    <module2copyright />
+  </component>
   <component name="DependenciesAnalyzeManager">
     <option name="myForwardDirection" value="false" />
   </component>
@@ -57,6 +60,11 @@
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" />
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
+  </component>
+  <component name="Generate Builder">
+    <option name="insertionPolicy">
+      <InsertionPolicy />
+    </option>
   </component>
   <component name="IdProvider" IDEtalkID="3353E949DEFC6C95356CD24BB8EF97F3" />
   <component name="InspectionProjectProfileManager">
@@ -227,18 +235,17 @@
   <component name="ProjectDetails">
     <option name="projectName" value="idea-plugin" />
   </component>
-  <component name="ProjectFileVersion" converted="true">
-    <converter id="javaee-modules" />
-    <converter id="ror-modules" />
-    <converter id="SelenaRunConfToDiana" />
+  <component name="ProjectFileVersion" converted="true" />
+  <component name="ProjectKey">
+    <option name="state" value="https://xcordion.googlecode.com/svn/trunk/idea-plugin/idea-plugin.ipr" />
   </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/idea-plugin.iml" filepath="$PROJECT_DIR$/idea-plugin.iml" />
+      <module fileurl="file:$TEMPLATE$/$PROJECT_DIR$/idea-plugin.iml" filepath="$PROJECT_DIR$/idea-plugin.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="IDEA 9164" project-jdk-type="IDEA JDK">
-    <output url="file://$PROJECT_DIR$/out" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="IDEA 9712" project-jdk-type="IDEA JDK">
+    <output url="file:$TEMPLATE$/$PROJECT_DIR$/out" />
   </component>
   <component name="ResourceManagerContainer">
     <option name="myResourceBundles">
@@ -265,6 +272,7 @@
       </map>
     </option>
     <option name="myVersion" value="124" />
+    <option name="mySupportsUserInfoFilter" value="true" />
   </component>
   <component name="TestDoxConfiguration">
     <option name="createTestIfMissing" value="true" />
@@ -276,18 +284,19 @@
   </component>
   <component name="WebServicesPlugin" addRequiredLibraries="true" />
   <component name="libraryTable">
-    <library name="TestJars">
+    <library name="Jedi-2.3">
       <CLASSES>
-        <root url="jar:///Users/dev/trunk/netstream/libraries/compilation-jars/jmock-junit4-2.4.0.jar!/" />
-        <root url="jar:///Users/dev/trunk/netstream/libraries/compilation-jars/jmock-2.4.0.jar!/" />
-        <root url="jar:///Users/dev/trunk/netstream/libraries/compilation-jars/hamcrest-core-1.1.jar!/" />
-        <root url="jar:///Users/dev/trunk/netstream/libraries/compilation-jars/hamcrest-library-1.1.jar!/" />
+        <root url="jar:$TEMPLATE$/$TEMPLATE$/Users/dev/IdeaProjects/libraries/jedi-2.3/jedi_2.3_jdk1.5.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar:///System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/src.jar!/src" />
+        <root url="jar:$TEMPLATE$/$TEMPLATE$/Users/dev/IdeaProjects/libraries/jedi-2.3/jedi_2.3_src.zip!/" />
       </SOURCES>
+      <jarDirectory url="file:$TEMPLATE$/$TEMPLATE$/Users/dev/IdeaProjects/libraries/jedi-2.3" recursive="false" />
     </library>
   </component>
+  <UsedPathMacros>
+    <macro name="TEMPLATE" description="" />
+  </UsedPathMacros>
 </project>
 

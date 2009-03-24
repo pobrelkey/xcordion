@@ -3,7 +3,7 @@ package org.xcordion.ide.intellij;
 import java.util.Date;
 
 
-public class MyFirstXcordionSpecTestClass extends Object{
+public class MyFirstXcordionSpecTestClass {
     String aString;
     Long aLong;
     int aint;
@@ -25,7 +25,7 @@ public class MyFirstXcordionSpecTestClass extends Object{
     }
 
     public Long build(){
-        return new Long(123L);
+        return 123L;
     }
 
     public String getAString() {

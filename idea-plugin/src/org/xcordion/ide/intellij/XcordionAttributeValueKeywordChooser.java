@@ -29,7 +29,7 @@ class XcordionAttributeValueKeywordChooser implements KeywordChooser {
 
             List<String> displayValues = XcordionReflectionUtils.getDisplayValues(attributeValueElement, suffix, baseExpression);
 
-            return displayValues.toArray(new String[0]);
+            return displayValues.toArray(new String[displayValues.size()]);
         }
         return EMPTY_KEYWORD_LIST;
     }

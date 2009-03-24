@@ -30,4 +30,8 @@
             <keyboard-shortcut keymap="$default" first-keystroke="shift alt X"/>
         </action>
     </actions>
+    <extensions defaultExtensionNs="com.intellij">
+        <completion.contributor implementation="org.xcordion.ide.intellij.XcordionCompletionContributor" />
+
+    </extensions>
 </idea-plugin>

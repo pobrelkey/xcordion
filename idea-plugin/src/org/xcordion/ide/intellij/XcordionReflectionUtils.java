@@ -34,6 +34,7 @@ public class XcordionReflectionUtils {
         if (!baseExpression.endsWith("#")) {
             displayValues.addAll(getMethodAndFieldNameVariants(attributeValueElement, baseExpression, suffix));
         }
+
         if (!baseExpression.trim().endsWith(".")) {
             displayValues.addAll(getVariableNameVariants(attributeValueElement, baseExpression, suffix));
         }
@@ -43,37 +44,56 @@ public class XcordionReflectionUtils {
     static private Collection<String> getMethodAndFieldNameVariants(XmlAttributeValue attributeValueElement, String baseExpression, String suffix) {
         TreeSet<String> displayValues = new TreeSet<String>();
         PsiClass clazz = findMember(baseExpression, attributeValueElement);
-        if (clazz != null) {
-            for (PsiMethod method : clazz.getAllMethods()) {
-                if (!method.isConstructor()
-                        && !EXCLUDED_METHODS.contains(method.getName())
-                        && isPublic(method)) {
-                    Matcher m = GETTER_SETTER_PATTERN.matcher(method.getName());
-                    String expression = null;
-                    if (m.matches() && (isGetter(method, m) || isBooleanGetter(method, m) || isSetter(method, m))) {
-                        // OGNL getter or setter
-                        expression = ifMatchesSuffix(suffix, m.group(2).toLowerCase() + m.group(3));
-                    }
-                    if (expression == null) {
-                        // normal method
-                        expression = ifMatchesSuffix(suffix, method.getName() + "()");
-                    }
 
-                    if (expression != null) {
-                        displayValues.add(baseExpression + expression);
-                    }
-                }
-            }
-            for (PsiField field : clazz.getAllFields()) {
-                if (isPublic(field)) {
-                    String expression = ifMatchesSuffix(suffix, field.getName());
-                    if (expression != null) {
-                        displayValues.add(baseExpression + expression);
-                    }
+        if (clazz != null) {
+            displayValues.addAll(getMethodsToDisplay(clazz, baseExpression, suffix));
+            displayValues.addAll(getFieldsToDisplay(clazz, baseExpression, suffix));
+        }
+        return displayValues;
+    }
+
+    private static List<String> getFieldsToDisplay(PsiClass clazz, String baseExpression, String suffix) {
+        List<String> fields = new ArrayList<String>();
+
+        for (PsiField field : clazz.getAllFields()) {
+            if (isPublic(field)) {
+                String expression = ifMatchesSuffix(suffix, field.getName());
+                if (expression != null) {
+                    fields.add(baseExpression + expression);
                 }
             }
         }
-        return displayValues;
+        return fields;
+    }
+
+    private static List<String> getMethodsToDisplay(PsiClass clazz, String baseExpression, String suffix) {
+        List<String> methods = new ArrayList<String>();
+
+        for (PsiMethod method : clazz.getAllMethods()) {
+            if (isPotentialMethod(method)) {
+                Matcher m = GETTER_SETTER_PATTERN.matcher(method.getName());
+                String expression = null;
+                if (m.matches() && (isGetter(method, m) || isBooleanGetter(method, m) || isSetter(method, m))) {
+                    // OGNL getter or setter
+                    expression = ifMatchesSuffix(suffix, m.group(2).toLowerCase() + m.group(3));
+                }
+                if (expression == null) {
+                    // normal method
+                    expression = ifMatchesSuffix(suffix, method.getName() + "()");
+                }
+
+                if (expression != null) {
+                    methods.add(baseExpression + expression);
+                }
+            }
+        }
+        return methods;
+    }
+
+    private static boolean isPotentialMethod(PsiMethod method) {
+        return !method.isConstructor()
+                && !EXCLUDED_METHODS.contains(method.getName())
+                && isPublic(method);
     }
 
     private static boolean isSetter(PsiMethod method, Matcher m) {
@@ -81,7 +101,8 @@ public class XcordionReflectionUtils {
     }
 
     private static boolean isBooleanGetter(PsiMethod method, Matcher m) {
-        return m.group(1).equals("is") && method.getParameterList().getParametersCount() == 0 && method.getReturnType().isConvertibleFrom(PsiType.BOOLEAN);
+        return m.group(1).equals("is") && method.getParameterList().getParametersCount() == 0
+                && method.getReturnType().isConvertibleFrom(PsiType.BOOLEAN);
     }
 
     private static boolean isGetter(PsiMethod method, Matcher m) {
@@ -92,11 +113,11 @@ public class XcordionReflectionUtils {
         return (suffix == null || expression.toLowerCase().startsWith(suffix.toLowerCase())) ? expression : null;
     }
 
-    static private boolean isPublic(PsiModifierListOwner modifiable) {
+    private static boolean isPublic(PsiModifierListOwner modifiable) {
         return modifiable.getModifierList().hasExplicitModifier("public");
     }
 
-    static private List<String> getVariableNameVariants(PsiElement attributeValueElement, String baseExpression, String suffix) {
+    private static List<String> getVariableNameVariants(PsiElement attributeValueElement, String baseExpression, String suffix) {
         XmlFile doc = (XmlFile) attributeValueElement.getContainingFile();
         TreeSet<String> ognlVariableNames = new TreeSet<String>();
         recursivelyScanXcordionTags(ognlVariableNames, doc, attributeValueElement);
@@ -106,13 +127,13 @@ public class XcordionReflectionUtils {
         String prefix = baseExpression;
         if (baseExpression.endsWith("#")) {
             prefix = baseExpression.substring(0, baseExpression.length() - 1);
-            suffix = "#" + (suffix==null?"":suffix);
+            suffix = "#" + (suffix == null ? "" : suffix);
         }
 
         List<String> displayValues = new ArrayList<String>();
         for (String variable : ognlVariableNames) {
             if (suffix == null || variable.startsWith(suffix)) {
-                if(prefix.length()==0 && suffix!=null && suffix.startsWith("#")){
+                if (prefix.length() == 0 && suffix != null && suffix.startsWith("#")) {
                     variable = variable.substring(1);
                 }
                 displayValues.add(prefix + variable);
@@ -121,7 +142,7 @@ public class XcordionReflectionUtils {
         return displayValues;
     }
 
-    static private void recursivelyScanXcordionTags(Set<String> ognlVariableNames, PsiElement element, PsiElement attributeValueElement) {
+    private static void recursivelyScanXcordionTags(Set<String> ognlVariableNames, PsiElement element, PsiElement attributeValueElement) {
         for (PsiElement psiChild : element.getChildren()) {
             if (psiChild instanceof XmlTag) {
                 XmlTag tag = (XmlTag) psiChild;
@@ -138,15 +159,10 @@ public class XcordionReflectionUtils {
         }
     }
 
-    static private PsiClass getXcordionTestBackingClass(PsiElement psiElement) {
+    private static PsiClass getXcordionTestBackingClass(PsiElement psiElement) {
         if (psiElement instanceof XmlAttributeValue) {
-            HtmlFileImpl htmlFile = (HtmlFileImpl)psiElement.getContainingFile().getOriginalFile();
-            if (htmlFile == null) {
-                htmlFile = (HtmlFileImpl)psiElement.getOriginalElement().getContainingFile();
-            }
-
-            final PsiPackage psiPackage = JavaDirectoryService.getInstance().getPackage(htmlFile.getContainingDirectory());
-            String qualifiedPackageName = psiPackage.getQualifiedName();
+            HtmlFileImpl htmlFile = getHtmlFile(psiElement);
+            String qualifiedPackageName = getQualifiedPackageName(htmlFile);
 
             PsiClass psiClass = findTestClass(psiElement, htmlFile, qualifiedPackageName, "Test");
             if (psiClass == null) {
@@ -157,17 +173,29 @@ public class XcordionReflectionUtils {
         return null;
     }
 
+    private static String getQualifiedPackageName(HtmlFileImpl htmlFile) {
+        return JavaDirectoryService.getInstance().getPackage(htmlFile.getContainingDirectory()).getQualifiedName();
+    }
+
+    private static HtmlFileImpl getHtmlFile(PsiElement psiElement) {
+        HtmlFileImpl htmlFile = (HtmlFileImpl) psiElement.getContainingFile().getOriginalFile();
+        if (htmlFile == null) {
+            htmlFile = (HtmlFileImpl) psiElement.getOriginalElement().getContainingFile();
+        }
+        return htmlFile;
+    }
+
     private static PsiClass findTestClass(PsiElement psiElement, PsiFile htmlFile, String qualifiedPackageName, String suffix) {
         String className = htmlFile.getName().substring(0, htmlFile.getName().length() - 5) + suffix;
         String qualifiedClassName = qualifiedPackageName + "." + className;
         return JavaPsiFacade.getInstance(psiElement.getProject()).findClass(qualifiedClassName, psiElement.getResolveScope());
     }
 
-    static private String parenInnards(int howManyDeep) {
+    private static String parenInnards(int howManyDeep) {
         return innards(howManyDeep, "()");
     }
 
-    static private String bracketInnards(int howManyDeep) {
+    private static String bracketInnards(int howManyDeep) {
         return innards(howManyDeep, "[]");
     }
 
@@ -179,8 +207,7 @@ public class XcordionReflectionUtils {
         }
     }
 
-
-    static PsiClass findMember(String chain, PsiElement attributeValueElement) {
+    private static PsiClass findMember(String chain, PsiElement attributeValueElement) {
         PsiManager psiManager = PsiManager.getInstance(attributeValueElement.getProject());
 
         Matcher lastDotMatcher = LAST_DOT_PATTERN.matcher(chain);
@@ -258,7 +285,8 @@ public class XcordionReflectionUtils {
         return null;
     }
 
-    static private final Pattern PARAMETER_PATTERN = Pattern.compile("([^,]|\\(" + parenInnards(6) + "\\))+");
+    private static final Pattern PARAMETER_PATTERN = Pattern.compile("([^,]|\\(" + parenInnards(6) + "\\))+");
+
     private static int countParameters(String possibleParams) {
         int result = 0;
         Matcher m = PARAMETER_PATTERN.matcher(possibleParams.substring(1, possibleParams.length() - 1));
@@ -268,11 +296,11 @@ public class XcordionReflectionUtils {
         return result;
     }
 
-    static private String addPrefix(String prefix, String methodName) {
+    private static String addPrefix(String prefix, String methodName) {
         return prefix + methodName.substring(0, 1).toUpperCase() + (methodName.length() > 1 ? methodName.substring(1) : "");
     }
 
-    static private PsiClass resolveTypeToClass(PsiType returnType, boolean hasIndexer, PsiManager psiManager) {
+    private static PsiClass resolveTypeToClass(PsiType returnType, boolean hasIndexer, PsiManager psiManager) {
         if (returnType instanceof PsiArrayType) {
             PsiType componentType = ((PsiArrayType) returnType).getComponentType();
             if (componentType instanceof PsiClassType) {
@@ -302,5 +330,4 @@ public class XcordionReflectionUtils {
         }
         return null;
     }
-
 }

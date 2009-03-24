@@ -7,7 +7,6 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleComponent;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -24,15 +23,14 @@ import javax.swing.*;
 public class XcordionModuleComponent implements ModuleComponent, Configurable, PersistentStateComponent<XcordionSettings> {
     public static final String COMPONENT_NAME = "XcordionConfiguration";
 
+    private final Module module;
     private XcordionSettings settings = new XcordionSettings();
     private SettingsPanel settingsPanel;
-    private Project project;
-    private Module module;
 
-    public XcordionModuleComponent(Project project, Module module) {
-        this.project = project;
+    public XcordionModuleComponent(Module module) {
         this.module = module;
-        settings.setXcordionBackingClassName(module.getName() + "ConcordionTestCase");
+        this.settings.setXcordionBackingClassName(module.getName() + "ConcordionTestCase");
+        this.settings.setShowConfirmationMessage(true);
     }
 
     public void projectOpened() {
@@ -62,7 +60,6 @@ public class XcordionModuleComponent implements ModuleComponent, Configurable, P
     }
 
     public Icon getIcon() {
-//        return IconHelper.getIcon(IconHelper.XCORDION_ICON);
         return null;
     }
 
@@ -71,22 +68,22 @@ public class XcordionModuleComponent implements ModuleComponent, Configurable, P
     }
 
     public JComponent createComponent() {
-        settingsPanel = new SettingsPanel();
+        settingsPanel = new SettingsPanel(settings);
         reset();
         return settingsPanel;
     }
 
     public boolean isModified() {
-        return !settings.getXcordionBackingClassName().equals(settingsPanel.getXcordionBackingClassName());
+        return !settings.equals(settingsPanel.getSettings());
     }
 
     public void apply() throws ConfigurationException {
-        settings.setXcordionBackingClassName(settingsPanel.getXcordionBackingClassName());
+        settings = settingsPanel.getSettings();
         setConfiguration(module.getName(), settings);
     }
 
     public void reset() {
-        settingsPanel.setXcordionBackingClassName(settings.getXcordionBackingClassName());
+        settingsPanel.setSettings(settings);
     }
 
     public void disposeUIResources() {

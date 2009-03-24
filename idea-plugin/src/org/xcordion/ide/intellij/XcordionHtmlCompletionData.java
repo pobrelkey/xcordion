@@ -12,8 +12,8 @@ import java.util.Set;
 //TODO: Handle carriage returns in attributevalue
 public class XcordionHtmlCompletionData extends HtmlCompletionData {
 
-    private CompletionVariant attributeCompletionVariant;
-    private CompletionVariant attributeValueCompletionVariant;
+    private final CompletionVariant attributeCompletionVariant;
+    private final CompletionVariant attributeValueCompletionVariant;
 
     public XcordionHtmlCompletionData() {
         super();

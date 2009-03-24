@@ -1,6 +1,10 @@
 package org.xcordion.ide.intellij;
 
 import com.intellij.psi.xml.XmlAttribute;
+import static jedi.functional.Coercions.list;
+import jedi.functional.Filter;
+import static jedi.functional.FunctionalPrimitives.headOrNullIfEmpty;
+import static jedi.functional.FunctionalPrimitives.select;
 import static org.xcordion.ide.intellij.XcordionNamespace.*;
 
 public enum XcordionAttribute {
@@ -25,9 +29,9 @@ public enum XcordionAttribute {
     ANCIENT_VERIFY(NAMESPACE_CONCORDION_ANCIENT, "verify", XcordionAttributeSyntax.EXECUTE);
 
 
-    private String namespaceUrl;
-    private String localName;
-    private XcordionAttributeSyntax syntax;
+    private final String namespaceUrl;
+    private final String localName;
+    private final XcordionAttributeSyntax syntax;
 
     XcordionAttribute(XcordionNamespace namespaceUrl, String localName, XcordionAttributeSyntax syntax) {
         this.syntax = syntax;
@@ -51,31 +55,24 @@ public enum XcordionAttribute {
         return syntax == XcordionAttributeSyntax.SET;
     }
 
-    static public XcordionAttribute forXmlAttribute(XmlAttribute xmlAttribute) {
-        for (XcordionAttribute attribute : XcordionAttribute.values()) {
-            if (attribute.namespaceUrl.equals(xmlAttribute.getNamespace()) &&
-                    attribute.localName.equals(xmlAttribute.getLocalName())) {
-                return attribute;
-            }
-        }
-        return null;
+    private static XcordionAttribute forXmlAttribute(XmlAttribute xmlAttribute) {
+        return headOrNullIfEmpty(select(list(values()), forNamespaceAndNameFilter(xmlAttribute.getNamespace(), xmlAttribute.getLocalName())));
     }
 
-    static public boolean isXcordionAttribute(XmlAttribute attribute) {
+    public static boolean isXcordionAttribute(XmlAttribute attribute) {
         return forXmlAttribute(attribute) != null;
     }
 
-    static public boolean isXcordionSetAttribute(XmlAttribute attribute) {
-        XcordionAttribute xcordionAttribute = forXmlAttribute(attribute);
-        return xcordionAttribute != null && xcordionAttribute.isSetAttribute();
+    public static XcordionAttribute forNamespaceAndName(String namespaceUrl, String localName) {
+        return headOrNullIfEmpty(select(list(values()), forNamespaceAndNameFilter(namespaceUrl, localName)));
     }
 
-    public static XcordionAttribute forNamespaceAndName(String namespaceUrl, String localName) {
-        for (XcordionAttribute attribute : values()) {
-            if (attribute.getNamespaceUrl().equals(namespaceUrl) && attribute.getLocalName().equals(localName)) {
-                return attribute;
+    private static Filter<XcordionAttribute> forNamespaceAndNameFilter(final String namespaceUrl, final String localName) {
+        return new Filter<XcordionAttribute>() {
+            public Boolean execute(XcordionAttribute xcordionAttribute) {
+                return xcordionAttribute.getNamespaceUrl().equals(namespaceUrl) && xcordionAttribute.getLocalName().equals(localName);
             }
-        }
-        return null;
+        };
     }
+
 }

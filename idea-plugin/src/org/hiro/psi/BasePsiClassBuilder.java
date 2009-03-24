@@ -1,7 +1,12 @@
 package org.hiro.psi;
 
+import com.intellij.openapi.project.Project;
+import static com.intellij.openapi.ui.Messages.showInfoMessage;
 import com.intellij.psi.*;
+import static com.intellij.psi.JavaPsiFacade.getInstance;
 import com.intellij.psi.search.GlobalSearchScope;
+import static com.intellij.psi.search.GlobalSearchScope.allScope;
+import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,18 +14,20 @@ import java.util.List;
 @SuppressWarnings({"unchecked"})
 public class BasePsiClassBuilder<T extends BasePsiClassBuilder> implements PsiClassBuilder<T, PsiClass> {
     private final PsiElementFactory elementFactory;
+    private final Project project;
 
+    private final List<String> fields = new ArrayList<String>();
+    private final List<PsiMethod> methods = new ArrayList<PsiMethod>();
+    private final List<PsiImportStatement> importStatements = new ArrayList<PsiImportStatement>();
     private PsiDirectory directory;
-    private List<PsiImportStatement> importStatements = new ArrayList<PsiImportStatement>();
-    private List<String> fields = new ArrayList<String>();
-    private List<PsiMethod> methods = new ArrayList<PsiMethod>();
 
     String className;
     String qualifiedClassName;
     String superClassName;
 
-    public BasePsiClassBuilder(PsiElementFactory elementFactory) {
+    public BasePsiClassBuilder(PsiElementFactory elementFactory, Project project) {
         this.elementFactory = elementFactory;
+        this.project = project;
     }
 
     public PsiElementFactory getElementFactory() {
@@ -45,11 +52,29 @@ public class BasePsiClassBuilder<T extends BasePsiClassBuilder> implements PsiCl
             psiClass.add(method);
         }
 
-        PsiReferenceList extendsList = psiClass.getExtendsList();
-        extendsList.add(elementFactory.createKeyword("extends"));
-        extendsList.add(elementFactory.createReferenceElementByFQClassName(superClassName, GlobalSearchScope.allScope(directory.getProject())));
+        if (isNotBlank(superClassName)) {
+            addSuperClass(psiClass);
+        }
 
         return psiClass;
+    }
+
+    private void addSuperClass(PsiClass psiClass) {
+        PsiClass superClass = getSuperClass();
+
+        if (superClass == null) {
+            showInfoMessage("Invalid super class [" + superClassName + "], please check your settings", "Invalid Super Class");
+        } else {
+            PsiReferenceList extendsList = psiClass.getExtendsList();
+            extendsList.add(elementFactory.createKeyword("extends"));
+            extendsList.add(elementFactory.createReferenceExpression(superClass));
+        }
+    }
+
+    private PsiClass getSuperClass() {
+        JavaPsiFacade psiFacade = getInstance(project);
+        GlobalSearchScope globalSearchScope = allScope(project);
+        return psiFacade.findClass(superClassName, globalSearchScope);
     }
 
     public T withName(String className) {
@@ -69,7 +94,7 @@ public class BasePsiClassBuilder<T extends BasePsiClassBuilder> implements PsiCl
 
     public T withImports(List<PsiImportStatement> importStatements) {
         if (importStatements != null) {
-            this.importStatements = importStatements;
+            this.importStatements.addAll(importStatements);
         }
         return (T) this;
     }
@@ -89,8 +114,8 @@ public class BasePsiClassBuilder<T extends BasePsiClassBuilder> implements PsiCl
         return (T) this;
     }
 
-    public T withSuperClass(String qualifiedClassName) {
-        this.superClassName = qualifiedClassName;
+    public T withSuperClass(String qualifiedSuperClassName) {
+        this.superClassName = qualifiedSuperClassName;
         return (T) this;
     }
 }

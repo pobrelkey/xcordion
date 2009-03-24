@@ -1,7 +1,11 @@
 package org.xcordion.ide.intellij;
 
+import static jedi.functional.Coercions.list;
+import jedi.functional.Filter;
+import static jedi.functional.FunctionalPrimitives.select;
+
 import java.util.ArrayList;
-import java.util.Collections;
+import static java.util.Collections.unmodifiableList;
 import java.util.List;
 
 
@@ -10,7 +14,7 @@ public enum XcordionNamespace {
     NAMESPACE_CONCORDION_OLD("http://concordion.org"),
     NAMESPACE_CONCORDION_ANCIENT("http://concordion.org/namespace/concordion-1.0");
 
-    private String namespace;
+    private final String namespace;
     private List<XcordionAttribute> attributes;
 
     private XcordionNamespace(String namespace) {
@@ -24,13 +28,17 @@ public enum XcordionNamespace {
     public List<XcordionAttribute> getAttributes() {
         if (this.attributes == null) {
             ArrayList<XcordionAttribute> attributes = new ArrayList<XcordionAttribute>();
-            for (XcordionAttribute attribute : XcordionAttribute.values()) {
-                if (attribute.getNamespaceUrl().equals(namespace)) {
-                    attributes.add(attribute);
-                }
-            }
-            this.attributes = Collections.unmodifiableList(attributes);
+            attributes.addAll(attributesForCurrentNamespace());
+            this.attributes = unmodifiableList(attributes);
         }
         return this.attributes;
+    }
+
+    private List<XcordionAttribute> attributesForCurrentNamespace() {
+        return select(list(XcordionAttribute.values()), new Filter<XcordionAttribute>() {
+            public Boolean execute(XcordionAttribute attribute) {
+                return attribute.getNamespaceUrl().equals(namespace);
+            }
+        });
     }
 }

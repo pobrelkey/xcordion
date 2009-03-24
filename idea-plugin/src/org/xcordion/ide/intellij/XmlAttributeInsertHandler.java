@@ -2,7 +2,7 @@ package org.xcordion.ide.intellij;
 
 import com.intellij.codeInsight.completion.BasicInsertHandler;
 import com.intellij.codeInsight.completion.InsertionContext;
-import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.codeInsight.lookup.LookupItem;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
@@ -14,16 +14,16 @@ import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.text.CharArrayUtil;
 import com.intellij.xml.util.HtmlUtil;
 
-class XmlAttributeInsertHandler extends BasicInsertHandler {
+class XmlAttributeInsertHandler<T extends LookupItem> extends BasicInsertHandler<T> {
 
-    @Override
-    public void handleInsert(InsertionContext insertionContext, LookupElement lookupElement) {
+    public void handleInsert(InsertionContext insertionContext, T lookupElement) {
         super.handleInsert(insertionContext, lookupElement);
         Editor editor = insertionContext.getEditor();
         Document document = editor.getDocument();
         int caretModelOffset = editor.getCaretModel().getOffset();
         PsiFile psiFile = PsiDocumentManager.getInstance(editor.getProject()).getPsiFile(document);
         String qualifiedAttributeName = lookupElement.getObject().toString();
+
         if (psiFile.getFileType() == StdFileTypes.HTML && HtmlUtil.isSingleHtmlAttribute(qualifiedAttributeName)) {
             return;
         }
