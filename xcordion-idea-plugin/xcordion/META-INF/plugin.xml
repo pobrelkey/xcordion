@@ -1,0 +1,37 @@
+<!DOCTYPE idea-plugin PUBLIC "Plugin/DTD" "http://plugins.intellij.net/plugin.dtd">
+<idea-plugin>
+    <name>Xcordion</name>
+    <description>
+        <![CDATA[
+              This plugin does code completions for xcordion/concordion (html) specification files.
+              <br/>For more information on Xcordion/Concordion see:
+              <ul>
+                <li><a href="http://code.google.com/p/xcordion/">http://code.google.com/p/xcordion/</a></li>
+                <li><a href="http://www.concordion.org/">http://www.concordion.org/</a></li>
+              </ul>
+      ]]>
+    </description>
+    <version>0.9</version>
+    <vendor email="ttennant@gmail.com" url="http://builderplugin.googlecode.com">Tim Tennant, Rob Pelkey, Mike Dunford</vendor>
+    <idea-version since-build="8000"/>
+    <project-components>
+        <component>
+            <implementation-class>org.xcordion.ide.intellij.XcordionProject</implementation-class>
+        </component>
+    </project-components>
+    <module-components>
+        <component>
+            <implementation-class>org.xcordion.ide.intellij.settings.XcordionModuleComponent</implementation-class>
+        </component>
+    </module-components>
+    <actions>
+        <action id="xcordion.Xcordion" class="org.xcordion.ide.intellij.actions.ToggleTestHtmlJavaAction"
+                text="toggle html/java files" description="Toggles between html spec and java test class. If java test class does not exist, generates a java test class for the current html spec.">
+            <keyboard-shortcut keymap="$default" first-keystroke="shift alt X"/>
+        </action>
+    </actions>
+    <extensions defaultExtensionNs="com.intellij">
+        <completion.contributor implementation="org.xcordion.ide.intellij.XcordionCompletionContributor" />
+
+    </extensions>
+</idea-plugin>
