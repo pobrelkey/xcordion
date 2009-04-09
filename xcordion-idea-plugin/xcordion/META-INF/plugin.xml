@@ -16,7 +16,7 @@
     <idea-version since-build="8000"/>
     <project-components>
         <component>
-            <implementation-class>org.xcordion.ide.intellij.XcordionProject</implementation-class>
+            <implementation-class>org.xcordion.ide.intellij.settings.XcordionProjectComponent</implementation-class>
         </component>
     </project-components>
     <module-components>
@@ -32,6 +32,5 @@
     </actions>
     <extensions defaultExtensionNs="com.intellij">
         <completion.contributor implementation="org.xcordion.ide.intellij.XcordionCompletionContributor" />
-
     </extensions>
 </idea-plugin>

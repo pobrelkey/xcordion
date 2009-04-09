@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.DataContext;
 import static com.intellij.openapi.application.ApplicationManager.getApplication;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
+import com.intellij.openapi.module.Module;
 import static com.intellij.openapi.ui.Messages.getQuestionIcon;
 import static com.intellij.openapi.ui.Messages.showOkCancelDialog;
 import com.intellij.openapi.util.Computable;
@@ -21,16 +22,16 @@ import org.hiro.psi.BasePsiClassBuilder;
 import org.hiro.psi.PsiHelper;
 import org.hiro.psi.PsiMethodBuilder;
 import org.xcordion.ide.intellij.XcordionNamespace;
-import static org.xcordion.ide.intellij.settings.XcordionSettingsContext.getConfiguration;
+import static org.xcordion.ide.intellij.settings.XcordionSettingsContext.getModuleSettings;
 
-public class ToggleTestHtmlJavaActionHandler extends EditorActionHandler {
+class ToggleTestHtmlJavaActionHandler extends EditorActionHandler {
     private static final String XCORDION_TEST_CASE = "XcordionTestCase";
     private static final String ABSTRACT_XCORDION_TEST_CASE = "AbstractXcordionTestCase";
     private static final String HTML_FILE_EXTENSION = ".html";
     private static final String TEST = "Test";
 
     private PsiHelper psiHelper;
-    private String moduleName;
+    private Module module;
     private PsiDirectory psiDirectory;
     private PsiFile currentFile;
     private GlobalSearchScope globalSearchScope;
@@ -39,7 +40,7 @@ public class ToggleTestHtmlJavaActionHandler extends EditorActionHandler {
 
     public void execute(Editor editor, DataContext dataContext) {
         psiHelper = new PsiHelper(dataContext);
-        moduleName = psiHelper.getModule(dataContext).getName();
+        module = psiHelper.getModule(dataContext);
         currentFile = psiHelper.getCurrentFile();
         fileNameWithoutExtension = currentFile.getVirtualFile().getNameWithoutExtension();
         psiDirectory = currentFile.getContainingDirectory();
@@ -75,7 +76,7 @@ public class ToggleTestHtmlJavaActionHandler extends EditorActionHandler {
     }
 
     private boolean okToCreateTestClass() {
-        return !getConfiguration(moduleName).showConfirmationMessage() ||
+        return !getModuleSettings(module).showConfirmationMessage() ||
                 showOkCancelDialog("Would you like to create a test class for this file?", "Test class not found", getQuestionIcon()) == 0;
     }
 
@@ -169,7 +170,7 @@ public class ToggleTestHtmlJavaActionHandler extends EditorActionHandler {
     }
 
     private String getFullyQualifiedXcordionTestCaseName() {
-        return getConfiguration(moduleName).getXcordionBackingClassName();
+        return getModuleSettings(module).getXcordionBackingClassName();
     }
 
     private String getXcordionTestCaseName() {

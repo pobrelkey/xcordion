@@ -6,7 +6,7 @@ public class XcordionSettings {
     private boolean showConfirmationMessage;
 
     public String getXcordionBackingClassName() {
-        return xcordionBackingClassName;
+        return xcordionBackingClassName == null ? "" : xcordionBackingClassName;
     }
 
     public void setXcordionBackingClassName(String xcordionBackingClassName) {

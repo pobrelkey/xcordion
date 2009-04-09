@@ -12,9 +12,9 @@ import java.util.regex.Pattern;
 
 //TODO: Handle completions for assignments i.e. #foo=bar() - Rob: this is a bug in IntelliJ, we return values but they get swallowed, perhaps solvable by going back to OpenAPI?
 class XcordionAttributeValueKeywordChooser implements KeywordChooser {
-    public static final String[] EMPTY_KEYWORD_LIST = new String[0];
+    private static final String[] EMPTY_KEYWORD_LIST = new String[0];
     private static final String INTELLIJ_IDEA_RULEZZZ = "IntellijIdeaRulezzz ";
-    static private final Pattern SUFFIX_PATTERN = Pattern.compile("^(.*)\\b(\\w+)$");
+    private static final Pattern SUFFIX_PATTERN = Pattern.compile("^(.*)\\b(\\w+)$");
 
     public String[] getKeywords(CompletionContext completionContext, PsiElement psiElement) {
         if (interestingElement(psiElement)) {

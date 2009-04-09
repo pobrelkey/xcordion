@@ -10,7 +10,7 @@ import java.util.Set;
 //TODO: Click through to java on method names
 //TODO: Completions after dot on variable names, i.e. #foo. should list bar()
 //TODO: Handle carriage returns in attributevalue
-public class XcordionHtmlCompletionData extends HtmlCompletionData {
+class XcordionHtmlCompletionData extends HtmlCompletionData {
 
     private final CompletionVariant attributeCompletionVariant;
     private final CompletionVariant attributeValueCompletionVariant;

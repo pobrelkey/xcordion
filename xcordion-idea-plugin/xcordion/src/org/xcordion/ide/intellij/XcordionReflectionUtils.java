@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class XcordionReflectionUtils {
+class XcordionReflectionUtils {
     private static final List<String> EXCLUDED_METHODS = Arrays.asList(
             "clone",
             "finalize",

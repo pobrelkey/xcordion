@@ -4,7 +4,7 @@ import static javax.swing.BorderFactory.createTitledBorder;
 import javax.swing.*;
 import java.awt.*;
 
-public class SettingsPanel extends JPanel {
+class SettingsPanel extends JPanel {
     private JTextField backingClassName;
     private final JCheckBox showConfirmationMessage = new JCheckBox("Prompt to create missing test classes");
 
@@ -50,13 +50,13 @@ public class SettingsPanel extends JPanel {
         JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         namePanel.setBorder(createTitledBorder("Fully Qualified Xcordion Test Class Name"));
         backingClassName = new JTextField(50);
-        namePanel.add(createTextFieldWithInstructions(backingClassName, "All Xcordion test classes in this module will extend this class"));
+        namePanel.add(createClassNameTextField(backingClassName));
         return namePanel;
     }
 
-    private Component createTextFieldWithInstructions(JTextField widget, String instructions) {
+    private Component createClassNameTextField(JTextField widget) {
         Box nameWidget = createLeftAlignedBox(widget);
-        Box instructionsBox = createLeftAlignedBox(new JLabel(instructions));
+        Box instructionsBox = createLeftAlignedBox(new JLabel("All Xcordion test classes in this module will extend this class"));
         Box box = Box.createVerticalBox();
         box.add(nameWidget);
         box.add(instructionsBox);
@@ -78,7 +78,9 @@ public class SettingsPanel extends JPanel {
     }
 
     public void setSettings(XcordionSettings settings) {
-        this.showConfirmationMessage.setSelected(settings.showConfirmationMessage());
-        this.backingClassName.setText(settings.getXcordionBackingClassName());
+        if (settings != null) {
+            this.showConfirmationMessage.setSelected(settings.showConfirmationMessage());
+            this.backingClassName.setText(settings.getXcordionBackingClassName());
+        }
     }
 }

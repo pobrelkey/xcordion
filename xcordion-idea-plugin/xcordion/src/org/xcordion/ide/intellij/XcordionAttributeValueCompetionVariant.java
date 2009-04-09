@@ -5,7 +5,7 @@ import com.intellij.codeInsight.completion.DefaultInsertHandler;
 import com.intellij.codeInsight.completion.KeywordChooser;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 
-public class XcordionAttributeValueCompetionVariant extends CompletionVariant {
+class XcordionAttributeValueCompetionVariant extends CompletionVariant {
     public XcordionAttributeValueCompetionVariant() {
         super(new XcordionXmlAttributeValueFilter());
         includeScopeClass(LeafPsiElement.class, true);
