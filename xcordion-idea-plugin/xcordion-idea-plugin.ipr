@@ -222,6 +222,7 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/PsiUtils/PsiUtils.iml" filepath="$PROJECT_DIR$/PsiUtils/PsiUtils.iml" />
       <module fileurl="file://$PROJECT_DIR$/xcordion/xcordion.iml" filepath="$PROJECT_DIR$/xcordion/xcordion.iml" />
     </modules>
   </component>
