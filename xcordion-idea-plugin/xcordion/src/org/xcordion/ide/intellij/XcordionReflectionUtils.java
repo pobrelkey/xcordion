@@ -8,6 +8,7 @@ import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -20,8 +21,8 @@ class XcordionReflectionUtils {
             "Object",
             "registerNatives"
     );
-    private static final Pattern LAST_DOT_PATTERN = Pattern.compile("^(.*)\\.\\s*$");
-    private static final Pattern LEFT_HAND_EXPRESSION_PATTERN = Pattern.compile("^(.*)\\b(\\w+)(\\(" + parenInnards(6) + "\\))?(\\[" + bracketInnards(6) + "\\])?\\s*$");
+    private static final Pattern LAST_DOT_PATTERN = Pattern.compile("^(.*)\\.\\s*$", Pattern.DOTALL);
+    private static final Pattern LEFT_HAND_EXPRESSION_PATTERN = Pattern.compile("^(.*)\\b(\\w+)(\\(" + parenInnards(6) + "\\))?(\\[" + bracketInnards(6) + "\\])?\\s*$", Pattern.DOTALL);
     private static final Pattern VARIABLE_NAME_PATTERN = Pattern.compile("(#\\w+)");
     private static final Pattern GETTER_SETTER_PATTERN = Pattern.compile("^(is|[gs]et)([A-Z])(\\w+)$");
 
@@ -35,9 +36,11 @@ class XcordionReflectionUtils {
             displayValues.addAll(getMethodAndFieldNameVariants(attributeValueElement, baseExpression, suffix));
         }
 
-        if (!baseExpression.trim().endsWith(".")) {
-            displayValues.addAll(getVariableNameVariants(attributeValueElement, baseExpression, suffix));
-        }
+        // TODO fix this!
+//        if (StringUtils.isBlank(baseExpression.trim()) || baseExpression.trim().endsWith(",")) {
+//            displayValues.addAll(getVariableNameVariants(attributeValueElement, baseExpression, suffix));
+//        }
+
         return displayValues;
     }
 
@@ -59,7 +62,7 @@ class XcordionReflectionUtils {
             if (isPublic(field)) {
                 String expression = ifMatchesSuffix(suffix, field.getName());
                 if (expression != null) {
-                    fields.add(baseExpression + expression);
+                    fields.add(expression);
                 }
             }
         }
@@ -83,7 +86,7 @@ class XcordionReflectionUtils {
                 }
 
                 if (expression != null) {
-                    methods.add(baseExpression + expression);
+                    methods.add(expression);
                 }
             }
         }
@@ -187,8 +190,18 @@ class XcordionReflectionUtils {
 
     private static PsiClass findTestClass(PsiElement psiElement, PsiFile htmlFile, String qualifiedPackageName, String suffix) {
         String className = htmlFile.getName().substring(0, htmlFile.getName().length() - 5) + suffix;
-        String qualifiedClassName = qualifiedPackageName + "." + className;
+        String qualifiedClassName = getQualifiedClassName(qualifiedPackageName, className);
         return JavaPsiFacade.getInstance(psiElement.getProject()).findClass(qualifiedClassName, psiElement.getResolveScope());
+    }
+
+    private static String getQualifiedClassName(String qualifiedPackageName, String className) {
+        String qualifiedClassName;
+        if(StringUtils.isBlank(qualifiedPackageName)){
+            qualifiedClassName = className;
+        } else {
+            qualifiedClassName = qualifiedPackageName + "." + className;
+        }
+        return qualifiedClassName;
     }
 
     private static String parenInnards(int howManyDeep) {

@@ -1,14 +1,19 @@
 package org.xcordion.ide.intellij;
 
-import com.intellij.codeInsight.completion.CompletionContributor;
-import com.intellij.codeInsight.completion.CompletionParameters;
-import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.codeInsight.completion.CompletionType;
+import com.intellij.codeInsight.completion.*;
+import com.intellij.codeInsight.completion.simple.SimpleLookupItem;
+import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
+import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.codeInsight.lookup.LookupElementFactoryImpl;
 import com.intellij.codeInsight.lookup.LookupItem;
 import static com.intellij.openapi.application.ApplicationManager.getApplication;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.ScrollType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.xml.*;
+import com.intellij.util.text.CharArrayUtil;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -16,7 +21,7 @@ import java.util.regex.Pattern;
 
 public class XcordionCompletionContributor extends CompletionContributor {
     private static final String INTELLIJ_IDEA_RULEZZZ = "IntellijIdeaRulezzz ";
-    private static final Pattern SUFFIX_PATTERN = Pattern.compile("^(.*)\\b(\\w+)$");
+    private static final Pattern SUFFIX_PATTERN = Pattern.compile("^(.*)\\b(\\w+)$", Pattern.DOTALL);
 
     @Override
     public boolean fillCompletionVariants(final CompletionParameters parameters, final CompletionResultSet result) {
@@ -68,6 +73,10 @@ public class XcordionCompletionContributor extends CompletionContributor {
         return currentFile instanceof XmlFile;
     }
 
+    // intended to prevent pre-existing text in the destination OGNL that happens to match our copmpletion test from getting deleted
+    // in our custom InsertHandler (particualrly at the point where the magickIndex variable is used) 
+    private static final String OUR_MAGICKAL_STRING = "lihugrgilugluygerqhbgagrsd";
+
     private void completeWithTagNames(XmlAttributeValue attributeValue, CompletionResultSet result) {
         String suffix = null;
         String baseExpression = getValueLeftOfCursor(attributeValue);
@@ -80,9 +89,47 @@ public class XcordionCompletionContributor extends CompletionContributor {
         List<String> displayValues = XcordionReflectionUtils.getDisplayValues(attributeValue, suffix, baseExpression);
 
         for (String displayValue : displayValues) {
-            result.addElement(new LookupItem<String>(displayValue, displayValue));
+            SimpleLookupItem<String> item = LookupElementFactoryImpl.getInstance().createLookupElement(displayValue);
+            String insertableString;
+            if(baseExpression.trim().endsWith(".")){
+                // for some reason when we auto complete when on the end of a '.' we have to add the baseExpression too. Who knows why :S
+                insertableString = baseExpression + displayValue; // value thta is put in the code
+            } else {
+                insertableString = displayValue; // value thta is put in the code
+            }
+            item.setLookupString(insertableString.replaceAll("\n", "") + OUR_MAGICKAL_STRING);
+            item.setTypeText("poop"); // return type
+            item.setAutoCompletionPolicy(AutoCompletionPolicy.GIVE_CHANCE_TO_OVERWRITE);
+            item.setPresentableText(displayValue);
+            item.setInsertHandler(getInsertHandler(insertableString));
+
+            result.addElement(item);
         }
+
     }
+
+    private BasicInsertHandler<LookupElement> getInsertHandler(final String insertable) {
+        return new BasicInsertHandler<LookupElement>() {
+            @Override
+            public void handleInsert(InsertionContext insertionContext, LookupElement lookupElement) {
+                Editor editor = insertionContext.getEditor();
+                Document document = editor.getDocument();
+                int caretModelOffset = editor.getCaretModel().getOffset();
+
+                CharSequence charsequence = document.getCharsSequence();
+                int magickIndex = CharArrayUtil.indexOf(charsequence, lookupElement.getLookupString(), 0);
+                if (magickIndex != -1) {
+                    caretModelOffset = magickIndex;
+                    document.deleteString(magickIndex, magickIndex + lookupElement.getLookupString().length());
+                }                
+                document.insertString(caretModelOffset, insertable);
+                editor.getCaretModel().moveToOffset(caretModelOffset + insertable.length());
+                editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
+                editor.getSelectionModel().removeSelection();
+            }
+        };
+    }
+
 
     private String getValueLeftOfCursor(PsiElement psiElement) {
         return psiElement.getText().substring(1, psiElement.getText().indexOf(INTELLIJ_IDEA_RULEZZZ));
