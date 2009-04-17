@@ -86,34 +86,43 @@ public class XcordionCompletionContributor extends CompletionContributor {
             suffix = suffixMatcher.group(2);
         }
 
-        List<String> displayValues = XcordionReflectionUtils.getDisplayValues(attributeValue, suffix, baseExpression);
+        List<AutoCompleteItem> displayValues = XcordionReflectionUtils.getAutoCompleteItems(attributeValue, suffix, baseExpression);
 
-        for (String displayValue : displayValues) {
-            SimpleLookupItem<String> item = LookupElementFactoryImpl.getInstance().createLookupElement(displayValue);
-            String insertableString;
-            if(baseExpression.trim().endsWith(".")){
-                // for some reason when we auto complete when on the end of a '.' we have to add the baseExpression too. Who knows why :S
-                insertableString = baseExpression + displayValue; // value thta is put in the code
+        for (AutoCompleteItem autoCompleteItem : displayValues) {
+            SimpleLookupItem<String> item = LookupElementFactoryImpl.getInstance().createLookupElement(autoCompleteItem.getText());
 
-                // find out if auto complete was performed on a new line. If so we need to not insert the baseExpressions. Stupid intellij :S
-                int indexOfDot = baseExpression.lastIndexOf(".");
-                int indexOfNewLine = baseExpression.lastIndexOf("\n");
-                if(indexOfNewLine > indexOfDot){
-                    insertableString = displayValue;
-                }
-            } else {
-                insertableString = displayValue; // value thta is put in the code
-            }
-            item.setLookupString(insertableString.replaceAll("\n", "") + OUR_MAGICKAL_STRING);
-            item.setTypeText("poop"); // return type
+            String insertableString = getInsertableString(baseExpression, autoCompleteItem.getText());
+
+            String insertableTextThatWillKeepIntelliJHappy = getInsertableTextWithNoCharactersIntelliJCantHandle(insertableString);
+            item.setLookupString(insertableTextThatWillKeepIntelliJHappy + OUR_MAGICKAL_STRING);
+
+            item.setTypeText(autoCompleteItem.getType()); // return type
             item.setAutoCompletionPolicy(AutoCompletionPolicy.GIVE_CHANCE_TO_OVERWRITE);
-            item.setPresentableText(displayValue);
-            
+            item.setPresentableText(autoCompleteItem.getText());
+
             item.setInsertHandler(getInsertHandler(insertableString));
 
             result.addElement(item);
         }
+    }
 
+    private String getInsertableTextWithNoCharactersIntelliJCantHandle(String insertableString) {
+        return insertableString.replaceAll("\n", "");
+    }
+
+    private String getInsertableString(String baseExpression, String displayValue) {
+        String insertableString = displayValue;
+        if (baseExpression.trim().endsWith(".") && !autoCompletePerformedOnNewLine(baseExpression)) {
+            // for some reason when we auto complete when on the end of a '.' we have to add the baseExpression too (but only when it was performed on the same line). Who knows why :S
+            insertableString = baseExpression + insertableString;
+        }
+        return insertableString;
+    }
+
+    private boolean autoCompletePerformedOnNewLine(String baseExpression) {
+        int indexOfDot = baseExpression.lastIndexOf(".");
+        int indexOfNewLine = baseExpression.lastIndexOf("\n");
+        return indexOfNewLine > indexOfDot;
     }
 
     private BasicInsertHandler<LookupElement> getInsertHandler(final String insertable) {
@@ -121,6 +130,7 @@ public class XcordionCompletionContributor extends CompletionContributor {
             @Override
             public void handleInsert(InsertionContext insertionContext, LookupElement lookupElement) {
                 Editor editor = insertionContext.getEditor();
+                
                 Document document = editor.getDocument();
                 int caretModelOffset = editor.getCaretModel().getOffset();
 
@@ -128,8 +138,9 @@ public class XcordionCompletionContributor extends CompletionContributor {
                 int magickIndex = CharArrayUtil.indexOf(charsequence, lookupElement.getLookupString(), 0);
                 if (magickIndex != -1) {
                     caretModelOffset = magickIndex;
+
                     document.deleteString(magickIndex, magickIndex + lookupElement.getLookupString().length());
-                }                
+                }
                 document.insertString(caretModelOffset, insertable);
                 editor.getCaretModel().moveToOffset(caretModelOffset + insertable.length());
                 editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
@@ -137,7 +148,6 @@ public class XcordionCompletionContributor extends CompletionContributor {
             }
         };
     }
-
 
     private String getValueLeftOfCursor(PsiElement psiElement) {
         return psiElement.getText().substring(1, psiElement.getText().indexOf(INTELLIJ_IDEA_RULEZZZ));

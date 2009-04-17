@@ -27,9 +27,14 @@ class XcordionAttributeValueKeywordChooser implements KeywordChooser {
                 suffix = suffixMatcher.group(2);
             }
 
-            List<String> displayValues = XcordionReflectionUtils.getDisplayValues(attributeValueElement, suffix, baseExpression);
+            List<AutoCompleteItem> autoCompleteItems = XcordionReflectionUtils.getAutoCompleteItems(attributeValueElement, suffix, baseExpression);
 
-            return displayValues.toArray(new String[displayValues.size()]);
+            String[] displayValues = new String[autoCompleteItems.size()];
+            for(int i=0; i < autoCompleteItems.size(); i++){
+                displayValues[i] = autoCompleteItems.get(i).getText();
+            }
+
+            return displayValues;
         }
         return EMPTY_KEYWORD_LIST;
     }

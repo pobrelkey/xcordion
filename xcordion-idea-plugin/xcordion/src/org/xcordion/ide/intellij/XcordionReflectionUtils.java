@@ -30,47 +30,46 @@ class XcordionReflectionUtils {
         // static class
     }
 
-    static List<String> getDisplayValues(XmlAttributeValue attributeValueElement, String suffix, String baseExpression) {
-        List<String> displayValues = new ArrayList<String>();
+    static List<AutoCompleteItem> getAutoCompleteItems(XmlAttributeValue attributeValueElement, String suffix, String baseExpression) {
+        List<AutoCompleteItem> displayValues = new ArrayList<AutoCompleteItem>();
         if (!baseExpression.endsWith("#")) {
             displayValues.addAll(getMethodAndFieldNameVariants(attributeValueElement, baseExpression, suffix));
         }
 
-        // TODO fix this!
-//        if (StringUtils.isBlank(baseExpression.trim()) || baseExpression.trim().endsWith(",")) {
-//            displayValues.addAll(getVariableNameVariants(attributeValueElement, baseExpression, suffix));
-//        }
+        if (StringUtils.isBlank(baseExpression.trim()) || baseExpression.trim().endsWith(",")) {
+            displayValues.addAll(getVariableNameVariants(attributeValueElement, baseExpression, suffix));
+        }
 
         return displayValues;
     }
 
-    static private Collection<String> getMethodAndFieldNameVariants(XmlAttributeValue attributeValueElement, String baseExpression, String suffix) {
-        TreeSet<String> displayValues = new TreeSet<String>();
+    private static Collection<AutoCompleteItem> getMethodAndFieldNameVariants(XmlAttributeValue attributeValueElement, String baseExpression, String suffix) {
+        List<AutoCompleteItem> displayValues = new ArrayList<AutoCompleteItem>();
         PsiClass clazz = findMember(baseExpression, attributeValueElement);
 
         if (clazz != null) {
-            displayValues.addAll(getMethodsToDisplay(clazz, baseExpression, suffix));
-            displayValues.addAll(getFieldsToDisplay(clazz, baseExpression, suffix));
+            displayValues.addAll(getMethodsToDisplay(clazz, suffix));
+            displayValues.addAll(getFieldsToDisplay(clazz, suffix));
         }
         return displayValues;
     }
 
-    private static List<String> getFieldsToDisplay(PsiClass clazz, String baseExpression, String suffix) {
-        List<String> fields = new ArrayList<String>();
+    private static List<AutoCompleteItem> getFieldsToDisplay(PsiClass clazz, String suffix) {
+        List<AutoCompleteItem> fields = new ArrayList<AutoCompleteItem>();
 
         for (PsiField field : clazz.getAllFields()) {
             if (isPublic(field)) {
                 String expression = ifMatchesSuffix(suffix, field.getName());
                 if (expression != null) {
-                    fields.add(expression);
+                    fields.add(new AutoCompleteItem(expression, field.getType().getPresentableText()));
                 }
             }
         }
         return fields;
     }
 
-    private static List<String> getMethodsToDisplay(PsiClass clazz, String baseExpression, String suffix) {
-        List<String> methods = new ArrayList<String>();
+    private static List<AutoCompleteItem> getMethodsToDisplay(PsiClass clazz, String suffix) {
+        List<AutoCompleteItem> methods = new ArrayList<AutoCompleteItem>();
 
         for (PsiMethod method : clazz.getAllMethods()) {
             if (isPotentialMethod(method)) {
@@ -84,9 +83,8 @@ class XcordionReflectionUtils {
                     // normal method
                     expression = ifMatchesSuffix(suffix, method.getName() + "()");
                 }
-
                 if (expression != null) {
-                    methods.add(expression);
+                    methods.add(new AutoCompleteItem(expression, method.getReturnType().getPresentableText()));
                 }
             }
         }
@@ -120,7 +118,7 @@ class XcordionReflectionUtils {
         return modifiable.getModifierList().hasExplicitModifier("public");
     }
 
-    private static List<String> getVariableNameVariants(PsiElement attributeValueElement, String baseExpression, String suffix) {
+    private static List<AutoCompleteItem> getVariableNameVariants(PsiElement attributeValueElement, String baseExpression, String suffix) {
         XmlFile doc = (XmlFile) attributeValueElement.getContainingFile();
         TreeSet<String> ognlVariableNames = new TreeSet<String>();
         recursivelyScanXcordionTags(ognlVariableNames, doc, attributeValueElement);
@@ -133,13 +131,13 @@ class XcordionReflectionUtils {
             suffix = "#" + (suffix == null ? "" : suffix);
         }
 
-        List<String> displayValues = new ArrayList<String>();
+        List<AutoCompleteItem> displayValues = new ArrayList<AutoCompleteItem>();
         for (String variable : ognlVariableNames) {
             if (suffix == null || variable.startsWith(suffix)) {
                 if (prefix.length() == 0 && suffix != null && suffix.startsWith("#")) {
                     variable = variable.substring(1);
                 }
-                displayValues.add(prefix + variable);
+                displayValues.add(new AutoCompleteItem(variable, null));
             }
         }
         return displayValues;
