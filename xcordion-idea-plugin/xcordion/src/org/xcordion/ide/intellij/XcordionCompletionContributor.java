@@ -94,6 +94,13 @@ public class XcordionCompletionContributor extends CompletionContributor {
             if(baseExpression.trim().endsWith(".")){
                 // for some reason when we auto complete when on the end of a '.' we have to add the baseExpression too. Who knows why :S
                 insertableString = baseExpression + displayValue; // value thta is put in the code
+
+                // find out if auto complete was performed on a new line. If so we need to not insert the baseExpressions. Stupid intellij :S
+                int indexOfDot = baseExpression.lastIndexOf(".");
+                int indexOfNewLine = baseExpression.lastIndexOf("\n");
+                if(indexOfNewLine > indexOfDot){
+                    insertableString = displayValue;
+                }
             } else {
                 insertableString = displayValue; // value thta is put in the code
             }
@@ -101,6 +108,7 @@ public class XcordionCompletionContributor extends CompletionContributor {
             item.setTypeText("poop"); // return type
             item.setAutoCompletionPolicy(AutoCompletionPolicy.GIVE_CHANCE_TO_OVERWRITE);
             item.setPresentableText(displayValue);
+            
             item.setInsertHandler(getInsertHandler(insertableString));
 
             result.addElement(item);
