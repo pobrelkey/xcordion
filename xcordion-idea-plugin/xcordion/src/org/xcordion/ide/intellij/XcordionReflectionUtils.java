@@ -25,6 +25,7 @@ class XcordionReflectionUtils {
     private static final Pattern LEFT_HAND_EXPRESSION_PATTERN = Pattern.compile("^(.*)\\b(\\w+)(\\(" + parenInnards(6) + "\\))?(\\[" + bracketInnards(6) + "\\])?\\s*$", Pattern.DOTALL);
     private static final Pattern VARIABLE_NAME_PATTERN = Pattern.compile("(#\\w+)");
     private static final Pattern GETTER_SETTER_PATTERN = Pattern.compile("^(is|[gs]et)([A-Z])(\\w+)$");
+    private static final String ENDS_WITH_HASH = "^(.*)\\n(\\s*.*)*#";
 
     private XcordionReflectionUtils() {
         // static class
@@ -35,10 +36,10 @@ class XcordionReflectionUtils {
         if (!baseExpression.endsWith("#")) {
             displayValues.addAll(getMethodAndFieldNameVariants(attributeValueElement, baseExpression, suffix));
         }
-
-        if (StringUtils.isBlank(baseExpression.trim()) || baseExpression.trim().endsWith(",")) {
-            displayValues.addAll(getVariableNameVariants(attributeValueElement, baseExpression, suffix));
-        }
+        
+//        if (StringUtils.isBlank(baseExpression.trim()) || baseExpression.trim().matches(ENDS_WITH_HASH) || baseExpression.trim().endsWith(",")) {
+//            displayValues.addAll(getVariableNameVariants(attributeValueElement, baseExpression, suffix));
+//        }
 
         return displayValues;
     }
@@ -137,7 +138,7 @@ class XcordionReflectionUtils {
                 if (prefix.length() == 0 && suffix != null && suffix.startsWith("#")) {
                     variable = variable.substring(1);
                 }
-                displayValues.add(new AutoCompleteItem(variable, null));
+                displayValues.add(new AutoCompleteItem(variable, "html variables"));
             }
         }
         return displayValues;

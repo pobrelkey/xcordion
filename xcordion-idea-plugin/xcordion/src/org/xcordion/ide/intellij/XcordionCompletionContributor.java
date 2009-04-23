@@ -15,6 +15,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.xml.*;
 import com.intellij.util.text.CharArrayUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -93,7 +94,7 @@ public class XcordionCompletionContributor extends CompletionContributor {
 
             String insertableString = getInsertableString(baseExpression, autoCompleteItem.getText());
 
-            String insertableTextThatWillKeepIntelliJHappy = getInsertableTextWithNoCharactersIntelliJCantHandle(insertableString);
+            String insertableTextThatWillKeepIntelliJHappy = getInsertableTextWithNoDodgyCharacters(insertableString);
             item.setLookupString(insertableTextThatWillKeepIntelliJHappy + OUR_MAGICKAL_STRING);
 
             item.setTypeText(autoCompleteItem.getType()); // return type
@@ -106,25 +107,47 @@ public class XcordionCompletionContributor extends CompletionContributor {
         }
     }
 
-    private String getInsertableTextWithNoCharactersIntelliJCantHandle(String insertableString) {
+    private String getInsertableTextWithNoDodgyCharacters(String insertableString) {
         return insertableString.replaceAll("\n", "");
     }
 
+    private List<Character> dodgyFirstCharacters = new ArrayList<Character>() {{
+        add('#');
+        add(' ');
+        add('\n');
+    }};
+
     private String getInsertableString(String baseExpression, String displayValue) {
         String insertableString = displayValue;
-        if (baseExpression.trim().endsWith(".") && !autoCompletePerformedOnNewLine(baseExpression)) {
+        if (isAutoCompleteOnDot(baseExpression) || isAutoCompleteInBraces(baseExpression)) {
             // for some reason when we auto complete when on the end of a '.' we have to add the baseExpression too (but only when it was performed on the same line). Who knows why :S
             insertableString = baseExpression + insertableString;
-        } else if(baseExpression.endsWith("(")){
-            insertableString = baseExpression + insertableString;    
         }
+
+        insertableString = removeDodgyFirstCharacter(insertableString);
+
         return insertableString;
     }
 
-    private boolean autoCompletePerformedOnNewLine(String baseExpression) {
+    private boolean isAutoCompleteInBraces(String baseExpression) {
+        return baseExpression.endsWith("(");
+    }
+
+    private boolean isAutoCompleteOnDot(String baseExpression) {
         int indexOfDot = baseExpression.lastIndexOf(".");
         int indexOfNewLine = baseExpression.lastIndexOf("\n");
-        return indexOfNewLine > indexOfDot;
+        boolean autoCompletePerformedOnNewLine = indexOfNewLine > indexOfDot;
+
+        return baseExpression.trim().endsWith(".") && !autoCompletePerformedOnNewLine;
+    }
+
+    private String removeDodgyFirstCharacter(String insertableString) {
+        for (Character dodgyFirstCharacter : dodgyFirstCharacters) {
+            if (insertableString.startsWith(String.valueOf(dodgyFirstCharacter))) {
+                insertableString = insertableString.replaceFirst(String.valueOf(dodgyFirstCharacter), "");
+            }
+        }
+        return insertableString;
     }
 
     private BasicInsertHandler<LookupElement> getInsertHandler(final String insertable) {
@@ -132,7 +155,7 @@ public class XcordionCompletionContributor extends CompletionContributor {
             @Override
             public void handleInsert(InsertionContext insertionContext, LookupElement lookupElement) {
                 Editor editor = insertionContext.getEditor();
-                
+
                 Document document = editor.getDocument();
                 int caretModelOffset = editor.getCaretModel().getOffset();
 
@@ -143,6 +166,7 @@ public class XcordionCompletionContributor extends CompletionContributor {
 
                     document.deleteString(magickIndex, magickIndex + lookupElement.getLookupString().length());
                 }
+                
                 document.insertString(caretModelOffset, insertable);
                 editor.getCaretModel().moveToOffset(caretModelOffset + insertable.length());
                 editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);

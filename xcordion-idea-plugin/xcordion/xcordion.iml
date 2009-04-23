@@ -9,7 +9,7 @@
     <orderEntry type="jdk" jdkName="IDEA 9164" jdkType="IDEA JDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="jedi-2.3" level="project" />
-    <orderEntry type="module" module-name="PsiUtils" />
+    <orderEntry type="module" module-name="PsiUtils" exported="" />
   </component>
   <component name="XcordionConfiguration">
     <option name="xcordionBackingClassName" value="xcordionConcordionTestCase" />
