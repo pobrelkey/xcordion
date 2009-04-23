@@ -3,8 +3,14 @@
     <name>Xcordion</name>
     <description>
         <![CDATA[
-              This plugin does code completions for xcordion/concordion (html) specification files.
-              <br/>For more information on Xcordion/Concordion see:
+              This plugin does basic code completions for xcordion/concordion (html) specification files.
+
+              <p>
+              You can switch between or create a backing class for a valid test specification file by using the shortcut alt + shift + X.
+              There are project and module level configuration panels to allow you to specify an abstract class to use for the test.
+              </p>
+
+              For more information on Xcordion/Concordion see:
               <ul>
                 <li><a href="http://code.google.com/p/xcordion/">http://code.google.com/p/xcordion/</a></li>
                 <li><a href="http://www.concordion.org/">http://www.concordion.org/</a></li>
