@@ -36,7 +36,7 @@ class XcordionReflectionUtils {
         if (!baseExpression.endsWith("#")) {
             displayValues.addAll(getMethodAndFieldNameVariants(attributeValueElement, baseExpression, suffix));
         }
-
+//
 //        if (StringUtils.isBlank(baseExpression.trim()) || baseExpression.trim().matches(ENDS_WITH_HASH) || baseExpression.trim().endsWith(",")) {
 //            displayValues.addAll(getVariableNameVariants(attributeValueElement, baseExpression, suffix));
 //        }
@@ -136,7 +136,7 @@ class XcordionReflectionUtils {
     private static List<AutoCompleteItem> getVariableNameVariants(PsiElement attributeValueElement, String baseExpression, String suffix) {
         XmlFile doc = (XmlFile) attributeValueElement.getContainingFile();
         TreeSet<String> ognlVariableNames = new TreeSet<String>();
-        recursivelyScanXcordionTags(ognlVariableNames, doc, attributeValueElement);
+        recursivelyScanXcordionTags(ognlVariableNames, doc, attributeValueElement, new ArrayList<PsiElement>());
         ognlVariableNames.add("#VALUE");
         ognlVariableNames.add("#HREF");
 
@@ -158,7 +158,8 @@ class XcordionReflectionUtils {
         return displayValues;
     }
 
-    private static void recursivelyScanXcordionTags(Set<String> ognlVariableNames, PsiElement element, PsiElement attributeValueElement) {
+    private static void recursivelyScanXcordionTags(Set<String> ognlVariableNames, PsiElement element, PsiElement attributeValueElement, List<PsiElement> elementsAlreadyScanned) {
+        elementsAlreadyScanned.add(element);
         for (PsiElement psiChild : element.getChildren()) {
             if (psiChild instanceof XmlTag) {
                 XmlTag tag = (XmlTag) psiChild;
@@ -171,7 +172,9 @@ class XcordionReflectionUtils {
                     }
                 }
             }
-            recursivelyScanXcordionTags(ognlVariableNames, psiChild, attributeValueElement);
+            if(!elementsAlreadyScanned.contains(psiChild)){
+                recursivelyScanXcordionTags(ognlVariableNames, psiChild, attributeValueElement, elementsAlreadyScanned);
+            }
         }
     }
 
