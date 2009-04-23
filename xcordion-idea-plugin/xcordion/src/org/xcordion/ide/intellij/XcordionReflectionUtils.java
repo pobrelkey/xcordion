@@ -187,7 +187,7 @@ class XcordionReflectionUtils {
     }
 
     private static PsiClass findTestClass(PsiElement psiElement, PsiFile htmlFile, String qualifiedPackageName, String suffix) {
-        String className = htmlFile.getName().substring(0, htmlFile.getName().length() - 5) + suffix;
+        String className = htmlFile.getName().replace(".html", "") + suffix;
         String qualifiedClassName = getQualifiedClassName(qualifiedPackageName, className);
         return JavaPsiFacade.getInstance(psiElement.getProject()).findClass(qualifiedClassName, psiElement.getResolveScope());
     }

@@ -115,6 +115,8 @@ public class XcordionCompletionContributor extends CompletionContributor {
         if (baseExpression.trim().endsWith(".") && !autoCompletePerformedOnNewLine(baseExpression)) {
             // for some reason when we auto complete when on the end of a '.' we have to add the baseExpression too (but only when it was performed on the same line). Who knows why :S
             insertableString = baseExpression + insertableString;
+        } else if(baseExpression.endsWith("(")){
+            insertableString = baseExpression + insertableString;    
         }
         return insertableString;
     }
