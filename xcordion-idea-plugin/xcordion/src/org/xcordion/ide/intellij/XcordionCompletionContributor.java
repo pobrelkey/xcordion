@@ -118,8 +118,8 @@ public class XcordionCompletionContributor extends CompletionContributor {
     }};
 
     private String getInsertableString(String baseExpression, String displayValue) {
-        String insertableString = displayValue;
-        if (isAutoCompleteOnDot(baseExpression) || isAutoCompleteInBraces(baseExpression)) {
+        String insertableString = displayValue;                                                 // dont ask why
+        if ((isAutoCompleteOnDot(baseExpression) || isAutoCompleteInBraces(baseExpression)) && !baseExpression.endsWith("build.")) {
             // for some reason when we auto complete when on the end of a '.' we have to add the baseExpression too (but only when it was performed on the same line). Who knows why :S
             insertableString = baseExpression + insertableString;
         }
@@ -147,7 +147,7 @@ public class XcordionCompletionContributor extends CompletionContributor {
                 insertableString = insertableString.replaceFirst(String.valueOf(dodgyFirstCharacter), "");
             }
         }
-        return insertableString;
+        return insertableString.trim();
     }
 
     private BasicInsertHandler<LookupElement> getInsertHandler(final String insertable) {

@@ -36,7 +36,7 @@ class XcordionReflectionUtils {
         if (!baseExpression.endsWith("#")) {
             displayValues.addAll(getMethodAndFieldNameVariants(attributeValueElement, baseExpression, suffix));
         }
-        
+
 //        if (StringUtils.isBlank(baseExpression.trim()) || baseExpression.trim().matches(ENDS_WITH_HASH) || baseExpression.trim().endsWith(",")) {
 //            displayValues.addAll(getVariableNameVariants(attributeValueElement, baseExpression, suffix));
 //        }
@@ -82,7 +82,7 @@ class XcordionReflectionUtils {
                 }
                 if (expression == null) {
                     // normal method
-                    expression = ifMatchesSuffix(suffix, method.getName() + "()");
+                    expression = ifMatchesSuffix(suffix, method.getName() + getParameterString(method));
                 }
                 if (expression != null) {
                     methods.add(new AutoCompleteItem(expression, method.getReturnType().getPresentableText()));
@@ -90,6 +90,20 @@ class XcordionReflectionUtils {
             }
         }
         return methods;
+    }
+
+    private static String getParameterString(PsiMethod method) {
+        String parameterString = "(";
+        PsiParameter[] parameters = method.getParameterList().getParameters();
+        for (int i = 0; i < parameters.length; i++) {
+            PsiParameter parameter = parameters[i];
+            parameterString += parameter.getType().getPresentableText();
+            if (i != parameters.length - 1) {
+                parameterString += ", ";
+            }
+        }
+        parameterString += ")";
+        return parameterString;
     }
 
     private static boolean isPotentialMethod(PsiMethod method) {
@@ -138,7 +152,7 @@ class XcordionReflectionUtils {
                 if (prefix.length() == 0 && suffix != null && suffix.startsWith("#")) {
                     variable = variable.substring(1);
                 }
-                displayValues.add(new AutoCompleteItem(variable, "html variables"));
+                displayValues.add(new AutoCompleteItem(variable, "html variable"));
             }
         }
         return displayValues;
@@ -195,7 +209,7 @@ class XcordionReflectionUtils {
 
     private static String getQualifiedClassName(String qualifiedPackageName, String className) {
         String qualifiedClassName;
-        if(StringUtils.isBlank(qualifiedPackageName)){
+        if (StringUtils.isBlank(qualifiedPackageName)) {
             qualifiedClassName = className;
         } else {
             qualifiedClassName = qualifiedPackageName + "." + className;
@@ -240,56 +254,58 @@ class XcordionReflectionUtils {
         boolean hasIndexer = (leftHandMatcher.groupCount() >= 4) && (leftHandMatcher.group(4) != null) && (leftHandMatcher.group(4).length() > 0);
 
         PsiClass clazz = findMember(leftOfMethodName, attributeValueElement);
-        if (possibleParams != null && possibleParams.length() > 0) {
-            PsiMethod[] possibleMethods = clazz.findMethodsByName(methodName, true);
-            if (possibleMethods.length > 0) {
-                // First check whether all methods of this name return the same type.
-                // (Usually the case - it's good programming practice.  Still, you never know...)
-                HashSet<PsiType> returnTypes = new HashSet<PsiType>();
-                for (PsiMethod possibleMethod : possibleMethods) {
-                    if (isPublic(possibleMethod)) {
-                        returnTypes.add(possibleMethod.getReturnType());
+        if (clazz != null) {
+            if (possibleParams != null && possibleParams.length() > 0) {
+                PsiMethod[] possibleMethods = clazz.findMethodsByName(methodName, true);
+                if (possibleMethods.length > 0) {
+                    // First check whether all methods of this name return the same type.
+                    // (Usually the case - it's good programming practice.  Still, you never know...)
+                    HashSet<PsiType> returnTypes = new HashSet<PsiType>();
+                    for (PsiMethod possibleMethod : possibleMethods) {
+                        if (isPublic(possibleMethod)) {
+                            returnTypes.add(possibleMethod.getReturnType());
+                        }
                     }
-                }
-                if (returnTypes.size() == 1) {
-                    return resolveTypeToClass(returnTypes.iterator().next(), hasIndexer, psiManager);
-                } else if (returnTypes.size() == 0) {
-                    // all voids, presumably
+                    if (returnTypes.size() == 1) {
+                        return resolveTypeToClass(returnTypes.iterator().next(), hasIndexer, psiManager);
+                    } else if (returnTypes.size() == 0) {
+                        // all voids, presumably
+                        return null;
+                    }
+
+                    // too many return types - so see if all with same parameter count return same type.
+                    returnTypes.clear();
+                    int parametersCount = countParameters(possibleParams);
+                    for (PsiMethod possibleMethod : possibleMethods) {
+                        if (isPublic(possibleMethod) && possibleMethod.getParameterList().getParametersCount() == parametersCount) {
+                            returnTypes.add(possibleMethod.getReturnType());
+                        }
+                    }
+                    if (returnTypes.size() == 1) {
+                        return resolveTypeToClass(returnTypes.iterator().next(), hasIndexer, psiManager);
+                    }
+
+                    // give up - test class is horribly written, and figuring out what user wants would require tons o'code
                     return null;
                 }
-
-                // too many return types - so see if all with same parameter count return same type.
-                returnTypes.clear();
-                int parametersCount = countParameters(possibleParams);
-                for (PsiMethod possibleMethod : possibleMethods) {
-                    if (isPublic(possibleMethod) && possibleMethod.getParameterList().getParametersCount() == parametersCount) {
-                        returnTypes.add(possibleMethod.getReturnType());
+            } else {
+                PsiField possibleField = clazz.findFieldByName(methodName, true);
+                if (possibleField != null && isPublic(possibleField)) {
+                    return resolveTypeToClass(possibleField.getType(), hasIndexer, psiManager);
+                }
+                PsiMethod[] possibleGetters = clazz.findMethodsByName(addPrefix("get", methodName), true);
+                for (PsiMethod possibleGetter : possibleGetters) {
+                    if (isPublic(possibleGetter) && possibleGetter.getParameterList().getParametersCount() == 0) {
+                        return resolveTypeToClass(possibleGetter.getReturnType(), hasIndexer, psiManager);
                     }
                 }
-                if (returnTypes.size() == 1) {
-                    return resolveTypeToClass(returnTypes.iterator().next(), hasIndexer, psiManager);
-                }
-
-                // give up - test class is horribly written, and figuring out what user wants would require tons o'code
-                return null;
-            }
-        } else {
-            PsiField possibleField = clazz.findFieldByName(methodName, true);
-            if (possibleField != null && isPublic(possibleField)) {
-                return resolveTypeToClass(possibleField.getType(), hasIndexer, psiManager);
-            }
-            PsiMethod[] possibleGetters = clazz.findMethodsByName(addPrefix("get", methodName), true);
-            for (PsiMethod possibleGetter : possibleGetters) {
-                if (isPublic(possibleGetter) && possibleGetter.getParameterList().getParametersCount() == 0) {
-                    return resolveTypeToClass(possibleGetter.getReturnType(), hasIndexer, psiManager);
-                }
-            }
-            PsiMethod[] possibleBooleanGetters = clazz.findMethodsByName(addPrefix("is", methodName), true);
-            for (PsiMethod possibleBooleanGetter : possibleBooleanGetters) {
-                if (isPublic(possibleBooleanGetter) && possibleBooleanGetter.getParameterList().getParametersCount() == 0) {
-                    PsiType returnType = possibleBooleanGetter.getReturnType();
-                    if (returnType.isConvertibleFrom(PsiType.BOOLEAN)) {
-                        return resolveTypeToClass(returnType, hasIndexer, psiManager);
+                PsiMethod[] possibleBooleanGetters = clazz.findMethodsByName(addPrefix("is", methodName), true);
+                for (PsiMethod possibleBooleanGetter : possibleBooleanGetters) {
+                    if (isPublic(possibleBooleanGetter) && possibleBooleanGetter.getParameterList().getParametersCount() == 0) {
+                        PsiType returnType = possibleBooleanGetter.getReturnType();
+                        if (returnType.isConvertibleFrom(PsiType.BOOLEAN)) {
+                            return resolveTypeToClass(returnType, hasIndexer, psiManager);
+                        }
                     }
                 }
             }
