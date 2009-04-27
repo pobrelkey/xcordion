@@ -19,6 +19,10 @@ import xcordion.util.DocumentFactory;
 import xcordion.util.WrappingIterable;
 import xcordion.api.EvaluationContext;
 import xcordion.api.TestElement;
+import xcordion.api.ResourceReference;
+import xcordion.visual.VisualXcordionServlet;
+import xcordion.visual.VisualXcordionServer;
+import xcordion.visual.VisualXcordionFeeder;
 import junit.framework.AssertionFailedError;
 import junit.framework.Assert;
 
@@ -49,17 +53,19 @@ public class SimpleXcordionRunner {
 
     public void runTest(boolean expectedToPass) throws IOException, JDOMException {
         Class testClass = testInstance.getClass();
-
         XcordionEventsBroadcaster broadcaster = new XcordionEventsBroadcaster();
-
         JDomTestDocument testDocument = getTestDocument();
+        ConcordionMarkupTheme theme = new ConcordionMarkupTheme();
+        List<ResourceReference<JDomTestDocument.JDomTestElement>> resourceReferences = theme.getResourceReferences();
 
         ResultSummariser summary = new ResultSummariser();
         summary.setExpectedToPass(expectedToPass);
         broadcaster.addListener(summary);
 
-        ConcordionMarkupTheme theme = new ConcordionMarkupTheme();
         broadcaster.addListener(theme);
+
+        VisualXcordionFeeder feeder = new VisualXcordionFeeder(testDocument, resourceReferences);
+        broadcaster.addListener(feeder);
 
         XcordionImpl xcordion = new XcordionImpl(new DefaultCommandRepository(), broadcaster);
 
@@ -67,7 +73,7 @@ public class SimpleXcordionRunner {
         ValueTranslatingEvaluationContext<Ognl.OgnlEvaluationContext> translatingContext = new ValueTranslatingEvaluationContext(ognlEvaluationContext);
         xcordion.run(testDocument, translatingContext);
 
-        String outputFilePath = new MarkupWriter(getOutputDir()).write(testDocument, getOutputPath(), testClass, theme.getResourceReferences());
+        String outputFilePath = new MarkupWriter(getOutputDir()).write(testDocument, getOutputPath(), testClass, resourceReferences);
 
         System.out.println("Xcordion result for " + testClass.getSimpleName() + ": " + summary.getScoreLine());
         String message = summary.getMessage();
