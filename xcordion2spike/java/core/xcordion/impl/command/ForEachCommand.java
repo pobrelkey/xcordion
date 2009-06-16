@@ -6,6 +6,8 @@ import xcordion.api.TestElement;
 import xcordion.api.Xcordion;
 import xcordion.impl.AbstractCommand;
 
+import java.util.Iterator;
+
 public class ForEachCommand extends AbstractCommand {
 
 	@Override
@@ -29,12 +31,36 @@ public class ForEachCommand extends AbstractCommand {
 		T lastSibling = placeholder;
 		T prototype = target.duplicate();
 		parent.remove(target);
-		for (C itemContext : iterable) {
+
+//		for (C itemContext : iterable) {
+//            T newContent = prototype.duplicate();
+//            parent.insertChildAfter(lastSibling, newContent);
+//            runChildren(xcordion, newContent.getChildren(), itemContext);
+//            lastSibling = newContent;
+//		}
+
+        // The above code wasn't robust against e.g. ConcurrentModificationExceptions (see Issue 7).
+        // New code is far more paranoid/ugly, but fails slightly more graciously.
+        Iterator<C> iterator = iterable.iterator();
+        while (true) {
             T newContent = prototype.duplicate();
+            C itemContext;
+            try {
+                if (!iterator.hasNext()) {
+                    break;
+                }
+                itemContext = iterator.next();
+            } catch (Exception e) {
+                parent.insertChildAfter(lastSibling, newContent);
+                xcordion.getBroadcaster().exception(newContent, expression, e);
+                lastSibling = newContent;
+                break;
+            }
             parent.insertChildAfter(lastSibling, newContent);
             runChildren(xcordion, newContent.getChildren(), itemContext);
             lastSibling = newContent;
-		}
+        }
+
 		parent.remove(placeholder);
 	}
 
