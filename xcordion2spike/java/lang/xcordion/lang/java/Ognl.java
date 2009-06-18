@@ -122,7 +122,7 @@ public class Ognl implements EvaluationContextFactory<Ognl.OgnlEvaluationContext
             Object value = getValue(element, null);
 			expression = expression.trim();
 
-            if (!FOREIGN_CHARACTERS.matcher(expression).matches()) {
+            if (!FOREIGN_CHARACTERS.matcher(expression).find()) {
 				if (expression.charAt(0) == '#') {
 					expression = expression.substring(1);
 				}

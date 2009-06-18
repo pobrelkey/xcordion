@@ -1,6 +1,7 @@
 package xcordion.util;
 
 import ognl.OgnlException;
+import ognl.MethodFailedException;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -72,7 +73,11 @@ public class Coercions {
     }
 
     public static String toExceptionMessage(Throwable e) {
-        return e.getMessage();
+        if (e.getMessage() == null || e.getMessage().length() == 0) {
+            return e.getClass().getSimpleName();   
+        } else {
+            return e.getMessage();
+        }
     }
 
     private static final Pattern DASH_CHARACTER = Pattern.compile("-([a-z])");
@@ -89,5 +94,15 @@ public class Coercions {
         }
         m.appendTail(result);
         return result.toString();
+    }
+
+    public static Throwable toDisplayableException(Throwable t) {
+        if (t instanceof RuntimeException && t.getCause() instanceof OgnlException) {
+            Throwable reason = ((OgnlException) t.getCause()).getReason();
+            if (reason != null && !(reason instanceof OgnlException)) {
+                return reason;
+            }
+        }
+        return t;
     }
 }

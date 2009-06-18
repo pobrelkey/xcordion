@@ -37,6 +37,8 @@ public class ConcordionMarkupTheme<T extends TestElement<T>> implements Xcordion
     public void exception(T target, String expression, Throwable e) {
         buttonId++;
 
+        e = Coercions.toDisplayableException(e);
+        
         target.appendChild(expectedSpan(target));
         target.appendChild(exceptionMessage(target.getDocument(), Coercions.toExceptionMessage(e)));
         target.appendChild(stackTraceTogglingButton(target.getDocument()));

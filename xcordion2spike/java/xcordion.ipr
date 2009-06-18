@@ -366,7 +366,11 @@
   <component name="ProjectDetails">
     <option name="projectName" value="xcordion" />
   </component>
-  <component name="ProjectFileVersion" converted="true" />
+  <component name="ProjectFileVersion" converted="true">
+    <converter id="javaee-modules" />
+    <converter id="ror-modules" />
+    <converter id="SelenaRunConfToDiana" />
+  </component>
   <component name="ProjectKey">
     <option name="state" value="https://xcordion.googlecode.com/svn/trunk/xcordion2spike/java/xcordion.ipr" />
   </component>
