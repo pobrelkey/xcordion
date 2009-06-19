@@ -2,6 +2,10 @@ package xcordion.impl.command;
 
 import org.jmock.Expectations;
 import xcordion.api.EvaluationContext;
+import xcordion.api.IgnoreState;
+import xcordion.api.events.FailedAssertBooleanEvent;
+import xcordion.api.events.SuccessfulAssertBooleanEvent;
+import xcordion.api.events.ExceptionThrownEvent;
 
 public class AssertBooleanCommandTest extends AbstractCommandTest {
 
@@ -27,10 +31,12 @@ public class AssertBooleanCommandTest extends AbstractCommandTest {
         final String expression = "someExpression()";
 
         context.checking(new Expectations(){{
+            allowing(evalContext).getIgnoreState();
+            will(returnValue(IgnoreState.NORMATIVE));
             one(evalContext).eval(expression, emptyElement);
             will(returnValue(!expected));
 
-            one(broadcaster).failedAssertBoolean(emptyElement, expression, expected, !expected);
+            one(broadcaster).handleEvent(new FailedAssertBooleanEvent(emptyElement, IgnoreState.NORMATIVE, expression, expected, !expected));
         }});
 
         command.run(xcordion, emptyElement, evalContext, expression);
@@ -42,10 +48,12 @@ public class AssertBooleanCommandTest extends AbstractCommandTest {
         final String expression = "someExpression()";
 
         context.checking(new Expectations(){{
+            allowing(evalContext).getIgnoreState();
+            will(returnValue(IgnoreState.NORMATIVE));
             one(evalContext).eval(expression, emptyElement);
             will(returnValue(expected));
 
-            one(broadcaster).successfulAssertBoolean(emptyElement, expression, expected);
+            one(broadcaster).handleEvent(new SuccessfulAssertBooleanEvent(emptyElement, IgnoreState.NORMATIVE, expression, expected));
         }});
 
         command.run(xcordion, emptyElement, evalContext, expression);
@@ -57,10 +65,12 @@ public class AssertBooleanCommandTest extends AbstractCommandTest {
         final String expression = "someExpression()";
 
         context.checking(new Expectations(){{
+            allowing(evalContext).getIgnoreState();
+            will(returnValue(IgnoreState.NORMATIVE));
             one(evalContext).eval(expression, emptyElement);
             will(returnValue(42));
 
-            one(broadcaster).failedAssertBoolean(emptyElement, expression, true, 42);
+            one(broadcaster).handleEvent(new FailedAssertBooleanEvent(emptyElement, IgnoreState.NORMATIVE, expression, true, 42));
         }});
 
         command.run(xcordion, emptyElement, evalContext, expression);
@@ -72,10 +82,12 @@ public class AssertBooleanCommandTest extends AbstractCommandTest {
         final String expression = "someExpression()";
 
         context.checking(new Expectations(){{
+            allowing(evalContext).getIgnoreState();
+            will(returnValue(IgnoreState.NORMATIVE));
             one(evalContext).eval(expression, emptyElement);
             will(returnValue(null));
 
-            one(broadcaster).failedAssertBoolean(emptyElement, expression, true, null);
+            one(broadcaster).handleEvent(new FailedAssertBooleanEvent(emptyElement, IgnoreState.NORMATIVE, expression, true, null));
         }});
 
         command.run(xcordion, emptyElement, evalContext, expression);
@@ -88,10 +100,12 @@ public class AssertBooleanCommandTest extends AbstractCommandTest {
         final Throwable error = new Error("this is only a test");
 
         context.checking(new Expectations(){{
+            allowing(evalContext).getIgnoreState();
+            will(returnValue(IgnoreState.NORMATIVE));
             one(evalContext).eval(expression, emptyElement);
             will(throwException(error));
 
-            one(broadcaster).exception(emptyElement, expression, error);
+            one(broadcaster).handleEvent(new ExceptionThrownEvent(emptyElement, IgnoreState.NORMATIVE, expression, error));
         }});
 
         command.run(xcordion, emptyElement, evalContext, expression);

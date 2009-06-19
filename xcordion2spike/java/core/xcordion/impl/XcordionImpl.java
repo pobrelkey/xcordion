@@ -1,14 +1,16 @@
 package xcordion.impl;
 
 import xcordion.api.*;
+import xcordion.api.events.BeginEvent;
+import xcordion.api.events.EndEvent;
 import xcordion.impl.command.NoOpCommand;
 
 public class XcordionImpl<T extends TestElement<T>> implements Xcordion<T> {
 	
 	private CommandRepository commandRepository;
-	private XcordionEvents<T> broadcaster;
+	private XcordionEventListener<T> broadcaster;
 
-    public XcordionImpl(CommandRepository commandRepository, XcordionEvents<T> broadcaster) {
+    public XcordionImpl(CommandRepository commandRepository, XcordionEventListener<T> broadcaster) {
         this.commandRepository = commandRepository;
         this.broadcaster = broadcaster;
 
@@ -38,23 +40,27 @@ public class XcordionImpl<T extends TestElement<T>> implements Xcordion<T> {
 			bodyElement = doc.getRootElement();
 		}
 
-        broadcaster.begin(bodyElement);
+        for (ItemAndExpression<Pragma> pragmaAndExpression : commandRepository.pragmasForElement(bodyElement)) {
+            rootContext = pragmaAndExpression.getItem().evaluate(this, bodyElement, rootContext, pragmaAndExpression.getExpression());
+        }
 
-        CommandAndExpression command = commandRepository.commandForElement(bodyElement);
-		if (command == null) {
+        broadcaster.handleEvent(new BeginEvent<T>(bodyElement, rootContext.getIgnoreState()));
+
+        ItemAndExpression<Command> commandAndExpression = commandRepository.commandForElement(bodyElement, rootContext.getIgnoreState());
+		if (commandAndExpression == null) {
 			new NoOpCommand().runElementAndChildren(this, bodyElement, rootContext, null);
 		} else {
-			command.command.runElementAndChildren(this, bodyElement, rootContext, command.expression);
+			commandAndExpression.getItem().runElementAndChildren(this, bodyElement, rootContext, commandAndExpression.getExpression());
 		}
 
-        broadcaster.end(bodyElement);
+        broadcaster.handleEvent(new EndEvent<T>(bodyElement, rootContext.getIgnoreState()));
     }
 
 	public CommandRepository getCommandRepository() {
 		return commandRepository;
 	}
 
-	public XcordionEvents<T> getBroadcaster() {
+	public XcordionEventListener<T> getBroadcaster() {
 		return broadcaster;
 	}	
 

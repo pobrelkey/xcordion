@@ -4,6 +4,9 @@ import xcordion.api.CommandType;
 import xcordion.api.EvaluationContext;
 import xcordion.api.TestElement;
 import xcordion.api.Xcordion;
+import xcordion.api.events.ExceptionThrownEvent;
+import xcordion.api.events.SuccessfulAssertContainsEvent;
+import xcordion.api.events.FailedAssertContainsEvent;
 
 
 public class AssertContainsCommand extends ChildrenInSetupRunVerifyOrderCommand {
@@ -26,7 +29,7 @@ public class AssertContainsCommand extends ChildrenInSetupRunVerifyOrderCommand 
             actual = context.eval(expression, target);
             expected = context.getValue(target, String.class);
         } catch (Throwable e) {
-            xcordion.getBroadcaster().exception(target, expression, e);
+            xcordion.getBroadcaster().handleEvent(new ExceptionThrownEvent<T>(target, context.getIgnoreState(), expression, e));
             return;
         }
 
@@ -42,9 +45,9 @@ public class AssertContainsCommand extends ChildrenInSetupRunVerifyOrderCommand 
         result ^= negate;
 
         if (result) {
-			xcordion.getBroadcaster().successfulAssertContains(target, expression, expected, actual);
+			xcordion.getBroadcaster().handleEvent(new SuccessfulAssertContainsEvent<T>(target, context.getIgnoreState(), expression, expected, actual));
 		} else {
-			xcordion.getBroadcaster().failedAssertContains(target, expression, expected, actual);
+			xcordion.getBroadcaster().handleEvent(new FailedAssertContainsEvent<T>(target, context.getIgnoreState(), expression, expected, actual));
 		}
 	}
 

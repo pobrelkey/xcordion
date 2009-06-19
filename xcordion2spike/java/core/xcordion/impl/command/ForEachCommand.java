@@ -4,6 +4,7 @@ import xcordion.api.CommandType;
 import xcordion.api.EvaluationContext;
 import xcordion.api.TestElement;
 import xcordion.api.Xcordion;
+import xcordion.api.events.ExceptionThrownEvent;
 import xcordion.impl.AbstractCommand;
 
 import java.util.Iterator;
@@ -21,7 +22,7 @@ public class ForEachCommand extends AbstractCommand {
 		try {
 			iterable = context.iterate(expression, target);
 		} catch (Exception e) {
-			xcordion.getBroadcaster().exception(target, expression, e);
+            xcordion.getBroadcaster().handleEvent(new ExceptionThrownEvent<T>(target, context.getIgnoreState(), expression, e));
 			return;
 		}
 
@@ -52,7 +53,7 @@ public class ForEachCommand extends AbstractCommand {
                 itemContext = iterator.next();
             } catch (Exception e) {
                 parent.insertChildAfter(lastSibling, newContent);
-                xcordion.getBroadcaster().exception(newContent, expression, e);
+                xcordion.getBroadcaster().handleEvent(new ExceptionThrownEvent<T>(target, context.getIgnoreState(), expression, e));
                 lastSibling = newContent;
                 break;
             }

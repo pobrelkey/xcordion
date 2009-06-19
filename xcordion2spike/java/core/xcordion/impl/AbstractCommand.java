@@ -21,10 +21,13 @@ abstract public class AbstractCommand implements Command {
 	}
 
 	private <T extends TestElement<T>, C extends EvaluationContext<C>> void runElement(Xcordion<T> xcordion, T element, CommandType commandType, C context) {
-		CommandAndExpression command = xcordion.getCommandRepository().commandForElement(element);
-		if (command != null) {
-			if (commandType == CommandType.ALL || command.command.getCommandType() == commandType) {
-				command.command.runElementAndChildren(xcordion, element, context, command.expression);
+        for (ItemAndExpression<Pragma> pragmaAndExpression : xcordion.getCommandRepository().pragmasForElement(element)) {
+            context = pragmaAndExpression.getItem().evaluate(xcordion, element, context, pragmaAndExpression.getExpression());
+        }
+		ItemAndExpression<Command> commandAndExpression = xcordion.getCommandRepository().commandForElement(element, context.getIgnoreState());
+		if (commandAndExpression != null) {
+			if (commandType == CommandType.ALL || commandAndExpression.getItem().getCommandType() == commandType) {
+				commandAndExpression.getItem().runElementAndChildren(xcordion, element, context, commandAndExpression.getExpression());
 			}
 		} else {
 			runChildren(xcordion, element.getChildren(), context, commandType);

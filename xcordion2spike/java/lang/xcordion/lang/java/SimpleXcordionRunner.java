@@ -208,8 +208,8 @@ public class SimpleXcordionRunner {
             return baseContext.getIgnoreState();
         }
 
-        public ValueTranslatingEvaluationContext<C> setIgnoreState(IgnoreState ignoreState) {
-            return new ValueTranslatingEvaluationContext(baseContext.setIgnoreState(ignoreState));
+        public ValueTranslatingEvaluationContext<C> withIgnoreState(IgnoreState ignoreState) {
+            return new ValueTranslatingEvaluationContext(baseContext.withIgnoreState(ignoreState));
         }
     }
 }

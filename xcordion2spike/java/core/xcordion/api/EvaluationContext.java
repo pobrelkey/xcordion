@@ -9,5 +9,5 @@ public interface EvaluationContext<C extends EvaluationContext<C>> {
 	void setVariable(String name, Object value);
     <T extends TestElement<T>> Object getValue(T element, Class asClass);
     IgnoreState getIgnoreState();
-    C setIgnoreState(IgnoreState ignoreState);
+    C withIgnoreState(IgnoreState ignoreState);
 }

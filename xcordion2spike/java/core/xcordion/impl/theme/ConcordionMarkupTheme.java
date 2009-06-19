@@ -1,7 +1,23 @@
 package xcordion.impl.theme;
 
-import xcordion.api.XcordionEvents;
+import xcordion.api.XcordionEventListener;
 import xcordion.api.*;
+import xcordion.api.events.XcordionEvent;
+import xcordion.api.events.InsertTextEvent;
+import xcordion.api.events.BeginEvent;
+import xcordion.api.events.ChangedIgnoreStateEvent;
+import xcordion.api.events.EndEvent;
+import xcordion.api.events.ExceptionThrownEvent;
+import xcordion.api.events.FailedAssertBooleanEvent;
+import xcordion.api.events.FailedAssertContainsEvent;
+import xcordion.api.events.FailedAssertEqualsEvent;
+import xcordion.api.events.MissingRowEvent;
+import xcordion.api.events.SuccessfulAssertBooleanEvent;
+import xcordion.api.events.SuccessfulAssertContainsEvent;
+import xcordion.api.events.SuccessfulAssertEqualsEvent;
+import xcordion.api.events.SuccessfulExecuteEvent;
+import xcordion.api.events.SuccessfulSetEvent;
+import xcordion.api.events.SurplusRowEvent;
 import xcordion.util.Coercions;
 
 import java.util.ArrayList;
@@ -9,7 +25,7 @@ import java.util.List;
 
 
 // TODO: loads of original concordion code here
-public class ConcordionMarkupTheme<T extends TestElement<T>> implements XcordionEvents<T> {
+public class ConcordionMarkupTheme<T extends TestElement<T>> implements XcordionEventListener<T> {
 
     private static final String RESOURCE_TOGGLESCRIPT = "/xcordion/impl/theme/visibility-toggler.js";
     private static final String RESOURCE_STYLESHEET = "/xcordion/impl/theme/embedded.css";
@@ -113,12 +129,12 @@ public class ConcordionMarkupTheme<T extends TestElement<T>> implements Xcordion
         failedAssertEquals(target, expression, expected, actual);
     }
 
-    public void missingRow(RowNavigator<T> row) {
-        row.getRowElement().addStyleClass("missing");
+    public void missingRow(T rowElement) {
+        rowElement.addStyleClass("missing");
     }
 
-    public void surplusRow(RowNavigator<T> row) {
-        row.getRowElement().addStyleClass("surplus");
+    public void surplusRow(T rowElement) {
+        rowElement.addStyleClass("surplus");
     }
 
     public void end(T target) {
@@ -181,6 +197,60 @@ public class ConcordionMarkupTheme<T extends TestElement<T>> implements Xcordion
 
     public List<ResourceReference<T>> getResourceReferences() {
         return resourceReferences;
+    }
+
+    public void changedIgnoreState(T target, IgnoreState ignoreState) {
+        if (ignoreState == IgnoreState.NORMATIVE) {
+            target.addStyleClass("normative");
+        } else if (ignoreState == IgnoreState.IGNORED) {
+            target.addStyleClass("ignored");
+        } else if (ignoreState == IgnoreState.OMITTED) {
+            target.addStyleClass("omitted");
+        }
+    }
+
+    public void handleEvent(XcordionEvent<T> event) {
+        if (event instanceof BeginEvent<?>) {
+            begin(event.getElement());
+        } else if (event instanceof ChangedIgnoreStateEvent<?>) {
+            changedIgnoreState(event.getElement(), event.getIgnoreState());
+        } else if (event instanceof EndEvent<?>) {
+            end(event.getElement());
+        } else if (event instanceof ExceptionThrownEvent<?>) {
+            ExceptionThrownEvent<T> e = (ExceptionThrownEvent<T>) event;
+            exception(e.getElement(), e.getExpression(), e.getThrowable());
+        } else if (event instanceof FailedAssertBooleanEvent<?>) {
+            FailedAssertBooleanEvent<T> e = (FailedAssertBooleanEvent<T>) event;
+            failedAssertBoolean(e.getElement(), e.getExpression(), e.getExpected(), e.getActual());
+        } else if (event instanceof FailedAssertContainsEvent<?>) {
+            FailedAssertContainsEvent<T> e = (FailedAssertContainsEvent<T>) event;
+            failedAssertContains(e.getElement(), e.getExpression(), e.getExpected(), e.getActual());
+        } else if (event instanceof FailedAssertEqualsEvent<?>) {
+            FailedAssertEqualsEvent<T> e = (FailedAssertEqualsEvent<T>) event;
+            failedAssertEquals(e.getElement(), e.getExpression(), e.getExpected(), e.getActual());
+        } else if (event instanceof InsertTextEvent<?>) {
+            InsertTextEvent<T> e = (InsertTextEvent<T>) event;
+            insertText(e.getElement(), e.getExpression(), e.getResult());
+        } else if (event instanceof MissingRowEvent<?>) {
+            missingRow(event.getElement());
+        } else if (event instanceof SuccessfulAssertBooleanEvent<?>) {
+            SuccessfulAssertBooleanEvent<T> e = (SuccessfulAssertBooleanEvent<T>) event;
+            successfulAssertBoolean(e.getElement(), e.getExpression(), e.getExpected());
+        } else if (event instanceof SuccessfulAssertContainsEvent<?>) {
+            SuccessfulAssertContainsEvent<T> e = (SuccessfulAssertContainsEvent<T>) event;
+            successfulAssertContains(e.getElement(), e.getExpression(), e.getExpected(), e.getActual());
+        } else if (event instanceof SuccessfulAssertEqualsEvent<?>) {
+            SuccessfulAssertEqualsEvent<T> e = (SuccessfulAssertEqualsEvent<T>) event;
+            successfulAssertEquals(e.getElement(), e.getExpression(), e.getExpected());
+        } else if (event instanceof SuccessfulExecuteEvent<?>) {
+            SuccessfulExecuteEvent<T> e = (SuccessfulExecuteEvent<T>) event;
+            succesfulExecute(e.getElement(), e.getExpression());
+        } else if (event instanceof SuccessfulSetEvent<?>) {
+            SuccessfulSetEvent<T> e = (SuccessfulSetEvent<T>) event;
+            succesfulSet(e.getElement(), e.getExpression(), e.getValue());
+        } else if (event instanceof SurplusRowEvent<?>) {
+            surplusRow(event.getElement());
+        }
     }
 }
 

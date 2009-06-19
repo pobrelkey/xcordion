@@ -197,7 +197,7 @@ public class Ognl implements EvaluationContextFactory<Ognl.OgnlEvaluationContext
             return ignoreState;
         }
 
-        public OgnlEvaluationContext setIgnoreState(IgnoreState ignoreState) {
+        public OgnlEvaluationContext withIgnoreState(IgnoreState ignoreState) {
             return new OgnlEvaluationContext(root, new OgnlContext(context), ignoreState);
         }
     }

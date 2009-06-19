@@ -161,3 +161,16 @@ ins {
 .inserted {
   background-color: #C9F;
 }
+
+.ignored {
+    border: 1px solid #AAA;
+    background-color: #DDD;
+}
+.omitted {
+    border: 1px solid #AAA;
+    background-color: #DDD;
+}
+.normative {
+    border: 1px solid #AAA;
+    background-color: #FFF;
+}

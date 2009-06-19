@@ -4,6 +4,7 @@ import xcordion.api.CommandType;
 import xcordion.api.EvaluationContext;
 import xcordion.api.TestElement;
 import xcordion.api.Xcordion;
+import xcordion.api.events.ExceptionThrownEvent;
 import xcordion.impl.AbstractCommand;
 
 abstract public class ChildrenInSetupRunVerifyOrderCommand extends AbstractCommand {
@@ -16,7 +17,7 @@ abstract public class ChildrenInSetupRunVerifyOrderCommand extends AbstractComma
 			try {
 				run(xcordion, target, context, expression);
 			} catch (Throwable e) {
-				xcordion.getBroadcaster().exception(target, null, e);
+                xcordion.getBroadcaster().handleEvent(new ExceptionThrownEvent<T>(target, context.getIgnoreState(), expression, e));
 			}
 		}
 		runChildren(xcordion, children, context, CommandType.EXECUTE);
@@ -24,7 +25,7 @@ abstract public class ChildrenInSetupRunVerifyOrderCommand extends AbstractComma
 			try {
 				run(xcordion, target, context, expression);
 			} catch (Throwable e) {
-				xcordion.getBroadcaster().exception(target, null, e);
+                xcordion.getBroadcaster().handleEvent(new ExceptionThrownEvent<T>(target, context.getIgnoreState(), expression, e));
 			}
 		}
 		runChildren(xcordion, children, context, CommandType.VERIFY);

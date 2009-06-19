@@ -1,19 +1,16 @@
 package xcordion.visual;
 
-import xcordion.api.XcordionEvents;
-import xcordion.api.TestElement;
-import xcordion.api.RowNavigator;
-import xcordion.api.ResourceReference;
+import xcordion.api.XcordionEventListener;
+import xcordion.api.events.XcordionEvent;
 import xcordion.lang.java.JDomTestDocument;
 
-import java.util.List;
 import java.net.Socket;
 import java.net.InetAddress;
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 
-public class VisualXcordionFeeder implements XcordionEvents {
+public class VisualXcordionFeeder implements XcordionEventListener {
     private static final String PROPERTY_VISUAL_HOST = "xcordion.visual.host";
     private static final String PROPERTY_VISUAL_PORT = "xcordion.visual.port";
 
@@ -53,59 +50,7 @@ public class VisualXcordionFeeder implements XcordionEvents {
         }
     }
 
-    public void begin(TestElement target) {
-        feed();
-    }
-
-    public void succesfulSet(TestElement target, String expression, Object value) {
-        feed();
-    }
-
-    public void exception(TestElement target, String expression, Throwable e) {
-        feed();
-    }
-
-    public void succesfulExecute(TestElement target, String expression) {
-        feed();
-    }
-
-    public void insertText(TestElement target, String expression, Object result) {
-        feed();
-    }
-
-    public void successfulAssertBoolean(TestElement target, String expression, boolean value) {
-        feed();
-    }
-
-    public void failedAssertBoolean(TestElement target, String expression, boolean expected, Object actual) {
-        feed();
-    }
-
-    public void successfulAssertEquals(TestElement target, String expression, Object expected) {
-        feed();
-    }
-
-    public void failedAssertEquals(TestElement target, String expression, Object expected, Object actual) {
-        feed();
-    }
-
-    public void successfulAssertContains(TestElement target, String expression, Object expected, Object actual) {
-        feed();
-    }
-
-    public void failedAssertContains(TestElement target, String expression, Object expected, Object actual) {
-        feed();
-    }
-
-    public void missingRow(RowNavigator row) {
-        feed();
-    }
-
-    public void surplusRow(RowNavigator row) {
-        feed();
-    }
-
-    public void end(TestElement target) {
+    public void handleEvent(XcordionEvent xcordionEvent) {
         feed();
     }
 }

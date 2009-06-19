@@ -4,6 +4,7 @@ import xcordion.api.CommandType;
 import xcordion.api.EvaluationContext;
 import xcordion.api.TestElement;
 import xcordion.api.Xcordion;
+import xcordion.api.events.InsertTextEvent;
 
 
 public class InsertTextCommand extends ChildrenInSetupRunVerifyOrderCommand {
@@ -16,7 +17,7 @@ public class InsertTextCommand extends ChildrenInSetupRunVerifyOrderCommand {
 	@Override
 	protected <T extends TestElement<T>, C extends EvaluationContext<C>> void run(Xcordion<T> xcordion, T target, C context, String expression) {
 		Object result = context.eval(expression, target);
-		xcordion.getBroadcaster().insertText(target, expression, result);
+		xcordion.getBroadcaster().handleEvent(new InsertTextEvent<T>(target, context.getIgnoreState(), expression, result));
 	}
 
 }

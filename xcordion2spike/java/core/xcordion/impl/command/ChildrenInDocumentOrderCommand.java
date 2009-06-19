@@ -3,6 +3,7 @@ package xcordion.impl.command;
 import xcordion.api.EvaluationContext;
 import xcordion.api.TestElement;
 import xcordion.api.Xcordion;
+import xcordion.api.events.ExceptionThrownEvent;
 import xcordion.impl.AbstractCommand;
 
 abstract public class ChildrenInDocumentOrderCommand extends AbstractCommand {
@@ -12,7 +13,7 @@ abstract public class ChildrenInDocumentOrderCommand extends AbstractCommand {
 		try {
 			run(xcordion, target, context, expression);
 		} catch (Throwable e) {
-			xcordion.getBroadcaster().exception(target, null, e);
+			xcordion.getBroadcaster().handleEvent(new ExceptionThrownEvent<T>(target, context.getIgnoreState(), expression, e));
 		}
 		runChildren(xcordion, target.getChildren(), context);
 	}

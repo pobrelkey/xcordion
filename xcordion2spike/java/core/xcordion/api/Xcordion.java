@@ -5,5 +5,5 @@ public interface Xcordion<T extends TestElement<T>> {
 
     CommandRepository getCommandRepository();
 
-    XcordionEvents<T> getBroadcaster();
+    XcordionEventListener<T> getBroadcaster();
 }

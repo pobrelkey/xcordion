@@ -1,8 +1,12 @@
 package xcordion.impl;
 
 import xcordion.api.TestElement;
+import xcordion.api.Pragma;
+import xcordion.api.ItemAndExpression;
+import xcordion.api.CommandRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class TableNavigator<T extends TestElement<T>>  {
@@ -19,9 +23,11 @@ public class TableNavigator<T extends TestElement<T>>  {
     private int navigateRow = -1;
 
     private T newRowParent;
+    private final CommandRepository commandRepository;
 
-    public TableNavigator(T table) {
-        parseTableStructure(table, null);
+    public TableNavigator(T table, CommandRepository commandRepository) {
+        this.commandRepository = commandRepository;
+        parseTableStructure(table, new ArrayList<ItemAndExpression<Pragma>>(), null);
         calculateDimensions();
 
         newRowParent = table.getFirstChildNamed("tbody");
@@ -39,28 +45,34 @@ public class TableNavigator<T extends TestElement<T>>  {
         }
     }
 
-    private void parseTableStructure(T e, T notableParent) {
+    private void parseTableStructure(T e, List<ItemAndExpression<Pragma>> pragmas, T notableParent) {
         for (T child : e.getChildren()) {
             // TODO check for pragmas
 
+            List<ItemAndExpression<Pragma>> childPragmas = commandRepository.pragmasForElement(child);
+            if (!childPragmas.isEmpty()) {
+                childPragmas.addAll(pragmas);
+            } else {
+                childPragmas = pragmas;
+            }
 
             String name = child.getLocalName().toLowerCase();
             if (name.equals("tr")) {
-                parseTableRow(child, notableParent);
+                parseTableRow(child, childPragmas, notableParent);
             } else if (name.equals("td") || name.equals("th") || name.equals("table")) {
                 // gak, a nested/malformed table!  go no further, here be dragons...
                 continue;
             } else if (name.equals("thead") || name.equals("tbody") || name.equals("tfoot")) {
                 // Complex Table Model elements
-                parseTableStructure(child, child);
+                parseTableStructure(child, childPragmas, child);
             } else {
                 // probably a span/div or something - blithely ignore
-                parseTableStructure(child, notableParent);
+                parseTableStructure(child, childPragmas, notableParent);
             }
         }
     }
 
-    private void parseTableRow(T row, T notableParent) {
+    private void parseTableRow(T row, List<ItemAndExpression<Pragma>> pragmas, T notableParent) {
         parseRow++;
         parseColumn = 0;
         skipRowspanCellsFromAbove();
@@ -77,6 +89,7 @@ public class TableNavigator<T extends TestElement<T>>  {
                     }
                     RowNavigatorImpl<T> rowNavigator = rows.get(y);
                     if (y == parseRow) {
+                        rowNavigator.setPragmas(pragmas);
                         rowNavigator.setRowElement(row);
                     }
                     for (int x = parseColumn; x < parseColumn + colspan; x++) {

@@ -4,6 +4,8 @@ import xcordion.api.CommandType;
 import xcordion.api.EvaluationContext;
 import xcordion.api.TestElement;
 import xcordion.api.Xcordion;
+import xcordion.api.events.SuccessfulAssertEqualsEvent;
+import xcordion.api.events.FailedAssertEqualsEvent;
 
 
 public class AssertEqualsCommand extends ChildrenInSetupRunVerifyOrderCommand {
@@ -24,9 +26,9 @@ public class AssertEqualsCommand extends ChildrenInSetupRunVerifyOrderCommand {
         String expectedString = (expected != null) ? expected.toString() : "";
 
         if (expectedString.equals(actualString)) {
-			xcordion.getBroadcaster().successfulAssertEquals(target, expression, expected);
+			xcordion.getBroadcaster().handleEvent(new SuccessfulAssertEqualsEvent<T>(target, context.getIgnoreState(), expression, expected));
 		} else {
-			xcordion.getBroadcaster().failedAssertEquals(target, expression, expected, actual);
+			xcordion.getBroadcaster().handleEvent(new FailedAssertEqualsEvent<T>(target, context.getIgnoreState(), expression, expected, actual));
 		}
 	}
 

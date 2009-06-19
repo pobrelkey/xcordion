@@ -1,68 +1,51 @@
 package xcordion.impl.events;
 
 import xcordion.api.TestElement;
-import xcordion.api.RowNavigator;
+import xcordion.api.XcordionEventListener;
+import xcordion.api.IgnoreState;
+import xcordion.api.events.XcordionEvent;
+import xcordion.api.events.ExceptionThrownEvent;
+import xcordion.api.events.SuccessfulAssertBooleanEvent;
+import xcordion.api.events.SuccessfulAssertContainsEvent;
+import xcordion.api.events.SuccessfulAssertEqualsEvent;
+import xcordion.api.events.FailedAssertBooleanEvent;
+import xcordion.api.events.FailedAssertEqualsEvent;
+import xcordion.api.events.FailedAssertContainsEvent;
+import xcordion.api.events.MissingRowEvent;
+import xcordion.api.events.SurplusRowEvent;
 
-public class ResultSummariser<T extends TestElement<T>> extends XcordionEventsAdapter<T> {
+public class ResultSummariser<T extends TestElement<T>> implements XcordionEventListener<T> {
 
     private int successes = 0, failures = 0, exceptions = 0;
+    private int ignoredSuccesses = 0, ignoredFailures = 0, ignoredExceptions = 0;
     private boolean expectedToPass = true;
     private Boolean successful;
     private String message;
 
 
-    @Override
-    public void exception(T target, String expression, Throwable e) {
-        markDirty();
-        exceptions++;
-    }
-
-    @Override
-    public void successfulAssertBoolean(T target, String expression, boolean value) {
-        markDirty();
-        successes++;
-    }
-
-    @Override
-    public void failedAssertBoolean(T target, String expression, boolean expected, Object actual) {
-        markDirty();
-        failures++;
-    }
-
-    @Override
-    public void successfulAssertEquals(T target, String expression, Object expected) {
-        markDirty();
-        successes++;
-    }
-
-    @Override
-    public void failedAssertEquals(T target, String expression, Object expected, Object actual) {
-        markDirty();
-        failures++;
-    }
-
-    @Override
-    public void successfulAssertContains(T target, String expression, Object expected, Object actual) {
-        markDirty();
-        successes++;
-    }
-
-    @Override
-    public void failedAssertContains(T target, String expression, Object expected, Object actual) {
-        markDirty();
-        failures++;
-    }
-
-    @Override
-    public void missingRow(RowNavigator<T> row) {
-        markDirty();
-        failures++;
-    }
-
-    @Override
-    public void surplusRow(RowNavigator<T> row) {
-        markDirty();
-        failures++;
+    public void handleEvent(XcordionEvent<T> event) {
+        if (event instanceof ExceptionThrownEvent) {
+            markDirty();
+            if (event.getIgnoreState() == IgnoreState.NORMATIVE) {
+                exceptions++;
+            } else {
+                ignoredExceptions++;
+            }
+        } else if (event instanceof SuccessfulAssertBooleanEvent || event instanceof SuccessfulAssertContainsEvent || event instanceof SuccessfulAssertEqualsEvent) {
+            markDirty();
+            if (event.getIgnoreState() == IgnoreState.NORMATIVE) {
+                successes++;
+            } else {
+                ignoredSuccesses++;
+            }
+        } else if (event instanceof FailedAssertBooleanEvent || event instanceof FailedAssertEqualsEvent || event instanceof FailedAssertContainsEvent || event instanceof MissingRowEvent || event instanceof SurplusRowEvent) {
+            markDirty();
+            if (event.getIgnoreState() == IgnoreState.NORMATIVE) {
+                failures++;
+            } else {
+                ignoredFailures++;
+            }
+        }
     }
 
     public boolean isExpectedToPass() {
@@ -79,6 +62,18 @@ public class ResultSummariser<T extends TestElement<T>> extends XcordionEventsAd
 
     public int getExceptions() {
         return exceptions;
+    }
+
+    public int getIgnoredSuccesses() {
+        return ignoredSuccesses;
+    }
+
+    public int getIgnoredFailures() {
+        return ignoredFailures;
+    }
+
+    public int getIgnoredExceptions() {
+        return ignoredExceptions;
     }
 
     public void setExpectedToPass(boolean expectedToPass) {
@@ -105,7 +100,10 @@ public class ResultSummariser<T extends TestElement<T>> extends XcordionEventsAd
 
     public String getScoreLine() {
         return "Successes: " + successes + ", Failures: " + failures +
-                (exceptions > 0 ? (", Exceptions: " + exceptions) : "");
+                (exceptions > 0 ? (", Exceptions: " + exceptions) : "") +
+                (ignoredSuccesses > 0 ? (", Ignored Successes: " + ignoredSuccesses) : "") +
+                (ignoredFailures > 0 ? (", Ignored Failures: " + ignoredFailures) : "") +
+                (ignoredExceptions > 0 ? (", Ignored Exceptions: " + ignoredExceptions) : "");
     }
 
     private void markDirty() {
