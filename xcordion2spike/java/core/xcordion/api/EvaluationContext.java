@@ -8,4 +8,6 @@ public interface EvaluationContext<C extends EvaluationContext<C>> {
 	Object getVariable(String name);
 	void setVariable(String name, Object value);
     <T extends TestElement<T>> Object getValue(T element, Class asClass);
+    IgnoreState getIgnoreState();
+    C setIgnoreState(IgnoreState ignoreState);
 }

@@ -41,6 +41,9 @@ public class TableNavigator<T extends TestElement<T>>  {
 
     private void parseTableStructure(T e, T notableParent) {
         for (T child : e.getChildren()) {
+            // TODO check for pragmas
+
+
             String name = child.getLocalName().toLowerCase();
             if (name.equals("tr")) {
                 parseTableRow(child, notableParent);

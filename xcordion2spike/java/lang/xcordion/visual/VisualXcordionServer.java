@@ -13,7 +13,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class VisualXcordionServer {
-    static final int SERIAL_PORT = 9997;
+    static final int NOTIFICATIONS_PORT = 9997;
     private static final int HTTP_PORT = 9999;
 
     private final Server server;
@@ -30,7 +30,7 @@ public class VisualXcordionServer {
         InetAddress localhost = null;
         try {
             localhost = InetAddress.getLocalHost();
-            serverSocket = new ServerSocket(SERIAL_PORT, 0, localhost);
+            serverSocket = new ServerSocket(NOTIFICATIONS_PORT, 0, localhost);
         } catch (IOException e) {
             e.printStackTrace();
         }

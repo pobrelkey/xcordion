@@ -20,14 +20,14 @@ import xcordion.util.WrappingIterable;
 import xcordion.api.EvaluationContext;
 import xcordion.api.TestElement;
 import xcordion.api.ResourceReference;
-import xcordion.visual.VisualXcordionServlet;
-import xcordion.visual.VisualXcordionServer;
+import xcordion.api.IgnoreState;
 import xcordion.visual.VisualXcordionFeeder;
 import junit.framework.AssertionFailedError;
 import junit.framework.Assert;
 
 public class SimpleXcordionRunner {
     private static final String PROPERTY_OUTPUT_DIR = "xcordion.outputPath";
+    private static final String PROPERTY_VISUAL = "xcordion.visual";
 
     private Object testInstance;
     private String resourceName;
@@ -64,8 +64,11 @@ public class SimpleXcordionRunner {
 
         broadcaster.addListener(theme);
 
-        VisualXcordionFeeder feeder = new VisualXcordionFeeder(testDocument, resourceReferences);
-        broadcaster.addListener(feeder);
+        String visual = System.getProperty(PROPERTY_VISUAL);
+        if (visual != null && Boolean.parseBoolean(visual)) {
+            VisualXcordionFeeder feeder = new VisualXcordionFeeder(testDocument);
+            broadcaster.addListener(feeder);
+        }
 
         XcordionImpl xcordion = new XcordionImpl(new DefaultCommandRepository(), broadcaster);
 
@@ -199,6 +202,14 @@ public class SimpleXcordionRunner {
         public <T extends TestElement<T>> Object getValue(T element, Class asClass) {
             Object result = baseContext.getValue(element, asClass);
             return (valueTranslator != null) ? valueTranslator.valueOf(element, asClass, result) : result;
+        }
+
+        public IgnoreState getIgnoreState() {
+            return baseContext.getIgnoreState();
+        }
+
+        public ValueTranslatingEvaluationContext<C> setIgnoreState(IgnoreState ignoreState) {
+            return new ValueTranslatingEvaluationContext(baseContext.setIgnoreState(ignoreState));
         }
     }
 }

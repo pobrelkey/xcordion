@@ -5,6 +5,7 @@ import ognl.OgnlException;
 import xcordion.api.EvaluationContext;
 import xcordion.api.EvaluationContextFactory;
 import xcordion.api.TestElement;
+import xcordion.api.IgnoreState;
 import xcordion.util.Coercions;
 import xcordion.util.WrappingIterable;
 
@@ -30,14 +31,16 @@ public class Ognl implements EvaluationContextFactory<Ognl.OgnlEvaluationContext
 
 		private Object root;
 		private OgnlContext context;
+        private IgnoreState ignoreState;
 
         public OgnlEvaluationContext(Object rootObject) {
-			this(rootObject, new OgnlContext());
+			this(rootObject, new OgnlContext(), IgnoreState.NORMATIVE);
 		}
 
-		private OgnlEvaluationContext(Object rootObject, OgnlContext ognlContext) {
+		private OgnlEvaluationContext(Object rootObject, OgnlContext ognlContext, IgnoreState ignoreState) {
 			this.root = rootObject;
 			this.context = ognlContext;
+            this.ignoreState = ignoreState;
 		}
 
 		public <T extends TestElement<T>> Object eval(String expression, T element) {
@@ -134,7 +137,7 @@ public class Ognl implements EvaluationContextFactory<Ognl.OgnlEvaluationContext
         }
 
 		public OgnlEvaluationContext subContext() {
-			return new OgnlEvaluationContext(root, new OgnlContext(context));
+			return new OgnlEvaluationContext(root, new OgnlContext(context), ignoreState);
 		}
 
 		public Object getVariable(String name) {
@@ -190,6 +193,13 @@ public class Ognl implements EvaluationContextFactory<Ognl.OgnlEvaluationContext
             return element.getValue();
         }
 
+        public IgnoreState getIgnoreState() {
+            return ignoreState;
+        }
+
+        public OgnlEvaluationContext setIgnoreState(IgnoreState ignoreState) {
+            return new OgnlEvaluationContext(root, new OgnlContext(context), ignoreState);
+        }
     }
 
 }
