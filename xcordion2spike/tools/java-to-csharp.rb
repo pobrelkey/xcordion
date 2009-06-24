@@ -130,6 +130,8 @@ def transmogrify(java_path, cs_path)
 
       else
       	java_line.gsub!(/\b(final\s+static|static\s+final)\b/, 'const')
+      	java_line.gsub!(/\bfinal\b/, 'readonly')
+      	java_line.gsub!(/\binstanceof\b/, 'is')
         cs_lines << java_line
 
       end

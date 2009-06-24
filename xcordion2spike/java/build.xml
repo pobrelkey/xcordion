@@ -36,6 +36,9 @@
         <pathelement location="${basedir}/lib/ognl-2.6.9.jar"/>
         <pathelement location="${basedir}/lib/junit-4.4.jar"/>
         <pathelement location="${basedir}/lib/jdom-contrib.jar"/>
+        <pathelement location="${basedir}/lib/servlet-api-2.5-6.1.14.jar"/>
+        <pathelement location="${basedir}/lib/jetty-6.1.16.jar"/>
+        <pathelement location="${basedir}/lib/jetty-util-6.1.16.jar"/>
     </path>
 
     <path id="buildtest.classpath">

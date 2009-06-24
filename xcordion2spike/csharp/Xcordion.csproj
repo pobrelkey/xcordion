@@ -18,6 +18,11 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Xcordion</AssemblyName>
+    <RootNamespace>Xcordion</RootNamespace>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -26,6 +31,12 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Xcordion</AssemblyName>
+    <DebugSymbols>true</DebugSymbols>
+    <RootNamespace>Xcordion</RootNamespace>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.JScript" />
@@ -39,14 +50,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="core\xcordion\api\Command.cs" />
-    <Compile Include="core\xcordion\api\CommandAndExpression.cs" />
     <Compile Include="core\xcordion\api\CommandRepository.cs" />
     <Compile Include="core\xcordion\api\CommandType.cs" />
     <Compile Include="core\xcordion\api\EvaluationContext.cs" />
     <Compile Include="core\xcordion\api\EvaluationContextFactory.cs" />
     <Compile Include="core\xcordion\api\ResourceReference.cs" />
     <Compile Include="core\xcordion\api\Xcordion.cs" />
-    <Compile Include="core\xcordion\api\XcordionEvents.cs" />
     <Compile Include="core\xcordion\api\RowNavigator.cs" />
     <Compile Include="core\xcordion\api\TestAttribute.cs" />
     <Compile Include="core\xcordion\api\TestDocument.cs" />
@@ -69,7 +78,6 @@
     <Compile Include="core\xcordion\impl\DefaultCommandFactory.cs" />
     <Compile Include="core\xcordion\impl\DefaultCommandRepository.cs" />
     <Compile Include="core\xcordion\impl\events\ResultSummariser.cs" />
-    <Compile Include="core\xcordion\impl\events\XcordionEventsAdapter.cs" />
     <Compile Include="core\xcordion\impl\events\XcordionEventsBroadcaster.cs" />
     <Compile Include="core\xcordion\impl\XcordionImpl.cs" />
     <Compile Include="core\xcordion\impl\RowNavigatorImpl.cs" />
@@ -97,6 +105,30 @@
     <Compile Include="lang\xcordion\util\SimpleIterator.cs" />
     <Compile Include="lang\xcordion\util\SimpleList.cs" />
     <Compile Include="lang\xcordion\util\SimpleMap.cs" />
+    <Compile Include="core\xcordion\api\events\BeginEvent.cs" />
+    <Compile Include="core\xcordion\api\events\ChangedIgnoreStateEvent.cs" />
+    <Compile Include="core\xcordion\api\events\EndEvent.cs" />
+    <Compile Include="core\xcordion\api\events\ExceptionThrownEvent.cs" />
+    <Compile Include="core\xcordion\api\events\FailedAssertBooleanEvent.cs" />
+    <Compile Include="core\xcordion\api\events\FailedAssertContainsEvent.cs" />
+    <Compile Include="core\xcordion\api\events\FailedAssertEqualsEvent.cs" />
+    <Compile Include="core\xcordion\api\events\InsertTextEvent.cs" />
+    <Compile Include="core\xcordion\api\events\MissingRowEvent.cs" />
+    <Compile Include="core\xcordion\api\events\SuccessfulAssertBooleanEvent.cs" />
+    <Compile Include="core\xcordion\api\events\SuccessfulAssertContainsEvent.cs" />
+    <Compile Include="core\xcordion\api\events\SuccessfulAssertEqualsEvent.cs" />
+    <Compile Include="core\xcordion\api\events\SuccessfulExecuteEvent.cs" />
+    <Compile Include="core\xcordion\api\events\SuccessfulSetEvent.cs" />
+    <Compile Include="core\xcordion\api\events\SurplusRowEvent.cs" />
+    <Compile Include="core\xcordion\api\events\XcordionEvent.cs" />
+    <Compile Include="core\xcordion\api\events\XcordionEventWithExpectedAndActualValues.cs" />
+    <Compile Include="core\xcordion\api\events\XcordionEventWithExpectedValue.cs" />
+    <Compile Include="core\xcordion\api\events\XcordionEventWithExpression.cs" />
+    <Compile Include="core\xcordion\api\IgnoreState.cs" />
+    <Compile Include="core\xcordion\api\ItemAndExpression.cs" />
+    <Compile Include="core\xcordion\api\Pragma.cs" />
+    <Compile Include="core\xcordion\api\XcordionEventListener.cs" />
+    <Compile Include="core\xcordion\impl\command\IgnorePragma.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="core\xcordion\impl\theme\embedded.css" />

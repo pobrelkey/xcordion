@@ -210,45 +210,45 @@ public class ConcordionMarkupTheme<T extends TestElement<T>> implements Xcordion
     }
 
     public void handleEvent(XcordionEvent<T> xcordionEvent) {
-        if (xcordionEvent instanceof BeginEvent<?>) {
+        if (xcordionEvent instanceof BeginEvent) {
             begin(xcordionEvent.getElement());
-        } else if (xcordionEvent instanceof ChangedIgnoreStateEvent<?>) {
+        } else if (xcordionEvent instanceof ChangedIgnoreStateEvent) {
             changedIgnoreState(xcordionEvent.getElement(), xcordionEvent.getIgnoreState());
-        } else if (xcordionEvent instanceof EndEvent<?>) {
+        } else if (xcordionEvent instanceof EndEvent) {
             end(xcordionEvent.getElement());
-        } else if (xcordionEvent instanceof ExceptionThrownEvent<?>) {
+        } else if (xcordionEvent instanceof ExceptionThrownEvent) {
             ExceptionThrownEvent<T> e = (ExceptionThrownEvent<T>) xcordionEvent;
             exception(e.getElement(), e.getExpression(), e.getThrowable());
-        } else if (xcordionEvent instanceof FailedAssertBooleanEvent<?>) {
+        } else if (xcordionEvent instanceof FailedAssertBooleanEvent) {
             FailedAssertBooleanEvent<T> e = (FailedAssertBooleanEvent<T>) xcordionEvent;
             failedAssertBoolean(e.getElement(), e.getExpression(), e.getExpected(), e.getActual());
-        } else if (xcordionEvent instanceof FailedAssertContainsEvent<?>) {
+        } else if (xcordionEvent instanceof FailedAssertContainsEvent) {
             FailedAssertContainsEvent<T> e = (FailedAssertContainsEvent<T>) xcordionEvent;
             failedAssertContains(e.getElement(), e.getExpression(), e.getExpected(), e.getActual());
-        } else if (xcordionEvent instanceof FailedAssertEqualsEvent<?>) {
+        } else if (xcordionEvent instanceof FailedAssertEqualsEvent) {
             FailedAssertEqualsEvent<T> e = (FailedAssertEqualsEvent<T>) xcordionEvent;
             failedAssertEquals(e.getElement(), e.getExpression(), e.getExpected(), e.getActual());
-        } else if (xcordionEvent instanceof InsertTextEvent<?>) {
+        } else if (xcordionEvent instanceof InsertTextEvent) {
             InsertTextEvent<T> e = (InsertTextEvent<T>) xcordionEvent;
             insertText(e.getElement(), e.getExpression(), e.getResult());
-        } else if (xcordionEvent instanceof MissingRowEvent<?>) {
+        } else if (xcordionEvent instanceof MissingRowEvent) {
             missingRow(xcordionEvent.getElement());
-        } else if (xcordionEvent instanceof SuccessfulAssertBooleanEvent<?>) {
+        } else if (xcordionEvent instanceof SuccessfulAssertBooleanEvent) {
             SuccessfulAssertBooleanEvent<T> e = (SuccessfulAssertBooleanEvent<T>) xcordionEvent;
             successfulAssertBoolean(e.getElement(), e.getExpression(), e.getExpected());
-        } else if (xcordionEvent instanceof SuccessfulAssertContainsEvent<?>) {
+        } else if (xcordionEvent instanceof SuccessfulAssertContainsEvent) {
             SuccessfulAssertContainsEvent<T> e = (SuccessfulAssertContainsEvent<T>) xcordionEvent;
             successfulAssertContains(e.getElement(), e.getExpression(), e.getExpected(), e.getActual());
-        } else if (xcordionEvent instanceof SuccessfulAssertEqualsEvent<?>) {
+        } else if (xcordionEvent instanceof SuccessfulAssertEqualsEvent) {
             SuccessfulAssertEqualsEvent<T> e = (SuccessfulAssertEqualsEvent<T>) xcordionEvent;
             successfulAssertEquals(e.getElement(), e.getExpression(), e.getExpected());
-        } else if (xcordionEvent instanceof SuccessfulExecuteEvent<?>) {
+        } else if (xcordionEvent instanceof SuccessfulExecuteEvent) {
             SuccessfulExecuteEvent<T> e = (SuccessfulExecuteEvent<T>) xcordionEvent;
             succesfulExecute(e.getElement(), e.getExpression());
-        } else if (xcordionEvent instanceof SuccessfulSetEvent<?>) {
+        } else if (xcordionEvent instanceof SuccessfulSetEvent) {
             SuccessfulSetEvent<T> e = (SuccessfulSetEvent<T>) xcordionEvent;
             succesfulSet(e.getElement(), e.getExpression(), e.getValue());
-        } else if (xcordionEvent instanceof SurplusRowEvent<?>) {
+        } else if (xcordionEvent instanceof SurplusRowEvent) {
             surplusRow(xcordionEvent.getElement());
         }
     }
