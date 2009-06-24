@@ -14,9 +14,9 @@ public class XcordionEventsBroadcaster<T extends TestElement<T>> implements Xcor
         listeners.add(listener);
     }
 
-    public void handleEvent(XcordionEvent<T> event) {
+    public void handleEvent(XcordionEvent<T> xcordionEvent) {
         for (XcordionEventListener<T> listener : listeners) {
-            listener.handleEvent(event);
+            listener.handleEvent(xcordionEvent);
         }
     }
 }

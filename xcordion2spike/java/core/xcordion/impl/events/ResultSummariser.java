@@ -23,24 +23,24 @@ public class ResultSummariser<T extends TestElement<T>> implements XcordionEvent
     private String message;
 
 
-    public void handleEvent(XcordionEvent<T> event) {
-        if (event instanceof ExceptionThrownEvent) {
+    public void handleEvent(XcordionEvent<T> xcordionEvent) {
+        if (xcordionEvent instanceof ExceptionThrownEvent) {
             markDirty();
-            if (event.getIgnoreState() == IgnoreState.NORMATIVE) {
+            if (xcordionEvent.getIgnoreState() == IgnoreState.NORMATIVE) {
                 exceptions++;
             } else {
                 ignoredExceptions++;
             }
-        } else if (event instanceof SuccessfulAssertBooleanEvent || event instanceof SuccessfulAssertContainsEvent || event instanceof SuccessfulAssertEqualsEvent) {
+        } else if (xcordionEvent instanceof SuccessfulAssertBooleanEvent || xcordionEvent instanceof SuccessfulAssertContainsEvent || xcordionEvent instanceof SuccessfulAssertEqualsEvent) {
             markDirty();
-            if (event.getIgnoreState() == IgnoreState.NORMATIVE) {
+            if (xcordionEvent.getIgnoreState() == IgnoreState.NORMATIVE) {
                 successes++;
             } else {
                 ignoredSuccesses++;
             }
-        } else if (event instanceof FailedAssertBooleanEvent || event instanceof FailedAssertEqualsEvent || event instanceof FailedAssertContainsEvent || event instanceof MissingRowEvent || event instanceof SurplusRowEvent) {
+        } else if (xcordionEvent instanceof FailedAssertBooleanEvent || xcordionEvent instanceof FailedAssertEqualsEvent || xcordionEvent instanceof FailedAssertContainsEvent || xcordionEvent instanceof MissingRowEvent || xcordionEvent instanceof SurplusRowEvent) {
             markDirty();
-            if (event.getIgnoreState() == IgnoreState.NORMATIVE) {
+            if (xcordionEvent.getIgnoreState() == IgnoreState.NORMATIVE) {
                 failures++;
             } else {
                 ignoredFailures++;
