@@ -1,6 +1,6 @@
 <project name="xcordion-java" default="all">
 
-    <property name="version" value="1.99.0"/>
+    <property name="version" value="2.0.RC1"/>
     <property name="productName" value="xcordion"/>
 
     <patternset id="ignored.files">
