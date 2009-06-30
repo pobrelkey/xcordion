@@ -83,7 +83,8 @@ class ToggleTestHtmlJavaActionHandler extends EditorActionHandler {
     private boolean validXcordionHtmlFile() {
         String fileContents = currentFile.getText();
         return currentFile instanceof HtmlFileImpl &&
-                (fileContents.contains(XcordionNamespace.NAMESPACE_CONCORDION_2007.getNamespace())
+                (fileContents.contains(XcordionNamespace.NAMESPACE_XCORDION.getNamespace())
+                        || fileContents.contains(XcordionNamespace.NAMESPACE_CONCORDION_2007.getNamespace())
                         || fileContents.contains(XcordionNamespace.NAMESPACE_CONCORDION_ANCIENT.getNamespace())
                         || fileContents.contains(XcordionNamespace.NAMESPACE_CONCORDION_OLD.getNamespace()));
     }

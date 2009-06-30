@@ -5,7 +5,6 @@ import com.intellij.codeInsight.completion.simple.SimpleLookupItem;
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementFactoryImpl;
-import com.intellij.codeInsight.lookup.LookupItem;
 import static com.intellij.openapi.application.ApplicationManager.getApplication;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
@@ -14,6 +13,12 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.xml.*;
 import com.intellij.util.text.CharArrayUtil;
+import static jedi.functional.Coercions.list;
+import jedi.functional.Filter;
+import static jedi.functional.FunctionalPrimitives.collect;
+import static jedi.functional.FunctionalPrimitives.select;
+import jedi.functional.Functor;
+import static org.xcordion.ide.intellij.XcordionAttribute.IGNORE;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +28,7 @@ import java.util.regex.Pattern;
 public class XcordionCompletionContributor extends CompletionContributor {
     private static final String INTELLIJ_IDEA_RULEZZZ = "IntellijIdeaRulezzz ";
     private static final Pattern SUFFIX_PATTERN = Pattern.compile("^(.*)\\b(\\w+)$", Pattern.DOTALL);
+    private static final Pattern IGNORE_ATTRIBUTE_PATTERN = Pattern.compile(".*[:" + IGNORE.getLocalName() + "=\"].*[" + INTELLIJ_IDEA_RULEZZZ + " ]+.*");
 
     @Override
     public boolean fillCompletionVariants(final CompletionParameters parameters, final CompletionResultSet result) {
@@ -70,8 +76,8 @@ public class XcordionCompletionContributor extends CompletionContributor {
         return tag instanceof XmlTag;
     }
 
-    private boolean xmlFile(PsiFile currentFile) {
-        return currentFile instanceof XmlFile;
+    private boolean xmlFile(PsiFile file) {
+        return file instanceof XmlFile;
     }
 
     // intended to prevent pre-existing text in the destination OGNL that happens to match our copmpletion test from getting deleted
@@ -87,9 +93,9 @@ public class XcordionCompletionContributor extends CompletionContributor {
             suffix = suffixMatcher.group(2);
         }
 
-        List<AutoCompleteItem> displayValues = XcordionReflectionUtils.getAutoCompleteItems(attributeValue, suffix, baseExpression);
+        List<AutoCompleteItem> autoCompleteItems = getAutoCompleteItems(attributeValue, suffix, baseExpression);
 
-        for (AutoCompleteItem autoCompleteItem : displayValues) {
+        for (AutoCompleteItem autoCompleteItem : autoCompleteItems) {
             SimpleLookupItem<String> item = LookupElementFactoryImpl.getInstance().createLookupElement(autoCompleteItem.getText());
 
             String insertableString = getInsertableString(baseExpression, autoCompleteItem.getText());
@@ -105,6 +111,21 @@ public class XcordionCompletionContributor extends CompletionContributor {
 
             result.addElement(item);
         }
+    }
+
+    private List<AutoCompleteItem> getAutoCompleteItems(XmlAttributeValue attributeValue, String suffix, String baseExpression) {
+        if (isIgnoreAttribute(attributeValue)) {
+            return collect(IgnoreAttributeValue.values(), new Functor<IgnoreAttributeValue, AutoCompleteItem>() {
+                public AutoCompleteItem execute(IgnoreAttributeValue value) {
+                    return new AutoCompleteItem(value.name().toLowerCase(), "");
+                }
+            });
+        }
+        return XcordionReflectionUtils.getAutoCompleteItems(attributeValue, suffix, baseExpression);
+    }
+
+    private boolean isIgnoreAttribute(XmlAttributeValue attributeValue) {
+        return IGNORE_ATTRIBUTE_PATTERN.matcher(attributeValue.getParent().getText()).matches();
     }
 
     private String getInsertableTextWithNoDodgyCharacters(String insertableString) {
@@ -166,7 +187,7 @@ public class XcordionCompletionContributor extends CompletionContributor {
 
                     document.deleteString(magickIndex, magickIndex + lookupElement.getLookupString().length());
                 }
-                
+
                 document.insertString(caretModelOffset, insertable);
                 editor.getCaretModel().moveToOffset(caretModelOffset + insertable.length());
                 editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
@@ -179,27 +200,38 @@ public class XcordionCompletionContributor extends CompletionContributor {
         return psiElement.getText().substring(1, psiElement.getText().indexOf(INTELLIJ_IDEA_RULEZZZ));
     }
 
-    private void completeWithAttributeNames(CompletionResultSet result, PsiElement parent) {
-        for (XcordionNamespace namespace : XcordionNamespace.values()) {
-            String namespacePrefix = ((XmlTag) parent.getParent().getParent()).getPrefixByNamespace(namespace.getNamespace());
-            if (namespacePrefix == null) {
-                continue;
-            }
-            for (XcordionAttribute xattribute : namespace.getAttributes()) {
-                String attributeName = namespacePrefix + ":" + xattribute.getLocalName();
-                result.addElement(new AttributeLookupItem(attributeName, attributeName));
+    private void completeWithAttributeNames(final CompletionResultSet result, PsiElement element) {
+        PsiElement grandParent = element.getParent().getParent();
+
+        if (xmlTag(grandParent)) {
+            for (XcordionNamespace namespace : getXcordionNamespacesInUse(grandParent)) {
+                addAttributesForNamespace(result, namespace, getNamespacePrefix(namespace, grandParent));
             }
         }
     }
 
-    private static class AttributeLookupItem extends LookupItem<String> {
-        public AttributeLookupItem(String attributeName, String attributeName1) {
-            super(attributeName, attributeName1);
-        }
+    private List<XcordionNamespace> getXcordionNamespacesInUse(final PsiElement grandParent) {
+        return select(list(XcordionNamespace.values()), new Filter<XcordionNamespace>() {
+            public Boolean execute(XcordionNamespace xcordionNamespace) {
+                return getNamespacePrefix(xcordionNamespace, grandParent) != null;
+            }
+        });
+    }
 
-        @Override
-        public XmlAttributeInsertHandler<AttributeLookupItem> getInsertHandler() {
-            return new XmlAttributeInsertHandler<AttributeLookupItem>();
+    private String getNamespacePrefix(XcordionNamespace xcordionNamespace, PsiElement grandParent) {
+        return ((XmlTag) grandParent).getPrefixByNamespace(xcordionNamespace.getNamespace());
+    }
+
+    private void addAttributesForNamespace(CompletionResultSet result, XcordionNamespace namespace, String namespacePrefix) {
+        for (XcordionAttribute xcordionAttribute : namespace.getAttributes()) {
+            String attributeName = namespacePrefix + ":" + xcordionAttribute.getLocalName();
+            result.addElement(new AttributeLookupItem(attributeName, attributeName));
         }
+    }
+
+    private enum IgnoreAttributeValue {
+        IGNORE,
+        NO,
+        OMIT
     }
 }

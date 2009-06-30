@@ -10,6 +10,7 @@ import java.util.List;
 
 
 public enum XcordionNamespace {
+    NAMESPACE_XCORDION("urn:xcordion:v1"),
     NAMESPACE_CONCORDION_2007("http://www.concordion.org/2007/concordion"),
     NAMESPACE_CONCORDION_OLD("http://concordion.org"),
     NAMESPACE_CONCORDION_ANCIENT("http://concordion.org/namespace/concordion-1.0");

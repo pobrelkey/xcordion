@@ -40,19 +40,25 @@ class XmlAttributeInsertHandler<T extends LookupItem> extends BasicInsertHandler
             namespace = tag.getNamespaceByPrefix(qualifiedAttributeName.substring(0, whereColon));
             localName = qualifiedAttributeName.substring(whereColon + 1);
         }
-        XcordionAttribute attribute = XcordionAttribute.forNamespaceAndName(namespace, localName);
-        boolean insertHash = (attribute != null && attribute.getSyntax() != XcordionAttributeSyntax.EXECUTE);
 
         CharSequence charsequence = document.getCharsSequence();
         if (!CharArrayUtil.regionMatches(charsequence, caretModelOffset, "=\"") && !CharArrayUtil.regionMatches(charsequence, caretModelOffset, "='")) {
             if (caretModelOffset >= document.getTextLength() || "/> \n\t\r".indexOf(document.getCharsSequence().charAt(caretModelOffset)) < 0) {
-                document.insertString(caretModelOffset, insertHash ? "=\"#\" " : "=\"\" ");
+                document.insertString(caretModelOffset, hashRequired(namespace, localName) ? "=\"#\" " : "=\"\" ");
             } else {
-                document.insertString(caretModelOffset, insertHash ? "=\"#\"" : "=\"\"");
+                document.insertString(caretModelOffset, hashRequired(namespace, localName) ? "=\"#\"" : "=\"\"");
             }
         }
-        editor.getCaretModel().moveToOffset(caretModelOffset + (insertHash ? 3 : 2));
+        editor.getCaretModel().moveToOffset(caretModelOffset + (hashRequired(namespace, localName) ? 3 : 2));
         editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
         editor.getSelectionModel().removeSelection();
     }
+
+    private boolean hashRequired(String namespace, String localName) {
+        XcordionAttribute attribute = XcordionAttribute.forNamespaceAndName(namespace, localName);
+        return (attribute != null
+                && attribute.getSyntax() != XcordionAttributeSyntax.EXECUTE
+                && attribute.getSyntax() != XcordionAttributeSyntax.IGNORE);
+    }
+
 }
