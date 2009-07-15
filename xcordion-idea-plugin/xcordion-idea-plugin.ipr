@@ -279,7 +279,13 @@
     <library name="jedi-2.3">
       <CLASSES>
         <root url="jar://$PROJECT_DIR$/lib/jedi_2.3_jdk1.5.jar!/" />
-        <root url="jar://$PROJECT_DIR$/xcordion/xcordion/lib/xcordion.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="ant">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/lib/ant.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
