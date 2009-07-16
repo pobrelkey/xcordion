@@ -60,5 +60,9 @@ public class JUnitAdapter {
     public Class runnerClass() {
         return runnerClass;
     }
+
+    public Class getTestClass() {
+        return testClass;
+    }
 }
 

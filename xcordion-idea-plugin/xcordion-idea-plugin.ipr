@@ -290,6 +290,17 @@
       <JAVADOC />
       <SOURCES />
     </library>
+    <library name="jmock">
+      <CLASSES>
+        <root url="jar:///Users/dev/trunk/netstream/libraries/compilation-jars/jmock-legacy-2.5.1.jar!/" />
+        <root url="jar:///Users/dev/trunk/netstream/libraries/compilation-jars/jmock-2.5.1.jar!/" />
+        <root url="jar:///Users/dev/trunk/netstream/libraries/compilation-jars/objenesis-1.0.jar!/" />
+        <root url="jar:///Users/dev/trunk/netstream/libraries/deployment-jars/hamcrest/hamcrest-core-1.1.jar!/" />
+        <root url="jar:///Users/dev/trunk/netstream/libraries/deployment-jars/hamcrest/hamcrest-library-1.1.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
   </component>
 </project>
 

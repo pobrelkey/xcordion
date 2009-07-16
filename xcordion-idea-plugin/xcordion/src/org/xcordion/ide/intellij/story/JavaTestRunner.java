@@ -1,21 +1,23 @@
 package org.xcordion.ide.intellij.story;
 
-import com.intellij.openapi.module.Module;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class JavaTestRunner {
-    public JavaTestRunner(Module module, List<String> testClassNames) {
-        ModuleAdapter moduleAdapter = new ModuleAdapter(module);
+    private List<JunitBuildLogger> results;
 
-        for (String testClassName : testClassNames) {
+    public JavaTestRunner(List<StoryRunnerActionHandler.TestToRun> tests) {
+
+        results = new ArrayList<JunitBuildLogger>();
+
+        for (StoryRunnerActionHandler.TestToRun test : tests) {
             try {
-                Class testClass = moduleAdapter.load(testClassName);
+                ModuleAdapter moduleAdapter = new ModuleAdapter(test.getModule());
+                Class testClass = moduleAdapter.load(test.getName());
                 JunitBuildLogger buildLogger = new JunitBuildLogger(testClass);
-                antJavaTask(moduleAdapter, testClassName, buildLogger).execute();
+                antJavaTask(moduleAdapter, test.getName(), buildLogger).execute();
 
-                System.out.println("Results:  " + buildLogger.getResults());
-
+                results.add(buildLogger);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -26,5 +28,9 @@ public class JavaTestRunner {
         AntJavaTaskRunner task = new AntJavaTaskRunner(moduleAdapter, testClassName, buildListener.getRunnerClassName());
         task.addBuildListener(buildListener);
         return task;
+    }
+
+    public List<JunitBuildLogger> getResults() {
+        return results;
     }
 }

@@ -47,13 +47,6 @@ public class AntJavaTaskRunner {
         javaTask.createClasspath().append(AntUtils.toPath(project, classpaths));
     }
 
-    private Target target(String testClassName, String runnerClassName) {
-        Target target = new Target();
-        target.setName(testClassName);
-        target.addTask(javaTask(testClassName, runnerClassName));
-        return target;
-    }
-
     private Java javaTask(String testClassName, String runnerClassName) {
         javaTask = (Java) project.createTask("java");
         javaTask.setFork(true);
