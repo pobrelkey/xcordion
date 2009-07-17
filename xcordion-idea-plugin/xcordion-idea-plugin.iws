@@ -6,21 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" readonly="true" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryRunnerActionHandler.java" afterPath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryRunnerActionHandler.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/xcordion/test/org/xcordion/ide/intellij/StoryPageParserTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryPageResults.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/xcordion/test/org/xcordion/ide/intellij/MyFirstXcordionSpecTestClass.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JunitBuildLogger.java" afterPath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JunitBuildLogger.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/AntJavaTaskRunner.java" afterPath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/AntJavaTaskRunner.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion/xcordion.iml" afterPath="$PROJECT_DIR$/xcordion/xcordion.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion-idea-plugin.ipr" afterPath="$PROJECT_DIR$/xcordion-idea-plugin.ipr" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JUnitResultsParser.java" afterPath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JUnitResultsParser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JavaTestRunner.java" afterPath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JavaTestRunner.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryRunnerAction.java" afterPath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryRunnerAction.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/xcordion/test/org/xcordion/ide/intellij/story" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/xcordion/test/org/xcordion/ide/intellij/story/StoryPageResultsTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JUnitAdapter.java" afterPath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JUnitAdapter.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JUnitResultsParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion/xcordion.zip" afterPath="$PROJECT_DIR$/xcordion/xcordion.zip" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion/test/org/xcordion/ide/intellij/story/StoryPageResultsTest.java" afterPath="$PROJECT_DIR$/xcordion/test/org/xcordion/ide/intellij/story/StoryPageResultsTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion-idea-plugin.iws" afterPath="$PROJECT_DIR$/xcordion-idea-plugin.iws" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryPageResults.java" afterPath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryPageResults.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/AntJavaTaskRunner.java" afterPath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/AntJavaTaskRunner.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JunitBuildLogger.java" afterPath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/TestResultLogger.java" />
     </list>
     <ignored path="xcordion-idea-plugin.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -40,7 +33,33 @@
   </component>
   <component name="DebuggerManager">
     <line_breakpoints>
-      <breakpoint url="file://$PROJECT_DIR$/xcordion/test/org/xcordion/ide/intellij/story/StoryPageResultsTest.java" line="47" class="org.xcordion.ide.intellij.story.StoryPageResultsTest" package="org.xcordion.ide.intellij.story">
+      <breakpoint url="file://$PROJECT_DIR$/xcordion/test/org/xcordion/ide/intellij/story/StoryPageResultsTest.java" line="52" class="org.xcordion.ide.intellij.story.StoryPageResultsTest" package="org.xcordion.ide.intellij.story">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryPageResults.java" line="30" class="org.xcordion.ide.intellij.story.StoryPageResults" package="org.xcordion.ide.intellij.story">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryRunnerActionHandler.java" line="54" class="org.xcordion.ide.intellij.story.StoryRunnerActionHandler" package="org.xcordion.ide.intellij.story">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -114,41 +133,57 @@
       <file leaf-file-name="StoryRunnerActionHandler.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryRunnerActionHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="50" column="83" selection-start="2511" selection-end="2511" vertical-scroll-proportion="-10.0">
+            <state line="69" column="21" selection-start="3280" selection-end="3280" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="StoryPageResults.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="StoryPageResults.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryPageResults.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="45" column="64" selection-start="1712" selection-end="1712" vertical-scroll-proportion="0.66226137">
+            <state line="23" column="0" selection-start="840" selection-end="840" vertical-scroll-proportion="0.0">
               <folding>
-                <element signature="imports" expanded="true" />
+                <marker date="1247826588000" expanded="false" signature="49:184" placeholder="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="StoryPageResultsTest.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="TestResultLogger.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/TestResultLogger.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="58" column="58" selection-start="1815" selection-end="1815" vertical-scroll-proportion="0.0">
+              <folding>
+                <marker date="1247825088000" expanded="false" signature="49:161" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="StoryPageResultsTest.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/xcordion/test/org/xcordion/ide/intellij/story/StoryPageResultsTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="50" column="23" selection-start="2045" selection-end="2045" vertical-scroll-proportion="0.0">
-              <folding>
-                <marker date="1247760950000" expanded="false" signature="49:309" placeholder="..." />
-              </folding>
+            <state line="34" column="29" selection-start="1280" selection-end="1280" vertical-scroll-proportion="0.3898305">
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="StoryPageParserTest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xcordion/test/org/xcordion/ide/intellij/StoryPageParserTest.java">
+      <file leaf-file-name="Object.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar:///Users/dev/trunk/netstream-tools/source-jars/jdk-1.5.6.zip!/java/lang/Object.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="31" column="61" selection-start="1561" selection-end="1561" vertical-scroll-proportion="0.0">
-              <folding>
-                <marker date="1247760950000" expanded="false" signature="43:256" placeholder="..." />
-              </folding>
+            <state line="37" column="48" selection-start="1185" selection-end="1185" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="JUnitAdapter.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JUnitAdapter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="23" column="36" selection-start="710" selection-end="710" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -156,21 +191,17 @@
       <file leaf-file-name="JavaTestRunner.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JavaTestRunner.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="36" column="0" selection-start="1262" selection-end="1262" vertical-scroll-proportion="0.0">
-              <folding>
-                <marker date="1247760950000" expanded="false" signature="49:92" placeholder="..." />
-              </folding>
+            <state line="16" column="29" selection-start="572" selection-end="572" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JunitBuildLogger.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JunitBuildLogger.java">
+      <file leaf-file-name="AntJavaTaskRunner.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/AntJavaTaskRunner.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="0" selection-start="1423" selection-end="1423" vertical-scroll-proportion="0.0">
-              <folding>
-                <marker date="1247760950000" expanded="false" signature="49:161" placeholder="..." />
-              </folding>
+            <state line="33" column="19" selection-start="1050" selection-end="1050" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -178,27 +209,7 @@
       <file leaf-file-name="JUnitResultsParser.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JUnitResultsParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="27" column="53" selection-start="901" selection-end="901" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StoryRunnerAction.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryRunnerAction.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="50" selection-start="493" selection-end="511" vertical-scroll-proportion="0.0">
-              <folding>
-                <marker date="1247760950000" expanded="false" signature="49:405" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ModuleAdapter.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/ModuleAdapter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="13" selection-start="796" selection-end="796" vertical-scroll-proportion="0.0">
+            <state line="13" column="46" selection-start="436" selection-end="436" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -226,250 +237,7 @@
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectPane">
-    <subPane>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion-idea-plugin" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion-idea-plugin" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion-idea-plugin" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion-idea-plugin" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellij" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion-idea-plugin" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellij" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="story" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion-idea-plugin" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellij" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion-idea-plugin" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellij" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="story" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion-idea-plugin" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellij" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="settings" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion-idea-plugin" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellij" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="actions" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion-idea-plugin" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="META-INF" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion-idea-plugin" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiUtils" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion-idea-plugin" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiUtils" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiUtils" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="xcordion-idea-plugin" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiUtils" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiUtils" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="psi" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-    </subPane>
+    <subPane />
   </component>
   <component name="ProjectReloadState">
     <option name="STATE" value="0" />
@@ -559,22 +327,22 @@
     <option name="referencePos" value="0" />
     <option name="showLabels" value="true" />
   </component>
-  <component name="RunManager" selected="JUnit.StoryPageParserTest.testParsingForTestNames">
-    <tempConfiguration default="false" name="StoryPageParserTest.testParsingForTestNames" type="JUnit" factoryName="JUnit" enabled="false" merge="false" sample_coverage="true" runner="emma">
+  <component name="RunManager" selected="JUnit.StoryPageResultsTest">
+    <tempConfiguration default="false" name="StoryPageResultsTest" type="JUnit" factoryName="JUnit" enabled="false" merge="false" runner="emma">
       <pattern>
-        <option name="PATTERN" value="org.xcordion.ide.intellij.*" />
+        <option name="PATTERN" value="org.xcordion.ide.intellij.story.*" />
         <option name="ENABLED" value="true" />
       </pattern>
       <module name="xcordion" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" value="" />
-      <option name="PACKAGE_NAME" value="org.xcordion.ide.intellij" />
-      <option name="MAIN_CLASS_NAME" value="org.xcordion.ide.intellij.StoryPageParserTest" />
-      <option name="METHOD_NAME" value="testParsingForTestNames" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-Drun.in.memory=yes" />
-      <option name="PARAMETERS" value="" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="org.xcordion.ide.intellij.story" />
+      <option name="MAIN_CLASS_NAME" value="org.xcordion.ide.intellij.story.StoryPageResultsTest" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
       <option name="ADDITIONAL_CLASS_PATH" />
@@ -688,8 +456,8 @@
       </method>
     </configuration>
     <list size="2">
-      <item index="0" class="java.lang.String" itemvalue="JUnit.StoryPageParserTest.testParsingForTestNames" />
-      <item index="1" class="java.lang.String" itemvalue="Plugin.xcordion" />
+      <item index="0" class="java.lang.String" itemvalue="Plugin.xcordion" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.StoryPageResultsTest" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -737,7 +505,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1920" y="0" width="1920" height="1200" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Web Preview" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" />
       <window_info id="Dataflow to this" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" />
@@ -746,9 +514,9 @@
       <window_info id="Regex" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="7" side_tool="false" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.65822786" order="0" side_tool="false" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.6726944" order="0" side_tool="false" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32188064" sideWeight="0.5" order="1" side_tool="false" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3209765" sideWeight="0.5" order="1" side_tool="false" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39963832" sideWeight="0.5" order="5" side_tool="false" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2830018" sideWeight="0.5" order="7" side_tool="false" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" />
@@ -756,9 +524,9 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="7" side_tool="false" />
       <window_info id="IvyIDEA" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32820976" sideWeight="0.5" order="2" side_tool="false" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32820976" sideWeight="0.5" order="2" side_tool="false" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33544305" sideWeight="0.5" order="3" side_tool="false" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33544305" sideWeight="0.5" order="3" side_tool="false" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.0" order="7" side_tool="false" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" />
@@ -775,7 +543,7 @@
     <option name="PERFORM_CHECKOUT_IN_BACKGROUND" value="true" />
     <option name="PERFORM_ADD_REMOVE_IN_BACKGROUND" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Dan and Priya and Mike: more story runner action work, hacked together a working solution, needs a lots of refactoring / embellishments" />
+    <option name="LAST_COMMIT_MESSAGE" value="Dan and Priya and Mike: tidy up test result object" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="REFORMAT_BEFORE_FILE_COMMIT" value="false" />
@@ -791,6 +559,7 @@
     <MESSAGE value="Brad and MikeD: fixed bug where java test class not found when &quot;.html&quot; wasn't included on the name. Made auto compeltion work for when cursor is in brackets" />
     <MESSAGE value="Priya and MikeD: first checkin of story runner action" />
     <MESSAGE value="Dan and Priya and Mike: more story runner action work, hacked together a working solution, needs a lots of refactoring / embellishments" />
+    <MESSAGE value="Dan and Priya and Mike: tidy up test result object" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -804,64 +573,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/XcordionNamespace.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="4" selection-start="316" selection-end="316" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/AntJavaTaskRunner.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="56" column="22" selection-start="1902" selection-end="1902" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xcordion/META-INF/plugin.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="37" column="95" selection-start="2030" selection-end="2030" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/actions/ToggleTestHtmlJavaAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="13" selection-start="272" selection-end="272" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/actions/ToggleTestHtmlJavaActionHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="6" selection-start="1266" selection-end="1266" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JunitTestListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="6" selection-start="160" selection-end="160" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryRunnerAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="50" selection-start="493" selection-end="511" vertical-scroll-proportion="0.0">
-          <folding>
-            <marker date="1247760950000" expanded="false" signature="49:405" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/ModuleAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="13" selection-start="796" selection-end="796" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$APPLICATION_HOME_DIR$/lib/idea_rt.jar!/com/intellij/rt/execution/junit/IdeaTestRunner.class">
       <provider selected="true" editor-type-id="text-editor">
         <state line="22" column="38" selection-start="1145" selection-end="1145" vertical-scroll-proportion="0.0">
@@ -869,62 +580,112 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JunitBuildLogger.java">
+    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/openapi/actionSystem/Presentation.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="0" selection-start="1423" selection-end="1423" vertical-scroll-proportion="0.0">
-          <folding>
-            <marker date="1247760950000" expanded="false" signature="49:161" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JUnitResultsParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="53" selection-start="901" selection-end="901" vertical-scroll-proportion="0.0">
+        <state line="73" column="16" selection-start="3501" selection-end="3501" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/xcordion/test/org/xcordion/ide/intellij/story/StoryPageResultsTest.java">
+    <entry file="jar://$PROJECT_DIR$/lib/ant.jar!/org/apache/tools/ant/Project.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="50" column="23" selection-start="2045" selection-end="2045" vertical-scroll-proportion="0.0">
-          <folding>
-            <marker date="1247760950000" expanded="false" signature="49:309" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JavaTestRunner.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="0" selection-start="1262" selection-end="1262" vertical-scroll-proportion="0.0">
-          <folding>
-            <marker date="1247760950000" expanded="false" signature="49:92" placeholder="..." />
-          </folding>
+        <state line="303" column="16" selection-start="13497" selection-end="13497" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/xcordion/test/org/xcordion/ide/intellij/StoryPageParserTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="31" column="61" selection-start="1561" selection-end="1561" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/ModuleAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="37" column="13" selection-start="1263" selection-end="1263" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryRunnerAction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="13" selection-start="457" selection-end="457" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JUnitAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="36" selection-start="710" selection-end="710" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Users/dev/trunk/netstream-tools/source-jars/jdk-1.5.6.zip!/java/lang/Object.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="37" column="48" selection-start="1185" selection-end="1185" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/lib/idea.jar!/com/intellij/openapi/command/impl/CommandProcessorImpl.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="16" selection-start="1271" selection-end="1271" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/AntJavaTaskRunner.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="19" selection-start="1050" selection-end="1050" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JUnitResultsParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="46" selection-start="436" selection-end="436" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JavaTestRunner.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="29" selection-start="572" selection-end="572" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/TestResultLogger.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="58" column="58" selection-start="1815" selection-end="1815" vertical-scroll-proportion="0.0">
           <folding>
-            <marker date="1247760950000" expanded="false" signature="43:256" placeholder="..." />
+            <marker date="1247825088000" expanded="false" signature="49:161" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryPageResults.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="0" selection-start="840" selection-end="840" vertical-scroll-proportion="0.0">
+          <folding>
+            <marker date="1247826588000" expanded="false" signature="49:184" placeholder="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryRunnerActionHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="50" column="83" selection-start="2511" selection-end="2511" vertical-scroll-proportion="-10.0">
+        <state line="69" column="21" selection-start="3280" selection-end="3280" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryPageResults.java">
+    <entry file="file://$PROJECT_DIR$/xcordion/test/org/xcordion/ide/intellij/story/StoryPageResultsTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="64" selection-start="1712" selection-end="1712" vertical-scroll-proportion="0.66226137">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state line="34" column="29" selection-start="1280" selection-end="1280" vertical-scroll-proportion="0.3898305">
+          <folding />
         </state>
       </provider>
     </entry>

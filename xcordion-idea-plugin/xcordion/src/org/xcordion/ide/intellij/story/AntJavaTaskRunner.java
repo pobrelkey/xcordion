@@ -13,9 +13,12 @@ public class AntJavaTaskRunner {
     private Project project;
     private Java javaTask;
 
-    public AntJavaTaskRunner(ModuleAdapter moduleAdapter, String testClassName, String runnerClassName) {
-        project = createProject(testClassName);
-        Target target = createTarget(testClassName, runnerClassName);
+    public AntJavaTaskRunner(ModuleAdapter moduleAdapter, Class testClass) {
+
+        JUnitAdapter jUnitAdapter = new JUnitAdapter(testClass);
+
+        project = createProject(jUnitAdapter.getTestClass().getName());
+        Target target = createTarget(jUnitAdapter.getTestClass().getName(), jUnitAdapter.runnerClass().getName());
         project.addTarget(target);
         project.setDefault(target.getName());
         moduleAdapter.setAttributes(this);

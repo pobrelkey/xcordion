@@ -46,7 +46,7 @@ public class StoryRunnerActionHandler extends EditorActionHandler {
 
     private void runTests() {
         JavaTestRunner testRunner = new JavaTestRunner(parseStoryPageForTestClassNames());
-        List<JunitBuildLogger> results = testRunner.getResults();
+        List<TestResultLogger> results = testRunner.getTestResults();
         new JUnitResultsParser(results).printReport();
         new StoryPageResults(storyPage.getName(), storyPage.getText(), results).save();
     }

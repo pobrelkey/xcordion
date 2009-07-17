@@ -1,7 +1,6 @@
 package org.xcordion.ide.intellij.story;
 
-import com.intellij.openapi.ui.Messages;
-import static com.intellij.openapi.ui.Messages.showMessageDialog;
+import com.intellij.ide.BrowserUtil;
 
 import java.io.*;
 import java.util.List;
@@ -11,13 +10,13 @@ import java.util.regex.Pattern;
 public class StoryPageResults {
     private final String fileName;
     private final String originalStoryPageText;
-    private final List<JunitBuildLogger> results;
+    private final List<TestResultLogger> results;
     private static final String START_PATTERN = "href=\"([../]*([\\w-]+/){2,9}";
     private static final String END_PATTERN = ")\"";
     private static String javaTmpDirectory = System.getProperty("java.io.tmpdir");
     private String finalText;
 
-    public StoryPageResults(String fileName, String originalStoryPageText, List<JunitBuildLogger> results) {
+    public StoryPageResults(String fileName, String originalStoryPageText, List<TestResultLogger> results) {
         this.fileName = fileName;
         this.originalStoryPageText = originalStoryPageText;
         this.results = results;
@@ -29,7 +28,7 @@ public class StoryPageResults {
 
     public void save() {
         finalText = originalStoryPageText;
-        for (JunitBuildLogger result : results) {
+        for (TestResultLogger result : results) {
             Pattern pattern = Pattern.compile(START_PATTERN + getTestHtmlPath(result) + END_PATTERN);
             Matcher matcher = pattern.matcher(finalText);
 
@@ -57,7 +56,8 @@ public class StoryPageResults {
         System.out.println("Test results page:");
         System.out.println(outputFile.getAbsolutePath());
 
-        showMessageDialog("Test results page: " + outputFile.getAbsolutePath(), "Test Results", Messages.getInformationIcon());
+        BrowserUtil.launchBrowser(outputFile.getAbsolutePath());
+//        showMessageDialog("Test results page: " + outputFile.getAbsolutePath(), "Test Results", Messages.getInformationIcon());
     }
 
     public String getFinalText() {
@@ -72,8 +72,8 @@ public class StoryPageResults {
         }
     }
 
-    private String getTestHtmlPath(JunitBuildLogger result) {
-        String fqClassName = result.getTestClass().getName();
+    private String getTestHtmlPath(TestResultLogger result) {
+        String fqClassName = result.getTestName();
         return fqClassName.replaceAll("\\.", "/").substring(0, fqClassName.length() - 4) + ".html";
     }
 }

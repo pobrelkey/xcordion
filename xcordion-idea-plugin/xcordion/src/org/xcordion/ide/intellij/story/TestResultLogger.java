@@ -4,17 +4,18 @@ import org.apache.tools.ant.BuildEvent;
 import org.apache.tools.ant.BuildListener;
 import org.apache.tools.ant.Project;
 
-class JunitBuildLogger implements BuildListener {
+class TestResultLogger implements BuildListener {
     static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
     private final StringBuffer log = new StringBuffer();
     private final StringBuffer allLevelLog = new StringBuffer();
-    private JUnitAdapter jUnitAdapter;
     private String testOutputPath;
     private boolean outputPathLogged = false;
+    private boolean testPassed;
+    private final String testName;
 
-    public JunitBuildLogger(Class testClass) {
-        jUnitAdapter = new JUnitAdapter(testClass);
+    public TestResultLogger(String testName) {
+        this.testName = testName;
     }
 
     public void messageLogged(BuildEvent event) {
@@ -29,15 +30,15 @@ class JunitBuildLogger implements BuildListener {
         allLevelLog.append(eventMessage + LINE_SEPARATOR);
     }
 
-    public Class getTestClass() {
-        return jUnitAdapter.getTestClass();
+    public String getTestSimpleName(){
+        return testName.substring(testName.lastIndexOf("."));
     }
 
-    public String getRunnerClassName() {
-        return jUnitAdapter.runnerClass().getName();
+    public String getTestName() {
+        return testName;
     }
 
-    public String getResults() {
+    public String getOutput() {
         return log.toString();
     }
 
@@ -55,6 +56,7 @@ class JunitBuildLogger implements BuildListener {
     }
 
     public void targetFinished(BuildEvent event) {
+        testPassed = !getOutput().contains("FAILURES!!!");
     }
 
     public void taskStarted(BuildEvent event) {
@@ -62,4 +64,9 @@ class JunitBuildLogger implements BuildListener {
 
     public void taskFinished(BuildEvent event) {
     }
+
+    public String passOrFail() {
+        return testPassed ? "PASS" : "FAIL";
+    }
+
 }

@@ -5,26 +5,19 @@ import java.util.List;
 public class JUnitResultsParser {
     private StringBuffer report;
 
-    public JUnitResultsParser(List<JunitBuildLogger> results) {
+    public JUnitResultsParser(List<TestResultLogger> results) {
         report = new StringBuffer(100);
         report.append("Test Results: ");
 
-        for (JunitBuildLogger result : results) {
-            report.append(JunitBuildLogger.LINE_SEPARATOR);
-            report.append(result.getTestClass().getSimpleName());
+        for (TestResultLogger result : results) {
+            report.append(TestResultLogger.LINE_SEPARATOR);
+            report.append(result.getTestName());
             report.append(": ");
-            report.append(passOrFail(result.getResults()));
-            report.append(JunitBuildLogger.LINE_SEPARATOR);
+            report.append(result.passOrFail());
+            report.append(TestResultLogger.LINE_SEPARATOR);
             report.append(result.getTestOutputPath());
-            report.append(JunitBuildLogger.LINE_SEPARATOR);
+            report.append(TestResultLogger.LINE_SEPARATOR);
         }
-    }
-
-    private String passOrFail(String results) {
-        if (results.contains("FAILURES!!!")) {
-            return "FAIL";
-        }
-        return "PASS";
     }
 
     public void printReport() {

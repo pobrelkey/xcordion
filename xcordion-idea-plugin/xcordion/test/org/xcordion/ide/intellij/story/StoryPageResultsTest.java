@@ -34,7 +34,7 @@ public class StoryPageResultsTest extends TestCase {
     }
 
     public void testSave() {
-        JunitBuildLogger junitBuildLogger = new JunitBuildLogger(getClass());
+        TestResultLogger junitBuildLogger = new TestResultLogger(getClass().getName());
 
         final String eventMessage = "." + StoryPageResults.getJavaTmpDirectory() + "some-new-href";
         final BuildEvent event = mockery.mock(BuildEvent.class);
@@ -45,7 +45,7 @@ public class StoryPageResultsTest extends TestCase {
         }});
 
         junitBuildLogger.messageLogged(event);
-        List<JunitBuildLogger> testResults = Collections.singletonList(junitBuildLogger);
+        List<TestResultLogger> testResults = Collections.singletonList(junitBuildLogger);
         StoryPageResults results = new StoryPageResults("SomeFileName.html", STORY_PAGE, testResults);
 
         results.save();
