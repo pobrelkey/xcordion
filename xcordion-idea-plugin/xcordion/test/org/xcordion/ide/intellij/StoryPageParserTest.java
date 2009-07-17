@@ -63,4 +63,5 @@ public class StoryPageParserTest extends TestCase {
         assertEquals(1, matcher.groupCount());
         assertEquals(FQ_NAME_WITH_DOTS, matcher.group(1));
     }
+
 }

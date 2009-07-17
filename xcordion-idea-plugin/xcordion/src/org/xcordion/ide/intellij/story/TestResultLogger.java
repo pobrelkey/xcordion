@@ -53,7 +53,7 @@ class TestResultLogger implements BuildListener {
     public void buildFinished(BuildEvent event) {
     }
 
-    public void targetStarted(BuildEvent event) {
+    public void targetStarted(BuildEvent event) {        
     }
 
     public void targetFinished(BuildEvent event) {

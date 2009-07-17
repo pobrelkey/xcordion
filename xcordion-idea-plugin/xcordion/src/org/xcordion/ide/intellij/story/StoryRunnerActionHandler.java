@@ -5,6 +5,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
+import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import org.hiro.psi.PsiHelper;
@@ -36,7 +37,16 @@ public class StoryRunnerActionHandler extends EditorActionHandler {
 //        CompilerManager.getInstance(project).make(new CompileStatusNotification() {
 //            public void finished(boolean aborted, int errors, int warnings, CompileContext compileContext) {
 //                if (!aborted && errors == 0) {
+
+
+        Runnable runnable = new Runnable() {
+            public void run() {
                     runTests();
+            }
+        };
+
+        ProgressManager.getInstance().runProcessWithProgressSynchronously(runnable, "Story Runner", true, null);
+
 //                }
 //                CompilerWorkspaceConfiguration.getInstance(project).AUTO_SHOW_ERRORS_IN_EDITOR = autoShowErrorsInEditor;
 //                CompilerWorkspaceConfiguration.getInstance(project).COMPILE_IN_BACKGROUND = compileInBackground;
@@ -45,6 +55,7 @@ public class StoryRunnerActionHandler extends EditorActionHandler {
     }
 
     private void runTests() {
+
         JavaTestRunner testRunner = new JavaTestRunner(parseStoryPageForTestClassNames());
         List<TestResultLogger> results = testRunner.getTestResults();
         new JUnitResultsParser(results).printReport();
@@ -59,7 +70,7 @@ public class StoryRunnerActionHandler extends EditorActionHandler {
             String moduleName = stripModuleName(htmlFileName);
             Module module = getModule(moduleName);
 
-            if(isNetstreamProject()) {
+            if (isNetstreamProject()) {
                 if ("active-documentation".equals(moduleName)) {
                     tests.add(new TestToRun(toFullyQualifiedTestName(htmlFileName, ACTIVE_DOC_FULLY_QUALIFIED_NAME_PATTERN), module));
                 } else {
