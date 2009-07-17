@@ -33,10 +33,20 @@ public class StoryPageResults {
             Matcher matcher = pattern.matcher(finalText);
 
             if (matcher.find()) {
-                this.finalText = matcher.replaceAll("href=\""+result.getTestOutputPath()+"\"");
+                this.finalText = matcher.replaceAll("href=\""+result.getTestOutputPath()+"\" "+ result.outcome().htmlStyle());
             }
         }
 
+        File outputFile = writeFile();
+
+        System.out.println("Test results page:");
+        System.out.println(outputFile.getAbsolutePath());
+
+        BrowserUtil.launchBrowser(outputFile.getAbsolutePath());
+//        showMessageDialog("Test results page: " + outputFile.getAbsolutePath(), "Test Results", Messages.getInformationIcon());
+    }
+
+    private File writeFile() {
         File baseOutputDirectory = new File(getJavaTmpDirectory(), "concordion");
         File outputFile = new File(baseOutputDirectory, fileName);
 
@@ -52,12 +62,7 @@ public class StoryPageResults {
         } finally {
             close(fileOutputStream);
         }
-
-        System.out.println("Test results page:");
-        System.out.println(outputFile.getAbsolutePath());
-
-        BrowserUtil.launchBrowser(outputFile.getAbsolutePath());
-//        showMessageDialog("Test results page: " + outputFile.getAbsolutePath(), "Test Results", Messages.getInformationIcon());
+        return outputFile;
     }
 
     public String getFinalText() {

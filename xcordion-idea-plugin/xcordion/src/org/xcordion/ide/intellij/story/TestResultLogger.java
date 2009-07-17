@@ -13,6 +13,7 @@ class TestResultLogger implements BuildListener {
     private boolean outputPathLogged = false;
     private boolean testPassed;
     private final String testName;
+    private TestOutcome testOutcome;
 
     public TestResultLogger(String testName) {
         this.testName = testName;
@@ -56,7 +57,12 @@ class TestResultLogger implements BuildListener {
     }
 
     public void targetFinished(BuildEvent event) {
-        testPassed = !getOutput().contains("FAILURES!!!");
+        if(getOutput().contains("FAILURES!!!")) {
+            testOutcome = TestOutcome.FAIL;
+        } else {
+            testOutcome = TestOutcome.PASS;
+        }
+
     }
 
     public void taskStarted(BuildEvent event) {
@@ -65,8 +71,34 @@ class TestResultLogger implements BuildListener {
     public void taskFinished(BuildEvent event) {
     }
 
-    public String passOrFail() {
-        return testPassed ? "PASS" : "FAIL";
+    public TestOutcome outcome() {
+        return testOutcome;
     }
 
+    public void testNotFound() {
+        testOutcome = TestOutcome.NOT_FOUND;        
+    }
+
+    public boolean passed() {
+        return testOutcome == TestOutcome.PASS;
+    }
+
+    enum TestOutcome {
+        PASS("PASS", "green"), FAIL("FAIL", "red"), NOT_FOUND("NOT FOUND", "yellow");
+        private final String text;
+        private final String style;
+
+        TestOutcome(String text, String style) {
+            this.text = text;
+            this.style = style;
+        }
+
+        public String text() {
+            return text;
+        }
+
+        public String htmlStyle() {
+            return "style = 'background-color : "+style+"'";
+        }
+    }
 }

@@ -59,13 +59,21 @@ public class StoryRunnerActionHandler extends EditorActionHandler {
             String moduleName = stripModuleName(htmlFileName);
             Module module = getModule(moduleName);
 
-            if ("active-documentation".equals(moduleName)) {
-                tests.add(new TestToRun(toFullyQualifiedTestName(htmlFileName, ACTIVE_DOC_FULLY_QUALIFIED_NAME_PATTERN), module));
+            if(isNetstreamProject()) {
+                if ("active-documentation".equals(moduleName)) {
+                    tests.add(new TestToRun(toFullyQualifiedTestName(htmlFileName, ACTIVE_DOC_FULLY_QUALIFIED_NAME_PATTERN), module));
+                } else {
+                    tests.add(new TestToRun(toFullyQualifiedTestName(htmlFileName, FULLY_QUALIFIED_NAME_PATTERN), module));
+                }
             } else {
-                tests.add(new TestToRun(toFullyQualifiedTestName(htmlFileName, FULLY_QUALIFIED_NAME_PATTERN), module));
+                tests.add(new TestToRun(toFullyQualifiedTestName(htmlFileName, ACTIVE_DOC_FULLY_QUALIFIED_NAME_PATTERN), module));
             }
         }
         return tests;
+    }
+
+    private boolean isNetstreamProject() {
+        return "netstream".equals(psiHelper.getProject().getName());
     }
 
     private String toFullyQualifiedTestName(String htmlFileName, Pattern fullyQualifiedNamePattern) {

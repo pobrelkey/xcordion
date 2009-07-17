@@ -11,16 +11,15 @@ public class JavaTestRunner {
         testResults = new ArrayList<TestResultLogger>();
 
         for (StoryRunnerActionHandler.TestToRun test : tests) {
+            TestResultLogger buildLogger = new TestResultLogger(test.getName());
             try {
                 ModuleAdapter moduleAdapter = new ModuleAdapter(test.getModule());
                 Class testClass = moduleAdapter.load(test.getName());
-                TestResultLogger buildLogger = new TestResultLogger(test.getName());
                 antJavaTask(moduleAdapter, testClass, buildLogger).execute();
-
-                testResults.add(buildLogger);
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                buildLogger.testNotFound();
             }
+            testResults.add(buildLogger);
         }
     }
 

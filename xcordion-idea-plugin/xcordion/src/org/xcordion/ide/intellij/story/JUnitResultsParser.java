@@ -13,7 +13,7 @@ public class JUnitResultsParser {
             report.append(TestResultLogger.LINE_SEPARATOR);
             report.append(result.getTestName());
             report.append(": ");
-            report.append(result.passOrFail());
+            report.append(result.outcome().text());
             report.append(TestResultLogger.LINE_SEPARATOR);
             report.append(result.getTestOutputPath());
             report.append(TestResultLogger.LINE_SEPARATOR);
