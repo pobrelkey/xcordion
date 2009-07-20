@@ -20,16 +20,20 @@ public class JavaTestRunner {
 
         double numberOfTestsRan = 0;
         for (TestToRun test : tests) {
-            TestResultLogger buildLogger = new TestResultLogger(test.getName());
-            indicator.setText2(test.getName());
+            TestResultLogger buildLogger = new TestResultLogger(test.getHtmlName());
+            indicator.setText2(test.getHtmlName());
 
-            try {
-                ModuleAdapter moduleAdapter = new ModuleAdapter(test.getModule());
-                Class testClass = moduleAdapter.load(test.getName());
-                buildLogger.setIsExpectedToPass(isExpectedToPass(testClass));
-                antJavaTask(moduleAdapter, testClass, buildLogger).execute();
-            } catch (ClassNotFoundException e) {
+            if (test.getModule() == null) {
                 buildLogger.testNotFound();
+            } else {
+                try {
+                    ModuleAdapter moduleAdapter = new ModuleAdapter(test.getModule());
+                    Class testClass = moduleAdapter.load(test.getFullyQualifiedClassName());
+                    buildLogger.setIsExpectedToPass(isExpectedToPass(testClass));
+                    antJavaTask(moduleAdapter, testClass, buildLogger).execute();
+                } catch (ClassNotFoundException e) {
+                    buildLogger.testNotFound();
+                }
             }
             
             indicator.setFraction(++numberOfTestsRan / tests.size());

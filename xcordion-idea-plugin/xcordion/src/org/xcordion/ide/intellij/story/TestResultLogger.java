@@ -11,7 +11,6 @@ class TestResultLogger implements BuildListener {
     private final StringBuffer allLevelLog = new StringBuffer();
     private String testOutputPath;
     private boolean outputPathLogged = false;
-    private boolean testPassed;
     private final String testName;
     private TestOutcome testOutcome;
     private boolean isExpectedToPass = true;

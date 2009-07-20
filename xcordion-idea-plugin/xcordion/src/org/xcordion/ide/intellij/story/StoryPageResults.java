@@ -29,13 +29,18 @@ public class StoryPageResults {
         for (TestResultLogger result : results) {
 
 
-            String pattern = "(<a\\s[^>]*\\bhref=\")([../]*(?:[\\w-]+/){2,9}" + Pattern.quote(getTestHtmlPath(result)) + ")(\"[^>]*>.*?</a>)";
+            String pattern = "(<a\\s[^>]*\\bhref=\")(" + Pattern.quote(getTestHtmlPath(result)) + ")(\"[^>]*>.*?</a>)";
             Pattern regex = Pattern.compile(pattern);
             Matcher matcher = regex.matcher(finalText);
 
             StringBuffer buf = new StringBuffer();
             while (matcher.find()) {
-                matcher.appendReplacement(buf, matcher.group(1) + result.getTestOutputPath() + matcher.group(3) + " <span " + result.outcome().htmlStyle() + ">" + result.outcome().text() + "</span>");
+                String path = result.getTestOutputPath();
+                if (result.outcome() == TestResultLogger.TestOutcome.NOT_FOUND) {
+                    // TODO: point to fully-qualified path to original HTML file, if any
+                    path = matcher.group(2);
+                }
+                matcher.appendReplacement(buf, matcher.group(1) + path + matcher.group(3) + " <span " + result.outcome().htmlStyle() + ">" + result.outcome().text() + "</span>");
             }
             matcher.appendTail(buf);
             this.finalText = buf.toString();
@@ -82,7 +87,7 @@ public class StoryPageResults {
     }
 
     private String getTestHtmlPath(TestResultLogger result) {
-        String fqClassName = result.getTestName();
-        return fqClassName.replaceAll("\\.", "/").substring(0, fqClassName.length() - 4) + ".html";
+        return result.getTestName();
+//        return fqClassName.replaceAll("\\.", "/").substring(0, fqClassName.length() - 4) + ".html";
     }
 }
