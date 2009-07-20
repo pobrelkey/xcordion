@@ -14,6 +14,7 @@ class TestResultLogger implements BuildListener {
     private boolean testPassed;
     private final String testName;
     private TestOutcome testOutcome;
+    private boolean isExpectedToPass = true;
 
     public TestResultLogger(String testName) {
         this.testName = testName;
@@ -39,7 +40,7 @@ class TestResultLogger implements BuildListener {
         return testName;
     }
 
-    public String getOutput() {
+    private String getOutput() {
         return log.toString();
     }
 
@@ -58,9 +59,9 @@ class TestResultLogger implements BuildListener {
 
     public void targetFinished(BuildEvent event) {
         if(getOutput().contains("FAILURES!!!")) {
-            testOutcome = TestOutcome.FAIL;
+            testOutcome = isExpectedToPass ? TestOutcome.FAIL : TestOutcome.FAIL_EXPECTEDTOFAIL;
         } else {
-            testOutcome = TestOutcome.PASS;
+            testOutcome = isExpectedToPass ? TestOutcome.PASS : TestOutcome.PASS_EXPECTEDTOFAIL;
         }
 
     }
@@ -83,8 +84,12 @@ class TestResultLogger implements BuildListener {
         return testOutcome == TestOutcome.PASS;
     }
 
+    public void setIsExpectedToPass(boolean expectedToPass) {
+        isExpectedToPass = expectedToPass;
+    }
+
     enum TestOutcome {
-        PASS("PASS", "green"), FAIL("FAIL", "red"), NOT_FOUND("NOT FOUND", "yellow");
+        PASS("PASS", "#9F9"), FAIL("FAIL", "#F99"), NOT_FOUND("NOT FOUND", "#FE9"), FAIL_EXPECTEDTOFAIL("FAIL (expected to fail)", "#FCC"), PASS_EXPECTEDTOFAIL("PASS (expected to fail)", "#CFC");
         private final String text;
         private final String style;
 
@@ -98,7 +103,7 @@ class TestResultLogger implements BuildListener {
         }
 
         public String htmlStyle() {
-            return "style = 'background-color : "+style+"'";
+            return "style=\"background-color: "+style+"; font-weight: bold\"";
         }
     }
 }

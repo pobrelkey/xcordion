@@ -11,8 +11,6 @@ public class StoryPageResults {
     private final String fileName;
     private final String originalStoryPageText;
     private final List<TestResultLogger> results;
-    private static final String START_PATTERN = "href=\"([../]*([\\w-]+/){2,9}";
-    private static final String END_PATTERN = ")\"";
     private static String javaTmpDirectory = System.getProperty("java.io.tmpdir");
     private String finalText;
 
@@ -29,12 +27,18 @@ public class StoryPageResults {
     public void save() {
         finalText = originalStoryPageText;
         for (TestResultLogger result : results) {
-            Pattern pattern = Pattern.compile(START_PATTERN + getTestHtmlPath(result) + END_PATTERN);
-            Matcher matcher = pattern.matcher(finalText);
 
-            if (matcher.find()) {
-                this.finalText = matcher.replaceAll("href=\""+result.getTestOutputPath()+"\" "+ result.outcome().htmlStyle());
+
+            String pattern = "(<a\\s[^>]*\\bhref=\")([../]*(?:[\\w-]+/){2,9}" + Pattern.quote(getTestHtmlPath(result)) + ")(\"[^>]*>.*?</a>)";
+            Pattern regex = Pattern.compile(pattern);
+            Matcher matcher = regex.matcher(finalText);
+
+            StringBuffer buf = new StringBuffer();
+            while (matcher.find()) {
+                matcher.appendReplacement(buf, matcher.group(1) + result.getTestOutputPath() + matcher.group(3) + " <span " + result.outcome().htmlStyle() + ">" + result.outcome().text() + "</span>");
             }
+            matcher.appendTail(buf);
+            this.finalText = buf.toString();
         }
 
         File outputFile = writeFile();
