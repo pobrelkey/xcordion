@@ -1,6 +1,10 @@
 package org.xcordion.ide.intellij.story;
 
+import com.intellij.compiler.CompilerWorkspaceConfiguration;
 import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.compiler.CompileContext;
+import com.intellij.openapi.compiler.CompileStatusNotification;
+import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
 import com.intellij.openapi.module.Module;
@@ -11,7 +15,9 @@ import com.intellij.psi.PsiFile;
 import org.hiro.psi.PsiHelper;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,37 +35,60 @@ public class StoryRunnerActionHandler extends EditorActionHandler {
         make(psiHelper.getProject());
     }
 
-    public void make(final Project project) {
-//        final boolean autoShowErrorsInEditor = CompilerWorkspaceConfiguration.getInstance(project).AUTO_SHOW_ERRORS_IN_EDITOR;
-//        final boolean compileInBackground = CompilerWorkspaceConfiguration.getInstance(project).COMPILE_IN_BACKGROUND;
-//        CompilerWorkspaceConfiguration.getInstance(project).COMPILE_IN_BACKGROUND = true;
-//
-//        CompilerManager.getInstance(project).make(new CompileStatusNotification() {
-//            public void finished(boolean aborted, int errors, int warnings, CompileContext compileContext) {
-//                if (!aborted && errors == 0) {
 
+    public void make(final Project project) {
+        final List<TestToRun> testsToRun = parseStoryPageForTestClassNames();
+        if (!compileModules(testsToRun, project)) {
+            return;
+        }
 
         Runnable runnable = new Runnable() {
             public void run() {
-                    runTests();
+
+                runTests(testsToRun);
             }
         };
 
         ProgressManager.getInstance().runProcessWithProgressSynchronously(runnable, "Story Runner", true, null);
-
-//                }
-//                CompilerWorkspaceConfiguration.getInstance(project).AUTO_SHOW_ERRORS_IN_EDITOR = autoShowErrorsInEditor;
-//                CompilerWorkspaceConfiguration.getInstance(project).COMPILE_IN_BACKGROUND = compileInBackground;
-//            }
-//        });
     }
 
-    private void runTests() {
+    private void runTests(List<TestToRun> testsToRun) {
 
-        JavaTestRunner testRunner = new JavaTestRunner(parseStoryPageForTestClassNames());
+        JavaTestRunner testRunner = new JavaTestRunner(testsToRun);
         List<TestResultLogger> results = testRunner.getTestResults();
         new JUnitResultsParser(results).printReport();
         new StoryPageResults(storyPage.getName(), storyPage.getText(), results).save();
+    }
+
+    private boolean compileModules(List<TestToRun> testsToRun, Project project) {
+        Set<Module> modulesToCompile = new HashSet<Module>();
+
+        final boolean[] success = new boolean[]{true};
+
+        for (TestToRun test : testsToRun) {
+            modulesToCompile.add(test.getModule());
+        }
+
+        final boolean autoShowErrorsInEditor = CompilerWorkspaceConfiguration.getInstance(project).AUTO_SHOW_ERRORS_IN_EDITOR;
+        final boolean compileInBackground = CompilerWorkspaceConfiguration.getInstance(project).COMPILE_IN_BACKGROUND;
+        CompilerWorkspaceConfiguration.getInstance(project).COMPILE_IN_BACKGROUND = true;
+
+        for (Module module : modulesToCompile) {
+            CompilerManager.getInstance(project).make(module, new CompileStatusNotification() {
+                public void finished(boolean aborted, int errors, int warnings, CompileContext compileContext) {
+                    if (aborted || errors > 0) {
+                        success[0] = false;
+                    }
+                }
+            });
+            if (!success[0]) {
+                break;
+            }
+        }
+        CompilerWorkspaceConfiguration.getInstance(project).AUTO_SHOW_ERRORS_IN_EDITOR = autoShowErrorsInEditor;
+        CompilerWorkspaceConfiguration.getInstance(project).COMPILE_IN_BACKGROUND = compileInBackground;
+
+        return success[0];
     }
 
     private List<TestToRun> parseStoryPageForTestClassNames() {
