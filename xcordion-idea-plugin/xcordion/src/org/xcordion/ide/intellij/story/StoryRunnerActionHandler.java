@@ -31,7 +31,6 @@ public class StoryRunnerActionHandler extends EditorActionHandler {
     public static final Pattern ACTIVE_DOC_FULLY_QUALIFIED_NAME_PATTERN = Pattern.compile("[\\w-]+/[\\w-]+/(.*).html");
     public static final Pattern CONCORDION_TEST_FILE_NAMES = Pattern.compile("<a.*?href=\"[../]+(.*.html)\"");
     private PsiFile storyPage;
-    private static final String HACKY_INTELLIJ_DIRECTORY_PREFIX = "../";
 
     public void execute(Editor editor, DataContext dataContext) {
         this.psiHelper = new PsiHelper(dataContext);

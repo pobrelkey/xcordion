@@ -4,13 +4,9 @@
     <option name="CUSTOM_SCOPE_NAME" value="Project Files" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" readonly="true" name="Default" comment="">
+    <list default="true" readonly="true" name="Default" comment="Rob and Priya: re-work compilation to compile just the necessary files.">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryRunnerActionHandler.java" afterPath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryRunnerActionHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/TestToRun.java" afterPath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/TestToRun.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JavaTestRunner.java" afterPath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JavaTestRunner.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/TestResultLogger.java" afterPath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/TestResultLogger.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion-idea-plugin.iws" afterPath="$PROJECT_DIR$/xcordion-idea-plugin.iws" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryPageResults.java" afterPath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryPageResults.java" />
     </list>
     <ignored path=".idea/workspace.xml" />
     <ignored path="xcordion-idea-plugin.iws" />
@@ -86,12 +82,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="StoryRunnerActionHandler.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="StoryRunnerActionHandler.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryRunnerActionHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="92" column="42" selection-start="4419" selection-end="4419" vertical-scroll-proportion="0.0">
+            <state line="64" column="170" selection-start="3051" selection-end="3051" vertical-scroll-proportion="0.84">
               <folding>
-                <marker date="1248105000000" expanded="true" signature="49:1045" placeholder="..." />
+                <marker date="1248106473000" expanded="true" signature="49:1045" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -133,10 +129,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JavaTestRunner.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="JavaTestRunner.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JavaTestRunner.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="45" column="83" selection-start="1765" selection-end="1765" vertical-scroll-proportion="0.6757143">
+            <state line="28" column="31" selection-start="1007" selection-end="1007" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -249,13 +245,13 @@
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth0" value="168" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth4" value="198" />
-    <property name="options.lastSelected" value="org.xcordion.ide.intellij.settings.XcordionProjectComponent" />
+    <property name="options.lastSelected" value="project.propCompiler" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder1" value="1" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder4" value="4" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="RunManagerConfig.showSettingsBeforeRunnig" value="false" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder2" value="2" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth1" value="227" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder3" value="3" />
     <property name="MemberChooser.sorted" value="false" />
@@ -521,7 +517,7 @@
     <option name="PERFORM_CHECKOUT_IN_BACKGROUND" value="true" />
     <option name="PERFORM_ADD_REMOVE_IN_BACKGROUND" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Rob and Priya: got the compile step to execute before running tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="Rob and Priya: re-work compilation to compile just the necessary files." />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="REFORMAT_BEFORE_FILE_COMMIT" value="false" />
@@ -543,6 +539,7 @@
     <MESSAGE value="Rob and Priya: make output result more obvious, and check if test is expected to fail" />
     <MESSAGE value="Rob and Priya: attempt to compile modules before running tests ... however it seems the modules finished compilation after the tests have run" />
     <MESSAGE value="Rob and Priya: got the compile step to execute before running tests" />
+    <MESSAGE value="Rob and Priya: re-work compilation to compile just the necessary files." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -626,15 +623,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryRunnerActionHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="92" column="42" selection-start="4419" selection-end="4419" vertical-scroll-proportion="0.0">
-          <folding>
-            <marker date="1248105000000" expanded="true" signature="49:1045" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/TestToRun.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="15" column="23" selection-start="404" selection-end="404" vertical-scroll-proportion="0.0">
@@ -667,8 +655,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JavaTestRunner.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="83" selection-start="1765" selection-end="1765" vertical-scroll-proportion="0.6757143">
+        <state line="28" column="31" selection-start="1007" selection-end="1007" vertical-scroll-proportion="0.0">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryRunnerActionHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="64" column="170" selection-start="3051" selection-end="3051" vertical-scroll-proportion="0.84">
+          <folding>
+            <marker date="1248106473000" expanded="true" signature="49:1045" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
