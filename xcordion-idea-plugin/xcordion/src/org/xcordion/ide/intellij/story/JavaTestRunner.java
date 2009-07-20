@@ -10,7 +10,7 @@ import java.util.List;
 public class JavaTestRunner {
     private List<TestResultLogger> testResults;
 
-    public JavaTestRunner(List<StoryRunnerActionHandler.TestToRun> tests) {
+    public JavaTestRunner(List<TestToRun> tests) {
 
         testResults = new ArrayList<TestResultLogger>();
         ProgressIndicator indicator = ProgressManager.getInstance().getProgressIndicator();
@@ -19,7 +19,7 @@ public class JavaTestRunner {
         indicator.setText("Running "+ tests.size() +" tests ...");
 
         double numberOfTestsRan = 0;
-        for (StoryRunnerActionHandler.TestToRun test : tests) {
+        for (TestToRun test : tests) {
             TestResultLogger buildLogger = new TestResultLogger(test.getName());
             indicator.setText2(test.getName());
 

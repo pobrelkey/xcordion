@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryRunnerActionHandler.java" afterPath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryRunnerActionHandler.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JavaTestRunner.java" afterPath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JavaTestRunner.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/TestResultLogger.java" afterPath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/TestResultLogger.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/TestToRun.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion-idea-plugin.iws" afterPath="$PROJECT_DIR$/xcordion-idea-plugin.iws" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryPageResults.java" afterPath="$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryPageResults.java" />
     </list>
     <ignored path="xcordion-idea-plugin.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,7 +28,7 @@
   </component>
   <component name="DebuggerManager">
     <line_breakpoints>
-      <breakpoint url="file://$PROJECT_DIR$/xcordion/test/org/xcordion/ide/intellij/story/StoryPageResultsTest.java" line="52" class="org.xcordion.ide.intellij.story.StoryPageResultsTest" package="org.xcordion.ide.intellij.story">
+      <breakpoint url="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JavaTestRunner.java" line="14" class="org.xcordion.ide.intellij.story.JavaTestRunner" package="org.xcordion.ide.intellij.story">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -99,50 +99,31 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="StoryRunnerActionHandler.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="StoryRunnerActionHandler.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryRunnerActionHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="130" column="0" selection-start="5183" selection-end="5183" vertical-scroll-proportion="0.0">
+            <state line="107" column="46" selection-start="4916" selection-end="4916" vertical-scroll-proportion="0.5720339">
               <folding>
-                <marker date="1247845750000" expanded="true" signature="49:579" placeholder="..." />
+                <marker date="1248096810000" expanded="true" signature="49:910" placeholder="..." />
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="StoryPageResults.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="TestToRun.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/TestToRun.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="4" column="13" selection-start="99" selection-end="99" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="StoryPageResults.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryPageResults.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="43" column="153" selection-start="1604" selection-end="1604" vertical-scroll-proportion="0.6779661">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StoryPageParserTest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xcordion/test/org/xcordion/ide/intellij/StoryPageParserTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="63" column="60" selection-start="2910" selection-end="2910" vertical-scroll-proportion="0.0">
-              <folding>
-                <marker date="1247845750000" expanded="false" signature="43:256" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="JUnitAdapter.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JUnitAdapter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="36" selection-start="1308" selection-end="1308" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StoryRunnerAction.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryRunnerAction.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="19" column="45" selection-start="683" selection-end="683" vertical-scroll-proportion="0.0">
+            <state line="42" column="82" selection-start="1565" selection-end="1565" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -151,8 +132,10 @@
       <file leaf-file-name="JavaTestRunner.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JavaTestRunner.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="32" column="83" selection-start="1352" selection-end="1352" vertical-scroll-proportion="0.0">
-              <folding />
+            <state line="14" column="0" selection-start="369" selection-end="369" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -184,15 +167,6 @@
               <folding>
                 <marker date="1248083078000" expanded="false" signature="49:161" placeholder="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BuildEvent.class" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar://$PROJECT_DIR$/lib/ant.jar!/org/apache/tools/ant/BuildEvent.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="13" selection-start="158" selection-end="158" vertical-scroll-proportion="0.0">
-              <folding />
             </state>
           </provider>
         </entry>
@@ -531,7 +505,7 @@
     <option name="PERFORM_CHECKOUT_IN_BACKGROUND" value="true" />
     <option name="PERFORM_ADD_REMOVE_IN_BACKGROUND" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Dan and Priya: added progress bar" />
+    <option name="LAST_COMMIT_MESSAGE" value="Rob and Priya: attempt to compile modules before running tests ... however it seems the modules finished compilation after the tests have run" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="REFORMAT_BEFORE_FILE_COMMIT" value="false" />
@@ -550,6 +524,8 @@
     <MESSAGE value="Dan and Priya and Mike: tidy up test result object" />
     <MESSAGE value="Dan and Priya: added html style for test outcomes" />
     <MESSAGE value="Dan and Priya: added progress bar" />
+    <MESSAGE value="Rob and Priya: make output result more obvious, and check if test is expected to fail" />
+    <MESSAGE value="Rob and Priya: attempt to compile modules before running tests ... however it seems the modules finished compilation after the tests have run" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -563,55 +539,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/idea.jar!/com/intellij/openapi/progress/util/ProgressBar.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="13" selection-start="172" selection-end="172" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Users/dev/trunk/netstream-tools/source-jars/jdk-1.5.6.zip!/javax/swing/text/DefaultEditorKit.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1093" column="17" selection-start="36390" selection-end="36390" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/openapi/editor/actionSystem/EditorAction.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="36" selection-start="201" selection-end="201" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/idea.jar!/com/intellij/compiler/progress/CompilerTask.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="13" selection-start="168" selection-end="168" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/openapi/progress/Task.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="75" column="33" selection-start="3724" selection-end="3724" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/openapi/editor/actionSystem/EditorActionHandler.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="22" selection-start="187" selection-end="187" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JUnitAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="36" selection-start="1308" selection-end="1308" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryRunnerAction.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="19" column="45" selection-start="683" selection-end="683" vertical-scroll-proportion="0.0">
@@ -651,22 +578,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryRunnerActionHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="130" column="0" selection-start="5183" selection-end="5183" vertical-scroll-proportion="0.0">
-          <folding>
-            <marker date="1247845750000" expanded="true" signature="49:579" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JavaTestRunner.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="83" selection-start="1352" selection-end="1352" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/TestResultLogger.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="102" column="79" selection-start="3076" selection-end="3076" vertical-scroll-proportion="0.0">
@@ -676,10 +587,78 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/compiler/CompilerWorkspaceConfiguration.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="189" selection-start="335" selection-end="335" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/compiler/ModuleCompilerUtil.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="19" selection-start="165" selection-end="165" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/lib/idea.jar!/com/intellij/compiler/CompilerManagerImpl.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="114" column="20" selection-start="8096" selection-end="8096" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryPageResults.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="43" column="153" selection-start="1604" selection-end="1604" vertical-scroll-proportion="0.6779661">
+        <state line="42" column="82" selection-start="1565" selection-end="1565" vertical-scroll-proportion="0.0">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/openapi/progress/ProgressManager.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="28" selection-start="1542" selection-end="1542" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/openapi/compiler/CompileStatusNotification.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="17" selection-start="171" selection-end="171" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/TestToRun.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="13" selection-start="99" selection-end="99" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/psi/PsiFile.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="17" selection-start="158" selection-end="158" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/JavaTestRunner.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="0" selection-start="369" selection-end="369" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xcordion/src/org/xcordion/ide/intellij/story/StoryRunnerActionHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="107" column="46" selection-start="4916" selection-end="4916" vertical-scroll-proportion="0.5720339">
+          <folding>
+            <marker date="1248096810000" expanded="true" signature="49:910" placeholder="..." />
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

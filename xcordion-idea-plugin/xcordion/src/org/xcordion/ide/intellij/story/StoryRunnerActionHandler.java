@@ -3,6 +3,7 @@ package org.xcordion.ide.intellij.story;
 import com.intellij.compiler.CompilerWorkspaceConfiguration;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.compiler.CompileContext;
+import com.intellij.openapi.compiler.CompileScope;
 import com.intellij.openapi.compiler.CompileStatusNotification;
 import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.editor.Editor;
@@ -38,57 +39,50 @@ public class StoryRunnerActionHandler extends EditorActionHandler {
 
     public void make(final Project project) {
         final List<TestToRun> testsToRun = parseStoryPageForTestClassNames();
-        if (!compileModules(testsToRun, project)) {
-            return;
-        }
+        compileModulesAndRunTests(testsToRun, project);
+    }
 
+    private void compileModulesAndRunTests(final List<TestToRun> testsToRun, Project project) {
+        Module[] modulesToCompile = modulesToCompile(testsToRun);
+
+        CompilerWorkspaceConfiguration workspaceConfiguration = CompilerWorkspaceConfiguration.getInstance(project);
+        final boolean autoShowErrorsInEditor = workspaceConfiguration.AUTO_SHOW_ERRORS_IN_EDITOR;
+        final boolean compileInBackground = workspaceConfiguration.COMPILE_IN_BACKGROUND;
+        workspaceConfiguration.COMPILE_IN_BACKGROUND = false;
+
+        CompilerManager compilerManager = CompilerManager.getInstance(project);
+        CompileScope compileScope = compilerManager.createModuleGroupCompileScope(project, modulesToCompile, true);
+
+        compilerManager.compile(compileScope, new CompileStatusNotification() {
+            public void finished(boolean aborted, int errors, int warnings, CompileContext compileContext) {
+                if (!aborted && errors == 0) {
+                    runTests(testsToRun);
+                }
+            }
+        }, true);
+
+        workspaceConfiguration.AUTO_SHOW_ERRORS_IN_EDITOR = autoShowErrorsInEditor;
+        workspaceConfiguration.COMPILE_IN_BACKGROUND = compileInBackground;
+    }
+
+    private void runTests(final List<TestToRun> testsToRun) {
         Runnable runnable = new Runnable() {
             public void run() {
-
-                runTests(testsToRun);
+                JavaTestRunner testRunner = new JavaTestRunner(testsToRun);
+                List<TestResultLogger> results = testRunner.getTestResults();
+                new JUnitResultsParser(results).printReport();
+                new StoryPageResults(storyPage.getName(), storyPage.getText(), results).save();
             }
         };
-
         ProgressManager.getInstance().runProcessWithProgressSynchronously(runnable, "Story Runner", true, null);
     }
 
-    private void runTests(List<TestToRun> testsToRun) {
-
-        JavaTestRunner testRunner = new JavaTestRunner(testsToRun);
-        List<TestResultLogger> results = testRunner.getTestResults();
-        new JUnitResultsParser(results).printReport();
-        new StoryPageResults(storyPage.getName(), storyPage.getText(), results).save();
-    }
-
-    private boolean compileModules(List<TestToRun> testsToRun, Project project) {
+    private Module[] modulesToCompile(List<TestToRun> testsToRun) {
         Set<Module> modulesToCompile = new HashSet<Module>();
-
-        final boolean[] success = new boolean[]{true};
-
         for (TestToRun test : testsToRun) {
             modulesToCompile.add(test.getModule());
         }
-
-        final boolean autoShowErrorsInEditor = CompilerWorkspaceConfiguration.getInstance(project).AUTO_SHOW_ERRORS_IN_EDITOR;
-        final boolean compileInBackground = CompilerWorkspaceConfiguration.getInstance(project).COMPILE_IN_BACKGROUND;
-        CompilerWorkspaceConfiguration.getInstance(project).COMPILE_IN_BACKGROUND = true;
-
-        for (Module module : modulesToCompile) {
-            CompilerManager.getInstance(project).make(module, new CompileStatusNotification() {
-                public void finished(boolean aborted, int errors, int warnings, CompileContext compileContext) {
-                    if (aborted || errors > 0) {
-                        success[0] = false;
-                    }
-                }
-            });
-            if (!success[0]) {
-                break;
-            }
-        }
-        CompilerWorkspaceConfiguration.getInstance(project).AUTO_SHOW_ERRORS_IN_EDITOR = autoShowErrorsInEditor;
-        CompilerWorkspaceConfiguration.getInstance(project).COMPILE_IN_BACKGROUND = compileInBackground;
-
-        return success[0];
+        return modulesToCompile.toArray(new Module[modulesToCompile.size()]);
     }
 
     private List<TestToRun> parseStoryPageForTestClassNames() {
@@ -145,23 +139,5 @@ public class StoryRunnerActionHandler extends EditorActionHandler {
             testHtmlNames.add(matcher.group(1));
         }
         return testHtmlNames;
-    }
-
-    public class TestToRun {
-        private String name;
-        private Module module;
-
-        TestToRun(String name, Module module) {
-            this.name = name;
-            this.module = module;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public Module getModule() {
-            return module;
-        }
     }
 }
