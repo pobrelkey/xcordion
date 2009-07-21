@@ -16,12 +16,15 @@ public class JavaTestRunner {
         ProgressIndicator indicator = ProgressManager.getInstance().getProgressIndicator();
         indicator.setIndeterminate(false);
         indicator.setFraction(0);
-        indicator.setText("Running "+ tests.size() +" tests ...");
 
-        double numberOfTestsRan = 0;
+        double numberOfTestsRan = 1;
         for (TestToRun test : tests) {
-            TestResultLogger buildLogger = new TestResultLogger(test.getHtmlName());
+            ProgressManager.getInstance().checkCanceled(); // terminate task if cancel button on progress bar is pressed
+            indicator.setText("Running " + (int) numberOfTestsRan + " of " + tests.size() +" tests ...");
             indicator.setText2(test.getHtmlName());
+            indicator.setFraction(numberOfTestsRan / tests.size());
+
+            TestResultLogger buildLogger = new TestResultLogger(test.getHtmlName());
 
             if (test.getModule() == null) {
                 buildLogger.testNotFound();
@@ -35,8 +38,7 @@ public class JavaTestRunner {
                     buildLogger.testNotFound();
                 }
             }
-            
-            indicator.setFraction(++numberOfTestsRan / tests.size());
+            numberOfTestsRan++;
             testResults.add(buildLogger);
         }
     }

@@ -88,7 +88,7 @@ class TestResultLogger implements BuildListener {
     }
 
     enum TestOutcome {
-        PASS("PASS", "#9F9"), FAIL("FAIL", "#F99"), NOT_FOUND("NOT FOUND", "#FE9"), FAIL_EXPECTEDTOFAIL("FAIL (expected to fail)", "#FCC"), PASS_EXPECTEDTOFAIL("PASS (expected to fail)", "#CFC");
+        PASS("PASS", "#9F9"), FAIL("FAIL", "#F99"), NOT_FOUND("NOT FOUND", "#FF6"), FAIL_EXPECTEDTOFAIL("FAIL (expected to fail)", "#CFC"), PASS_EXPECTEDTOFAIL("PASS (expected to fail)", "#FC6");
         private final String text;
         private final String style;
 
@@ -102,7 +102,9 @@ class TestResultLogger implements BuildListener {
         }
 
         public String htmlStyle() {
-            return "style=\"background-color: "+style+"; font-weight: bold\"";
+            return "style=\"border-style:solid; border-width:1px; " +
+                    "padding:2px 10px; " +
+                    "background-color: "+style+"; font-weight: bold\"";
         }
     }
 }

@@ -10,13 +10,17 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
+import com.intellij.openapi.progress.PerformInBackgroundOption;
+import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
 import org.hiro.psi.PsiHelper;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -42,10 +46,10 @@ public class StoryRunnerActionHandler extends EditorActionHandler {
 
     public void make(final Project project) {
         final List<TestToRun> testsToRun = parseStoryPageForTests(project);
-        compileModulesAndRunTests(testsToRun, project);
+        compileAndRunTests(testsToRun, project);
     }
 
-    private void compileModulesAndRunTests(final List<TestToRun> testsToRun, Project project) {
+    private void compileAndRunTests(final List<TestToRun> testsToRun, final Project project) {
         final boolean autoShowErrorsInEditor = CompilerWorkspaceConfiguration.getInstance(project).AUTO_SHOW_ERRORS_IN_EDITOR;
         final boolean compileInBackground = CompilerWorkspaceConfiguration.getInstance(project).COMPILE_IN_BACKGROUND;
         CompilerWorkspaceConfiguration.getInstance(project).COMPILE_IN_BACKGROUND = false;
@@ -53,7 +57,8 @@ public class StoryRunnerActionHandler extends EditorActionHandler {
         Set<VirtualFile> testFiles = new HashSet<VirtualFile>();
         for (TestToRun testToRun : testsToRun) {
             if (testToRun.hasJavaFile()) {
-                testFiles.add(testToRun.getJavaFile());
+                testFiles.add(testToRun.getHtmlVirtualFile());
+                testFiles.add(testToRun.getJavaVirtualFile());
             }
         }
 
@@ -62,7 +67,7 @@ public class StoryRunnerActionHandler extends EditorActionHandler {
         CompilerManager.getInstance(project).compile(compileScope, new CompileStatusNotification() {
             public void finished(boolean aborted, int errors, int warnings, CompileContext compileContext) {
                 if (!aborted && errors == 0) {
-                    runTests(testsToRun);
+                    runTests(testsToRun, project);
                 }
             }
         }, true);
@@ -71,16 +76,25 @@ public class StoryRunnerActionHandler extends EditorActionHandler {
         CompilerWorkspaceConfiguration.getInstance(project).COMPILE_IN_BACKGROUND = compileInBackground;
     }
 
-    private void runTests(final List<TestToRun> testsToRun) {
-        Runnable runnable = new Runnable() {
-            public void run() {
+    private void runTests(final List<TestToRun> testsToRun, Project project) {
+
+        PerformInBackgroundOption backgroundOption = new PerformInBackgroundOption() {
+            public boolean shouldStartInBackground() {
+                return false;
+            }
+
+            public void processSentToBackground() {}
+        };
+
+        ProgressManager.getInstance().run(new Task.Backgroundable(project, "Story Runner", true, backgroundOption) {
+
+            public void run(@NotNull ProgressIndicator progressIndicator) {
                 JavaTestRunner testRunner = new JavaTestRunner(testsToRun);
                 List<TestResultLogger> results = testRunner.getTestResults();
                 new JUnitResultsParser(results).printReport();
                 new StoryPageResults(storyPage.getName(), storyPage.getText(), results).save();
             }
-        };
-        ProgressManager.getInstance().runProcessWithProgressSynchronously(runnable, "Story Runner", true, null);
+        });
     }
 
     private List<TestToRun> parseStoryPageForTests(Project project) {
@@ -103,6 +117,7 @@ public class StoryRunnerActionHandler extends EditorActionHandler {
                         }
                     }
 
+                    testToRun.setHtmlVirtualFile(testHtmlFile);
                     testToRun.setJavaVirtualFile(testJavaFile);
                     testToRun.setFullyQualifiedClassName(toFullyQualifyJavaClassName(testJavaFile));
                 }

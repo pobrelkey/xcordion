@@ -8,6 +8,7 @@ public class TestToRun {
     private Module module;
     private VirtualFile javaFile;
     private String fullyQualifiedClassName;
+    private VirtualFile htmlVirtualFile;
 
     public TestToRun(String testHtmlName) {
         this.htmlName =  testHtmlName;
@@ -25,7 +26,7 @@ public class TestToRun {
         this.javaFile = testJavaFile;
     }
 
-    public VirtualFile getJavaFile() {
+    public VirtualFile getJavaVirtualFile() {
         return javaFile;
     }
 
@@ -43,5 +44,13 @@ public class TestToRun {
 
     public String getFullyQualifiedClassName() {
         return fullyQualifiedClassName;
+    }
+
+    public VirtualFile getHtmlVirtualFile() {
+        return htmlVirtualFile;
+    }
+
+    public void setHtmlVirtualFile(VirtualFile htmlVirtualFile) {
+        this.htmlVirtualFile = htmlVirtualFile;
     }
 }
