@@ -27,6 +27,7 @@ class TestResultLogger implements BuildListener {
                 outputPathLogged = true;
             }
             log.append(eventMessage + LINE_SEPARATOR);
+            System.out.println(eventMessage);
         }
         allLevelLog.append(eventMessage + LINE_SEPARATOR);
     }

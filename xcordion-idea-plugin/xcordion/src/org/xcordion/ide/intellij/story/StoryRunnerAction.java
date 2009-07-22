@@ -5,13 +5,12 @@ import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.actionSystem.EditorAction;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.impl.source.xml.XmlFileImpl;
 import org.hiro.psi.PsiHelper;
 
 import java.util.regex.Pattern;
 
 public class StoryRunnerAction extends EditorAction {
-    public static final Pattern STYLESHEET_PATTERN = Pattern.compile("<link .*[href=\"].*(story_overview.css\" />)");
+    public static final Pattern STORY_PAGE_STYLESHEET_PATTERN = Pattern.compile("<link .*[href=\"].*(story_overview.css\" />)");
 
     protected StoryRunnerAction() {
         super(new StoryRunnerActionHandler());
@@ -20,17 +19,12 @@ public class StoryRunnerAction extends EditorAction {
     @Override
     public void update(Editor editor, Presentation presentation, DataContext dataContext) {
         PsiHelper psiHelper = new PsiHelper(dataContext);
-
-        boolean enabled = false;
         PsiFile psiFile = psiHelper.getCurrentFile();
-
-        if (psiFile instanceof XmlFileImpl) {
-            String fileContents = psiFile.getText();
-            if (STYLESHEET_PATTERN.matcher(fileContents).find()) {
-                enabled = true;
-            }
+        
+        if(XcordionPsiFileHelper.isStoryPage(psiFile) || XcordionPsiFileHelper.isConcordionHtmlFile(psiFile)) {
+            presentation.setEnabled(true);
+        } else {
+            presentation.setEnabled(false);
         }
-
-        presentation.setEnabled(enabled);
     }
 }

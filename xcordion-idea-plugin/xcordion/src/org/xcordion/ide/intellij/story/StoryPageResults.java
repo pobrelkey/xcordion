@@ -52,7 +52,6 @@ public class StoryPageResults {
         System.out.println(outputFile.getAbsolutePath());
 
         BrowserUtil.launchBrowser(outputFile.getAbsolutePath());
-//        showMessageDialog("Test results page: " + outputFile.getAbsolutePath(), "Test Results", Messages.getInformationIcon());
     }
 
     private File writeFile() {

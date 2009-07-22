@@ -8,44 +8,46 @@ import com.intellij.openapi.compiler.CompileStatusNotification;
 import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.progress.PerformInBackgroundOption;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaFile;
 import org.hiro.psi.PsiHelper;
 import org.jetbrains.annotations.NotNull;
+import static org.xcordion.ide.intellij.story.XcordionPsiFileHelper.isConcordionHtmlFile;
+import static org.xcordion.ide.intellij.story.XcordionPsiFileHelper.isStoryPage;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class StoryRunnerActionHandler extends EditorActionHandler {
     private PsiHelper psiHelper;
-    public static final Pattern FULLY_QUALIFIED_NAME_PATTERN = Pattern.compile("[\\w-]+/[\\w-]+/[\\w-]+/[\\w-]+/(.*).html");
-    public static final Pattern ACTIVE_DOC_FULLY_QUALIFIED_NAME_PATTERN = Pattern.compile("[\\w-]+/[\\w-]+/(.*).html");
-    public static final Pattern CONCORDION_TEST_FILE_NAMES = Pattern.compile("<a.*?href=\"[../]+(.*.html)\"");
-    private PsiFile storyPage;
+    private TestRunnerStrategy strategy;
 
     public void execute(Editor editor, DataContext dataContext) {
         this.psiHelper = new PsiHelper(dataContext);
-        this.storyPage = getStoryPage();
 
+        determineTestRunnerStrategy(psiHelper.getCurrentFile());
         make(psiHelper.getProject());
     }
 
+    private void determineTestRunnerStrategy(PsiFile currentFile) {
+        if(isStoryPage(currentFile)) {
+            strategy = TestRunnerStrategy.RUN_FROM_STORY_PAGE;
+        } else if(isConcordionHtmlFile(currentFile)) {
+            // not quite sure if this is the best way to run a test
+            // since we probably wanna to see stuff on stdout as the test run
+            // ... should something be printed out from TestResultLogger as messageLogged() is called?
+            strategy = TestRunnerStrategy.RUN_FROM_TEST_PAGE;
+        }
+    }
 
-    public void make(final Project project) {
-        final List<TestToRun> testsToRun = parseStoryPageForTests(project);
+    private void make(final Project project) {
+        final List<TestToRun> testsToRun = strategy.getTestsToRun(psiHelper.getCurrentFile(), project, psiHelper);
         compileAndRunTests(testsToRun, project);
     }
 
@@ -67,7 +69,7 @@ public class StoryRunnerActionHandler extends EditorActionHandler {
         CompilerManager.getInstance(project).compile(compileScope, new CompileStatusNotification() {
             public void finished(boolean aborted, int errors, int warnings, CompileContext compileContext) {
                 if (!aborted && errors == 0) {
-                    runTests(testsToRun, project);
+                    runTests(testsToRun, project, psiHelper.getCurrentFile());
                 }
             }
         }, true);
@@ -76,7 +78,7 @@ public class StoryRunnerActionHandler extends EditorActionHandler {
         CompilerWorkspaceConfiguration.getInstance(project).COMPILE_IN_BACKGROUND = compileInBackground;
     }
 
-    private void runTests(final List<TestToRun> testsToRun, Project project) {
+    private void runTests(final List<TestToRun> testsToRun, Project project, final PsiFile currentFile) {
 
         PerformInBackgroundOption backgroundOption = new PerformInBackgroundOption() {
             public boolean shouldStartInBackground() {
@@ -91,60 +93,10 @@ public class StoryRunnerActionHandler extends EditorActionHandler {
             public void run(@NotNull ProgressIndicator progressIndicator) {
                 JavaTestRunner testRunner = new JavaTestRunner(testsToRun);
                 List<TestResultLogger> results = testRunner.getTestResults();
-                new JUnitResultsParser(results).printReport();
-                new StoryPageResults(storyPage.getName(), storyPage.getText(), results).save();
+
+//                new JUnitResultsParser(results).printReport();
+                strategy.processResult(currentFile, results);
             }
         });
-    }
-
-    private List<TestToRun> parseStoryPageForTests(Project project) {
-        List<String> htmlFileNames = getConcordionTestFileNames(storyPage);
-        List<TestToRun> testFiles = new ArrayList<TestToRun>();
-
-        for (String htmlFileName : htmlFileNames) {
-            VirtualFile testHtmlFile = storyPage.getVirtualFile().getParent().findFileByRelativePath(htmlFileName);
-            TestToRun testToRun = new TestToRun(htmlFileName);
-            if (testHtmlFile != null) {
-                VirtualFile testJavaFile = testHtmlFile.getParent().findFileByRelativePath(testHtmlFile.getNameWithoutExtension() + "Test.java");
-
-                if (testJavaFile != null) {
-                    Module[] modules = ModuleManager.getInstance(project).getModules();
-                    for (Module module : modules) {
-                        ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
-                        if (moduleRootManager.getFileIndex().isInSourceContent(testJavaFile)) {
-                            testToRun.setModule(module);
-                            break;
-                        }
-                    }
-
-                    testToRun.setHtmlVirtualFile(testHtmlFile);
-                    testToRun.setJavaVirtualFile(testJavaFile);
-                    testToRun.setFullyQualifiedClassName(toFullyQualifyJavaClassName(testJavaFile));
-                }
-            }
-            testFiles.add(testToRun);
-        }
-
-        return testFiles;
-    }
-
-    private String toFullyQualifyJavaClassName(VirtualFile testJavaFile) {
-        PsiFile psiFile = psiHelper.getPsiManager().findFile(testJavaFile);
-        PsiJavaFile psiJavaFile = (PsiJavaFile) psiFile;
-        return psiJavaFile.getPackageName() + '.' + testJavaFile.getNameWithoutExtension();
-    }
-
-    private PsiFile getStoryPage() {
-        return psiHelper.getCurrentFile();
-    }
-
-    private List<String> getConcordionTestFileNames(PsiFile storyPage) {
-        List<String> testHtmlNames = new ArrayList<String>();
-        Matcher matcher = Pattern.compile("<a.*?href=\"([../]+.*.html)\"").matcher(storyPage.getText());
-
-        while (matcher.find()) {
-            testHtmlNames.add(matcher.group(1));
-        }
-        return testHtmlNames;
     }
 }
