@@ -1,7 +1,7 @@
 package xcordion.lang.java;
 
 import junit.framework.TestCase;
-import org.jdom.Document;
+import org.jdom.JDOMException;
 import xcordion.util.DocumentFactory;
 
 public class JDomTestDocumentTest extends TestCase {
@@ -16,11 +16,13 @@ public class JDomTestDocumentTest extends TestCase {
             "</xml>";
 
     private JDomTestDocument testDoc;
+    private static final String SIMPLE_TEST_DOC = "<xml><z>One</z><z>Two</z><z>Three</z></xml>";
+    private JDomTestDocument simpleTestDoc;
 
     protected void setUp() throws Exception {
         super.setUp();
-        Document doc = DocumentFactory.document(TEST_DOCUMENT);
-        testDoc = new JDomTestDocument(doc);
+        testDoc = new JDomTestDocument(DocumentFactory.document(TEST_DOCUMENT));
+        simpleTestDoc = new JDomTestDocument(DocumentFactory.document(SIMPLE_TEST_DOC));
     }
 
     public void testSimpleHappyPath() throws Exception {
@@ -63,17 +65,76 @@ public class JDomTestDocumentTest extends TestCase {
         JDomTestDocument.JDomTestElement c = testDoc.getRootElement().getChildren().get(2);
         c.getChildren().get(0).setText("(a sometimes food)");
         assertEquals("<c>Cookie <x>(a sometimes food)</x></c>", c.asXml());
-        assertEquals("Cookie (good enough for me)", c.getValue());  // should return original value
+        assertEquals("Cookie (good enough for me)", c.getValue());  // should return *ORIGINAL* value
     }
 
     public void testInsertChildAfter() {
-        // TODO WRITEME
-//        fail("WRITE ME");
+        JDomTestDocument.JDomTestElement b = testDoc.getRootElement().getChildren().get(1);
+        JDomTestDocument.JDomTestElement newElement = testDoc.newElement("new");
+        newElement.setText("this is new");
+        testDoc.getRootElement().insertChildAfter(b, newElement);
+        String testDocXml = testDoc.asXml();
+        assertTrue(testDocXml, testDocXml.contains("</b><new>this is new</new>"));
     }
+
     public void testRemove() {
-        // TODO WRITEME
-//        fail("WRITE ME");
+        JDomTestDocument.JDomTestElement c = testDoc.getRootElement().getChildren().get(2);
+        JDomTestDocument.JDomTestElement x = c.getChildren().get(0);
+        c.remove(x);
+        assertEquals("<c>Cookie </c>", c.asXml());
     }
+
+    // This test will fail if the JDOM-optional jar isn't in the classpath.
+    public void testStartLine() {
+        JDomTestDocument.JDomTestElement a = testDoc.getRootElement().getChildren().get(0);
+        JDomTestDocument.JDomTestElement b = testDoc.getRootElement().getChildren().get(1);
+        JDomTestDocument.JDomTestElement c = testDoc.getRootElement().getChildren().get(2);
+        assertEquals((Integer) 2, a.getStartLine());
+        assertEquals((Integer) 3, b.getStartLine());
+        assertEquals((Integer) 4, c.getStartLine());
+    }
+
+    public void testGetFirstChildNamed() throws JDOMException {
+        assertEquals("One", simpleTestDoc.getRootElement().getFirstChildNamed("z").getValue());
+    }
+
+    public void testPrependChild() {
+        JDomTestDocument.JDomTestElement y = simpleTestDoc.newElement("y");
+        y.setText("hello");
+        simpleTestDoc.getRootElement().prependChild(y);
+        assertEquals("<xml><y>hello</y><z>One</z><z>Two</z><z>Three</z></xml>", simpleTestDoc.getRootElement().asXml());
+    }
+
+    public void testAppendChild() {
+        JDomTestDocument.JDomTestElement y = simpleTestDoc.newElement("y");
+        y.setText("hello");
+        simpleTestDoc.getRootElement().appendChild(y);
+        assertEquals("<xml><z>One</z><z>Two</z><z>Three</z><y>hello</y></xml>", simpleTestDoc.getRootElement().asXml());
+    }
+
+    public void testGetIntAttribute() {
+        assertEquals(42, testDoc.getRootElement().getChildren().get(3).getIntAttribute(FOO_URI, "answer"));
+        assertEquals(1, testDoc.getRootElement().getChildren().get(3).getIntAttribute("answer"));
+    }
+
+
+
     // TODO: any other methods?
+    /*
+    String getAttribute(String name);
+    String getAttribute(String namespaceUri, String name);
+    T setAttribute(String name, String value);
+    T setAttribute(String namespaceUri, String name, String value);
+	String getLocalName();
+    T addChild(String namespaceUri, String name);
+    T addChild(String name);
+	T getParent();
+	T duplicate();
+    List<TestAttribute> getAttributes();
+    T addStyleClass(String styleClass);
+    T appendNonBreakingSpaceIfBlank();
+    T appendText(String text);
+    T moveContentTo(T sibling);
+     */
 
 }

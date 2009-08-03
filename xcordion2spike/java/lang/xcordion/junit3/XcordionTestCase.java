@@ -7,7 +7,7 @@ import java.util.Collections;
 
 import xcordion.lang.java.SimpleXcordionRunner;
 
-public class XcordionTestCase extends TestCase {
+public abstract class XcordionTestCase extends TestCase {
     private static final String PROPERTY_RUN_EXPECTED_TO_FAIL_TESTS = "xcordion.runExpectedToFailTests";
 
 
