@@ -56,7 +56,7 @@ public class AntJavaTaskRunner {
         javaTask.setNewenvironment(true);
         javaTask.setClassname(runnerClassName);
         javaTask.setFailonerror(true);
-        javaTask.createArg().setValue(testClassName);
+        javaTask.createArg().setValue(testClassName);        
         return javaTask;
     }
 
@@ -67,6 +67,10 @@ public class AntJavaTaskRunner {
     
     public void addJvmArgs(String args) {
         javaTask.createJvmarg().setLine(args);
+    }
+
+    public void setRunInMemory(boolean runInMemory) {
+        addJvmArgs("-Drun.in.memory="+ (runInMemory ? "yes" : "no"));
     }
 
     public void setBaseDir(File baseDir) {

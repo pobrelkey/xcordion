@@ -10,7 +10,7 @@ import java.util.List;
 public class JavaTestRunner {
     private List<TestResultLogger> testResults;
 
-    public JavaTestRunner(List<TestToRun> tests) {
+    public JavaTestRunner(List<TestToRun> tests, boolean runInMemory) {
 
         testResults = new ArrayList<TestResultLogger>();
         ProgressIndicator indicator = ProgressManager.getInstance().getProgressIndicator();
@@ -33,7 +33,7 @@ public class JavaTestRunner {
                     ModuleAdapter moduleAdapter = new ModuleAdapter(test.getModule());
                     Class testClass = moduleAdapter.load(test.getFullyQualifiedClassName());
                     buildLogger.setIsExpectedToPass(isExpectedToPass(testClass));
-                    antJavaTask(moduleAdapter, testClass, buildLogger).execute();
+                    antJavaTask(moduleAdapter, testClass, buildLogger, runInMemory).execute();
                 } catch (ClassNotFoundException e) {
                     buildLogger.testNotFound();
                 }
@@ -53,9 +53,10 @@ public class JavaTestRunner {
         }
     }
 
-    private AntJavaTaskRunner antJavaTask(ModuleAdapter moduleAdapter, Class testClass, TestResultLogger buildListener) {
+    private AntJavaTaskRunner antJavaTask(ModuleAdapter moduleAdapter, Class testClass, TestResultLogger buildListener, boolean runInMemory) {
         AntJavaTaskRunner task = new AntJavaTaskRunner(moduleAdapter, testClass);
         task.addBuildListener(buildListener);
+        task.setRunInMemory(runInMemory);
         return task;
     }
 

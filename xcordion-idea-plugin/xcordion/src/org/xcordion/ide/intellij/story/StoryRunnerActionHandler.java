@@ -13,6 +13,7 @@ import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import org.hiro.psi.PsiHelper;
@@ -27,12 +28,19 @@ import java.util.Set;
 public class StoryRunnerActionHandler extends EditorActionHandler {
     private PsiHelper psiHelper;
     private TestRunnerStrategy strategy;
+    private boolean runInMemory;
+    private static final int YES_RESPONSE = 0;
 
     public void execute(Editor editor, DataContext dataContext) {
         this.psiHelper = new PsiHelper(dataContext);
 
+        determineRunningTestsInMemory();
         determineTestRunnerStrategy(psiHelper.getCurrentFile());
         make(psiHelper.getProject());
+    }
+
+    private void determineRunningTestsInMemory() {
+        runInMemory = YES_RESPONSE == Messages.showYesNoDialog("Wanna run test in memory?", "", Messages.getQuestionIcon());
     }
 
     private void determineTestRunnerStrategy(PsiFile currentFile) {
@@ -68,8 +76,8 @@ public class StoryRunnerActionHandler extends EditorActionHandler {
 
         CompilerManager.getInstance(project).compile(compileScope, new CompileStatusNotification() {
             public void finished(boolean aborted, int errors, int warnings, CompileContext compileContext) {
-                if (!aborted && errors == 0) {
-                    runTests(testsToRun, project, psiHelper.getCurrentFile());
+                if (!aborted && errors == YES_RESPONSE) {
+                    runTests(testsToRun, project, psiHelper.getCurrentFile(), runInMemory);
                 }
             }
         }, true);
@@ -78,7 +86,7 @@ public class StoryRunnerActionHandler extends EditorActionHandler {
         CompilerWorkspaceConfiguration.getInstance(project).COMPILE_IN_BACKGROUND = compileInBackground;
     }
 
-    private void runTests(final List<TestToRun> testsToRun, Project project, final PsiFile currentFile) {
+    private void runTests(final List<TestToRun> testsToRun, Project project, final PsiFile currentFile, final boolean runInMemory) {
 
         PerformInBackgroundOption backgroundOption = new PerformInBackgroundOption() {
             public boolean shouldStartInBackground() {
@@ -91,7 +99,7 @@ public class StoryRunnerActionHandler extends EditorActionHandler {
         ProgressManager.getInstance().run(new Task.Backgroundable(project, "Story Runner", true, backgroundOption) {
 
             public void run(@NotNull ProgressIndicator progressIndicator) {
-                JavaTestRunner testRunner = new JavaTestRunner(testsToRun);
+                JavaTestRunner testRunner = new JavaTestRunner(testsToRun, runInMemory);
                 List<TestResultLogger> results = testRunner.getTestResults();
 
 //                new JUnitResultsParser(results).printReport();
