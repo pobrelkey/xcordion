@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
 public class XcordionCompletionContributor extends CompletionContributor {
     private static final String INTELLIJ_IDEA_RULEZZZ = "IntellijIdeaRulezzz ";
     private static final Pattern SUFFIX_PATTERN = Pattern.compile("^(.*)\\b(\\w+)$", Pattern.DOTALL);
-    private static final Pattern IGNORE_ATTRIBUTE_PATTERN = Pattern.compile(".*[:" + IGNORE.getLocalName() + "=\"].*[" + INTELLIJ_IDEA_RULEZZZ + " ]+.*");
+    private static final Pattern IGNORE_ATTRIBUTE_PATTERN = Pattern.compile("\\w+:" + Pattern.quote(IGNORE.getLocalName()) + "=\"(?:^\"|" + Pattern.quote(INTELLIJ_IDEA_RULEZZZ) + ")+");
 
     @Override
     public boolean fillCompletionVariants(final CompletionParameters parameters, final CompletionResultSet result) {
