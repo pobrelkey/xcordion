@@ -35,11 +35,6 @@
                 text="toggle html/java files" description="Toggles between html spec and java test class. If java test class does not exist, generates a java test class for the current html spec.">
             <keyboard-shortcut keymap="$default" first-keystroke="shift alt X"/>
         </action>
-        <action id="story-runner.story-runner" class="org.xcordion.ide.intellij.story.StoryRunnerAction"
-              text="runs all xcordion tests on the current overview page"
-              description="runs all xcordion tests on the current overview page">
-          <keyboard-shortcut keymap="$default" first-keystroke="shift alt R"/>
-      </action>
     </actions>
     <extensions defaultExtensionNs="com.intellij">
         <completion.contributor implementation="org.xcordion.ide.intellij.XcordionCompletionContributor" />
