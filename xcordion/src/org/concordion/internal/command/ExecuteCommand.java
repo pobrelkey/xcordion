@@ -44,12 +44,16 @@ public class ExecuteCommand extends AbstractCommand {
         public void execute(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
             TableSupport tableSupport = new TableSupport(commandCall, documentParser);
             Row[] detailRows = tableSupport.getDetailRows();
+            int rownum = 0;
+            Object oldRowNum = evaluator.getVariable("ROWNUM");
             for (Row detailRow : detailRows) {
                 commandCall.setElement(detailRow.getElement());
                 //tableSupport.copyCommandCallsTo(detailRow);
                 commandCall.setChildren(tableSupport.getCommandCallsFor(detailRow, commandCall.getResource()));
+                evaluator.setVariable("#ROWNUM", rownum++);
                 commandCall.execute(evaluator, resultRecorder);
             }
+            evaluator.setVariable("#ROWNUM", oldRowNum);
         }
         
         

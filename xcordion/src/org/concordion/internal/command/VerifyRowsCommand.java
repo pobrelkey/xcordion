@@ -71,6 +71,7 @@ public class VerifyRowsCommand extends AbstractCommand {
             Row[] detailRows = tableSupport.getDetailRows();
 
             int index = 0;
+            Object oldRowNum = evaluator.getVariable("ROWNUM");
             for (Object loopVar : iterable) {
                 evaluator.setVariable(loopVariableName, loopVar);
                 Row detailRow;
@@ -82,11 +83,13 @@ public class VerifyRowsCommand extends AbstractCommand {
                 }
                 //tableSupport.copyCommandCallsTo(detailRow);
                 commandCall.setChildren(tableSupport.getCommandCallsFor(detailRow, commandCall.getResource()));
+                evaluator.setVariable("#ROWNUM", index);
                 commandCall.getChildren().setUp(evaluator, resultRecorder);
                 commandCall.getChildren().execute(evaluator, resultRecorder);
                 commandCall.getChildren().verify(evaluator, resultRecorder);
                 index++;
             }
+            evaluator.setVariable("#ROWNUM", oldRowNum);
 
             for (; index < detailRows.length; index++) {
                 Row detailRow = detailRows[index];

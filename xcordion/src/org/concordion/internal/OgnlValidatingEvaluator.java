@@ -33,7 +33,7 @@ public class OgnlValidatingEvaluator extends OgnlPermissiveEvaluator {
     private static String PROPERTY_NAME_PATTERN = "[a-z][a-zA-Z0-9_]*";
     private static String STRING_PATTERN = "'[^']+'";
     private static String LHS_VARIABLE_PATTERN = "#" + METHOD_NAME_PATTERN;
-    private static String RHS_VARIABLE_PATTERN = "(" + LHS_VARIABLE_PATTERN + "|#TEXT|#VALUE|#HREF)";
+    private static String RHS_VARIABLE_PATTERN = "(" + LHS_VARIABLE_PATTERN + "|#TEXT|#VALUE|#HREF|#ROWNUM)";
 
     private static void checkForBannedWords(String expression) {
         for (String bannedWord : BANNED_WORDS) {
