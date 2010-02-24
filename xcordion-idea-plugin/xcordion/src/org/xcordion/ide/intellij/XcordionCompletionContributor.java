@@ -1,6 +1,11 @@
 package org.xcordion.ide.intellij;
 
-import com.intellij.codeInsight.completion.*;
+import com.intellij.codeInsight.completion.BasicInsertHandler;
+import com.intellij.codeInsight.completion.CompletionContributor;
+import com.intellij.codeInsight.completion.CompletionParameters;
+import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.completion.CompletionType;
+import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.completion.simple.SimpleLookupItem;
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -11,7 +16,11 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.xml.*;
+import com.intellij.psi.impl.source.html.HtmlFileImpl;
+import com.intellij.psi.xml.XmlAttribute;
+import com.intellij.psi.xml.XmlAttributeValue;
+import com.intellij.psi.xml.XmlTag;
+import com.intellij.psi.xml.XmlToken;
 import com.intellij.util.text.CharArrayUtil;
 import static jedi.functional.Coercions.list;
 import jedi.functional.Filter;
@@ -77,7 +86,7 @@ public class XcordionCompletionContributor extends CompletionContributor {
     }
 
     private boolean xmlFile(PsiFile file) {
-        return file instanceof XmlFile;
+        return file instanceof HtmlFileImpl;
     }
 
     // intended to prevent pre-existing text in the destination OGNL that happens to match our copmpletion test from getting deleted

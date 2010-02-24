@@ -17,7 +17,7 @@
               </ul>
       ]]>
     </description>
-    <version>0.9</version>
+    <version>0.10</version>
     <vendor email="ttennant@gmail.com" url="http://builderplugin.googlecode.com">Tim Tennant, Rob Pelkey, Mike Dunford</vendor>
     <idea-version since-build="8000"/>
     <project-components>
