@@ -1,0 +1,10 @@
+To build the C# stuff you'll need to install NMaven:
+
+	http://nmaven.codeplex.com/
+
+Get the source zip file, unpack and run "mvn install" in the root.
+
+You'll also need a C# compiler, of course. :-)
+
+Note to posterity: the project directory was first created using: 
+	mvn archetype:create -DarchetypeGroupId=org.sonatype.nmaven.csharp -DarchetypeArtifactId=maven-archetype-class-library -DarchetypeVersion=0.17 -DgroupId=org.xcordion -DartifactId=xcordion2-clr
