@@ -4,9 +4,9 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import xcordion.api.EvaluationContext;
 import xcordion.api.IgnoreState;
+import xcordion.api.events.ExceptionThrownEvent;
 import xcordion.api.events.FailedAssertBooleanEvent;
 import xcordion.api.events.SuccessfulAssertBooleanEvent;
-import xcordion.api.events.ExceptionThrownEvent;
 
 public class AssertBooleanCommandTest extends AbstractCommandTest {
 
@@ -40,8 +40,9 @@ public class AssertBooleanCommandTest extends AbstractCommandTest {
 
         command.run(xcordion, emptyElement, evalContext, expression);
 
-        Mockito.verify(evalContext, Mockito.atMost(1)).eval(expression, emptyElement);
-        Mockito.verify(broadcaster, Mockito.atMost(1)).handleEvent(new FailedAssertBooleanEvent(emptyElement, IgnoreState.NORMATIVE, expression, expected, !expected));
+        Mockito.verify(evalContext, Mockito.times(1)).eval(expression, emptyElement);
+        Mockito.verify(broadcaster, Mockito.times(1)).handleEvent(new FailedAssertBooleanEvent(emptyElement, IgnoreState.NORMATIVE, expression, expected, !expected));
+        Mockito.verifyNoMoreInteractions(broadcaster);
     }
 
     private void assertSimpleHappyPath(final boolean expected) {
@@ -54,8 +55,9 @@ public class AssertBooleanCommandTest extends AbstractCommandTest {
 
         command.run(xcordion, emptyElement, evalContext, expression);
 
-        Mockito.verify(evalContext, Mockito.atMost(1)).eval(expression, emptyElement);
-        Mockito.verify(broadcaster, Mockito.atMost(1)).handleEvent(new SuccessfulAssertBooleanEvent(emptyElement, IgnoreState.NORMATIVE, expression, expected));
+        Mockito.verify(evalContext, Mockito.times(1)).eval(expression, emptyElement);
+        Mockito.verify(broadcaster, Mockito.times(1)).handleEvent(new SuccessfulAssertBooleanEvent(emptyElement, IgnoreState.NORMATIVE, expression, expected));
+        Mockito.verifyNoMoreInteractions(broadcaster);
     }
 
     @Test
@@ -69,8 +71,9 @@ public class AssertBooleanCommandTest extends AbstractCommandTest {
 
         command.run(xcordion, emptyElement, evalContext, expression);
 
-        Mockito.verify(evalContext, Mockito.atMost(1)).eval(expression, emptyElement);
-        Mockito.verify(broadcaster, Mockito.atMost(1)).handleEvent(new FailedAssertBooleanEvent(emptyElement, IgnoreState.NORMATIVE, expression, true, 42));
+        Mockito.verify(evalContext, Mockito.times(1)).eval(expression, emptyElement);
+        Mockito.verify(broadcaster, Mockito.times(1)).handleEvent(new FailedAssertBooleanEvent(emptyElement, IgnoreState.NORMATIVE, expression, true, 42));
+        Mockito.verifyNoMoreInteractions(broadcaster);
     }
 
     @Test
@@ -84,8 +87,9 @@ public class AssertBooleanCommandTest extends AbstractCommandTest {
 
         command.run(xcordion, emptyElement, evalContext, expression);
 
-        Mockito.verify(evalContext, Mockito.atMost(1)).eval(expression, emptyElement);
-        Mockito.verify(broadcaster, Mockito.atMost(1)).handleEvent(new FailedAssertBooleanEvent(emptyElement, IgnoreState.NORMATIVE, expression, true, null));
+        Mockito.verify(evalContext, Mockito.times(1)).eval(expression, emptyElement);
+        Mockito.verify(broadcaster, Mockito.times(1)).handleEvent(new FailedAssertBooleanEvent(emptyElement, IgnoreState.NORMATIVE, expression, true, null));
+        Mockito.verifyNoMoreInteractions(broadcaster);
     }
 
     @Test
@@ -100,8 +104,9 @@ public class AssertBooleanCommandTest extends AbstractCommandTest {
 
         command.run(xcordion, emptyElement, evalContext, expression);
 
-        Mockito.verify(evalContext, Mockito.atMost(1)).eval(expression, emptyElement);
-        Mockito.verify(broadcaster, Mockito.atMost(1)).handleEvent(new ExceptionThrownEvent(emptyElement, IgnoreState.NORMATIVE, expression, error));
+        Mockito.verify(evalContext, Mockito.times(1)).eval(expression, emptyElement);
+        Mockito.verify(broadcaster, Mockito.times(1)).handleEvent(new ExceptionThrownEvent(emptyElement, IgnoreState.NORMATIVE, expression, error));
+        Mockito.verifyNoMoreInteractions(broadcaster);
     }
 
 }

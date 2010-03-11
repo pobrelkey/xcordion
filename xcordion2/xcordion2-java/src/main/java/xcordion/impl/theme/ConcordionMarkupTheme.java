@@ -1,9 +1,10 @@
 package xcordion.impl.theme;
 
+import xcordion.api.IgnoreState;
+import xcordion.api.ResourceReference;
+import xcordion.api.TestDocument;
+import xcordion.api.TestElement;
 import xcordion.api.XcordionEventListener;
-import xcordion.api.*;
-import xcordion.api.events.XcordionEvent;
-import xcordion.api.events.InsertTextEvent;
 import xcordion.api.events.BeginEvent;
 import xcordion.api.events.ChangedIgnoreStateEvent;
 import xcordion.api.events.EndEvent;
@@ -11,6 +12,7 @@ import xcordion.api.events.ExceptionThrownEvent;
 import xcordion.api.events.FailedAssertBooleanEvent;
 import xcordion.api.events.FailedAssertContainsEvent;
 import xcordion.api.events.FailedAssertEqualsEvent;
+import xcordion.api.events.InsertTextEvent;
 import xcordion.api.events.MissingRowEvent;
 import xcordion.api.events.SuccessfulAssertBooleanEvent;
 import xcordion.api.events.SuccessfulAssertContainsEvent;
@@ -18,6 +20,7 @@ import xcordion.api.events.SuccessfulAssertEqualsEvent;
 import xcordion.api.events.SuccessfulExecuteEvent;
 import xcordion.api.events.SuccessfulSetEvent;
 import xcordion.api.events.SurplusRowEvent;
+import xcordion.api.events.XcordionEvent;
 import xcordion.util.Coercions;
 
 import java.util.ArrayList;
@@ -29,7 +32,6 @@ public class ConcordionMarkupTheme<T extends TestElement<T>> implements Xcordion
 
     private static final String RESOURCE_TOGGLESCRIPT = "/xcordion/impl/theme/visibility-toggler.js";
     private static final String RESOURCE_STYLESHEET = "/xcordion/impl/theme/embedded.css";
-    private static final String RESOURCE_LOGO = "/xcordion/impl/theme/logo.png";
     
     private int buttonId;
     private ArrayList<ResourceReference<T>> resourceReferences = new ArrayList<ResourceReference<T>>();

@@ -1,7 +1,7 @@
 package xcordion.api.events;
 
-import xcordion.api.TestElement;
 import xcordion.api.IgnoreState;
+import xcordion.api.TestElement;
 
 public abstract class XcordionEvent<T extends TestElement<T>> {
     protected final T element;
@@ -18,5 +18,10 @@ public abstract class XcordionEvent<T extends TestElement<T>> {
 
     public IgnoreState getIgnoreState() {
         return ignoreState;
+    }
+
+    public boolean equals(Object o) {
+        XcordionEvent<T> event = (XcordionEvent<T>) o;
+        return getClass().equals(o.getClass()) && element.equals(event.element) && ignoreState.equals(event.ignoreState);
     }
 }

@@ -1,32 +1,30 @@
 package xcordion.lang.java;
 
-import org.jdom.JDOMException;
+import junit.framework.Assert;
+import junit.framework.AssertionFailedError;
 import org.jdom.Document;
+import org.jdom.JDOMException;
+import xcordion.api.EvaluationContext;
+import xcordion.api.IgnoreState;
+import xcordion.api.ResourceReference;
+import xcordion.api.TestElement;
+import xcordion.impl.DefaultCommandRepository;
+import xcordion.impl.XcordionImpl;
+import xcordion.impl.events.ResultSummariser;
+import xcordion.impl.events.XcordionEventsBroadcaster;
+import xcordion.impl.theme.ConcordionMarkupTheme;
+import xcordion.util.DocumentFactory;
+import xcordion.util.ResourceFinder;
+import xcordion.util.WrappingIterable;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.ArrayList;
-
-import xcordion.impl.events.XcordionEventsBroadcaster;
-import xcordion.impl.events.ResultSummariser;
-import xcordion.impl.theme.ConcordionMarkupTheme;
-import xcordion.impl.XcordionImpl;
-import xcordion.impl.DefaultCommandRepository;
-import xcordion.util.ResourceFinder;
-import xcordion.util.DocumentFactory;
-import xcordion.util.WrappingIterable;
-import xcordion.api.EvaluationContext;
-import xcordion.api.TestElement;
-import xcordion.api.ResourceReference;
-import xcordion.api.IgnoreState;
-import junit.framework.AssertionFailedError;
-import junit.framework.Assert;
+import java.util.List;
 
 public class SimpleXcordionRunner {
     private static final String PROPERTY_OUTPUT_DIR = "xcordion.outputPath";
-    private static final String PROPERTY_VISUAL = "xcordion.visual";
 
     private Object testInstance;
     private String resourceName;

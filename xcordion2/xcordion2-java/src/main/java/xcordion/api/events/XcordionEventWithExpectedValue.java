@@ -1,7 +1,7 @@
 package xcordion.api.events;
 
-import xcordion.api.TestElement;
 import xcordion.api.IgnoreState;
+import xcordion.api.TestElement;
 
 public abstract class XcordionEventWithExpectedValue<T extends TestElement<T>, X> extends XcordionEventWithExpression<T> {
     private final X expected;
@@ -11,5 +11,14 @@ public abstract class XcordionEventWithExpectedValue<T extends TestElement<T>, X
     }
     public X getExpected() {
         return expected;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!super.equals(o)) {
+            return false;
+        }
+        XcordionEventWithExpectedValue<T,X> event = (XcordionEventWithExpectedValue<T,X>) o;
+        return (expected != null ? (event.expected != null && expected.equals(event.expected)) : event.expected == null);
     }
 }

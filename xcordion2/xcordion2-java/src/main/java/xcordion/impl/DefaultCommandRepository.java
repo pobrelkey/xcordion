@@ -1,20 +1,36 @@
 package xcordion.impl;
 
-import xcordion.impl.command.*;
-import xcordion.api.*;
+import xcordion.api.Command;
+import xcordion.api.CommandRepository;
+import xcordion.api.IgnoreState;
+import xcordion.api.ItemAndExpression;
+import xcordion.api.Pragma;
+import xcordion.api.TestAttribute;
+import xcordion.api.TestElement;
+import xcordion.impl.command.AssertBooleanCommand;
+import xcordion.impl.command.AssertContainsCommand;
+import xcordion.impl.command.AssertEqualsCommand;
+import xcordion.impl.command.ExecCommand;
+import xcordion.impl.command.ForEachCommand;
+import xcordion.impl.command.IgnorePragma;
+import xcordion.impl.command.InsertTextCommand;
+import xcordion.impl.command.SetCommand;
+import xcordion.impl.command.TableExecuteCommand;
+import xcordion.impl.command.TableForEachCommand;
 import xcordion.util.Coercions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ArrayList;
 
 public class DefaultCommandRepository implements CommandRepository {
 
     private HashMap<String, HashMap<String, CommandFactory>> commandFactories = new HashMap<String, HashMap<String, CommandFactory>>();
     private HashMap<String, HashMap<String, Pragma>> pragmas = new HashMap<String, HashMap<String, Pragma>>();
 
-    // TODO: no mention of concordion outside of java-impl
     public static final String NAMESPACE_XCORDION           = "urn:xcordion:v1";
+
+    // TODO: no mention of concordion outside of java-impl
     public static final String NAMESPACE_CONCORDION_2007    = "http://www.concordion.org/2007/concordion";
     public static final String NAMESPACE_CONCORDION_OLD     = "http://concordion.org";
     public static final String NAMESPACE_CONCORDION_ANCIENT = "http://concordion.org/namespace/concordion-1.0";
