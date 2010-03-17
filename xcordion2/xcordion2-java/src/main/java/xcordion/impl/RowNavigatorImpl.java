@@ -1,9 +1,9 @@
 package xcordion.impl;
 
-import xcordion.api.TestElement;
-import xcordion.api.RowNavigator;
-import xcordion.api.Pragma;
 import xcordion.api.ItemAndExpression;
+import xcordion.api.Pragma;
+import xcordion.api.RowNavigator;
+import xcordion.api.TestElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ public class RowNavigatorImpl<T extends TestElement<T>> implements RowNavigator<
     private TableNavigator<T> tableNavigator;
     private T rowElement;
     private ArrayList<T> cells;
-    private List<ItemAndExpression<Pragma>> pragmas;
+    private List<ItemAndExpression<Pragma>> pragmas = new ArrayList<ItemAndExpression<Pragma>>();
 
     public RowNavigatorImpl(TableNavigator<T> tableNavigator) {
         this.tableNavigator = tableNavigator;

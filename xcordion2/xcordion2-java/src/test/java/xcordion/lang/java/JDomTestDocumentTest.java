@@ -1,9 +1,7 @@
 package xcordion.lang.java;
 
-import junit.framework.TestCase;
-import junit.framework.Assert;
-import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 import org.jdom.JDOMException;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +16,8 @@ public class JDomTestDocumentTest {
             "\t<b color=\"red\">Ball</b>\n" +
             "\t<c>Cookie <x>(good enough for me)</x></c>\n" +
             "\t<d foo:bar=\"baz\" foo:answer=\"42\">Deoxyribonucleic Acid</d>\n" +
+            "\t<e>  This  text\n"+
+            "\t\tcontains rubbish whitespace!</e>\n" +
             "</xml>";
 
     private JDomTestDocument testDoc;
@@ -36,7 +36,7 @@ public class JDomTestDocumentTest {
 
         assertEquals("xml", rootElement.getLocalName());
 //        assertEquals((Integer) 1, rootElement.getStartLine());
-        assertEquals(4, rootElement.getChildren().size());
+        assertEquals(5, rootElement.getChildren().size());
 
         JDomTestDocument.JDomTestElement a = rootElement.getChildren().get(0);
         assertEquals("a", a.getLocalName());
@@ -65,6 +65,11 @@ public class JDomTestDocumentTest {
 //        assertEquals((Integer) 5, d.getStartLine());
         assertEquals("baz", d.getAttribute(FOO_URI, "bar"));
         assertEquals(42, d.getIntAttribute(FOO_URI, "answer"));
+    }
+
+    @Test
+    public void testWhitespace() throws Exception {
+        assertEquals("This text contains rubbish whitespace!", testDoc.getRootElement().getChildren().get(4).getValue());
     }
 
     @Test

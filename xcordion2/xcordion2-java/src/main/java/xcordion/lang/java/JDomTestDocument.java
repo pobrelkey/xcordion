@@ -1,29 +1,32 @@
 package xcordion.lang.java;
 
+import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.Parent;
-import org.jdom.Attribute;
 import org.jdom.Text;
-import org.jdom.output.XMLOutputter;
 import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
+import xcordion.api.TestAttribute;
 import xcordion.api.TestDocument;
 import xcordion.api.TestElement;
-import xcordion.api.TestAttribute;
 import xcordion.util.XcordionBug;
 
-import java.util.HashMap;
-import java.util.Collections;
-import java.util.ArrayList;
-import java.util.List;
-import java.io.StringWriter;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.Method;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.regex.Pattern;
 
 public class JDomTestDocument implements TestDocument<JDomTestDocument.JDomTestElement> {
+
+    static final private Pattern WHITESPACE = Pattern.compile("[\\s\\r\\n]+", Pattern.MULTILINE);
 
     private static Class LINE_NUMBER_ELEMENT_CLASS;
     private static Method GET_START_LINE_METHOD;
@@ -235,6 +238,9 @@ public class JDomTestDocument implements TestDocument<JDomTestDocument.JDomTestE
         private void populateValue() {
             if (!valuePopulated) {
                 value = element.getValue();
+                if (value != null) {
+                    value = WHITESPACE.matcher(value.trim()).replaceAll(" ");
+                }
                 valuePopulated = true;
                 JDomTestElement parent = getParent();
                 if (parent != null) {
