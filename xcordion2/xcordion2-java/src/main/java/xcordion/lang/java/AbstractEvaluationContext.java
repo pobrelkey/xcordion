@@ -1,8 +1,8 @@
 package xcordion.lang.java;
 
 import xcordion.api.EvaluationContext;
-import xcordion.api.TestElement;
 import xcordion.api.IgnoreState;
+import xcordion.api.TestElement;
 import xcordion.util.Coercions;
 import xcordion.util.WrappingIterable;
 import xcordion.util.XmlUtils;
@@ -80,7 +80,7 @@ public abstract class AbstractEvaluationContext<K extends AbstractEvaluationCont
 
 	public <T extends TestElement<T>> Object set(String expression, T element) {
 		Object value = getValue(element, null);
-		expression = expression.trim();
+		expression = mungeVariableName(expression.trim());
 
 		if (isOnlyVariableName(expression)) {
 			setVariable(expression, value);
