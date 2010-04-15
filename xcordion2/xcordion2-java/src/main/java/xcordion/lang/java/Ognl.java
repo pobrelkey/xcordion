@@ -12,6 +12,7 @@ import xcordion.util.WrappingIterable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.regex.Pattern;
+import xcordion.util.XmlUtils;
 
 public class Ognl implements EvaluationContextFactory<Ognl.OgnlEvaluationContext> {
 
@@ -23,121 +24,17 @@ public class Ognl implements EvaluationContextFactory<Ognl.OgnlEvaluationContext
 		return new OgnlEvaluationContext(rootObject);
 	}
 
-	static public class OgnlEvaluationContext implements EvaluationContext<OgnlEvaluationContext> {
+	static public class OgnlEvaluationContext extends AbstractEvaluationContext<OgnlEvaluationContext> {
 
-        private static final String SPECIALVARIABLE_TEXT = "TEXT";
-        private static final String SPECIALVARIABLE_VALUE = "VALUE";
-        private static final String SPECIALVARIABLE_HREF = "HREF";
-
-		private Object root;
 		private OgnlContext context;
-        private IgnoreState ignoreState;
 
         public OgnlEvaluationContext(Object rootObject) {
 			this(rootObject, new OgnlContext(), IgnoreState.NORMATIVE);
 		}
 
 		private OgnlEvaluationContext(Object rootObject, OgnlContext ognlContext, IgnoreState ignoreState) {
-			this.root = rootObject;
+			super(rootObject, ignoreState);
 			this.context = ognlContext;
-            this.ignoreState = ignoreState;
-		}
-
-		public <T extends TestElement<T>> Object eval(String expression, T element) {
-			Object savedText = null, savedValue = null, savedHref = null;
-            boolean hasText = expression.indexOf(SPECIALVARIABLE_TEXT) != -1,
-                    hasValue = expression.indexOf(SPECIALVARIABLE_VALUE) != -1,
-                    hasHref = expression.indexOf(SPECIALVARIABLE_HREF) != -1;
-            if (hasText) {
-                savedText = getVariable(SPECIALVARIABLE_TEXT);
-                setVariable(SPECIALVARIABLE_TEXT, element.getValue());
-            }
-            if (hasValue) {
-                savedValue = getVariable(SPECIALVARIABLE_VALUE);
-                setVariable(SPECIALVARIABLE_VALUE, getValue(element, null));
-            }
-            if (hasHref) {
-                savedValue = getVariable(SPECIALVARIABLE_HREF);
-                setVariable(SPECIALVARIABLE_HREF, getFirstChildHref(element));
-            }
-
-            try {
-                return ognl.Ognl.getValue(expression, context, root);
-			} catch (OgnlException e) {
-				// TODO
-				throw new RuntimeException(e);
-			} finally {
-                if (hasText) {
-                    setVariable(SPECIALVARIABLE_TEXT, savedText);
-                }
-                if (hasValue) {
-                    setVariable(SPECIALVARIABLE_VALUE, savedValue);
-                }
-                if (hasHref) {
-                    setVariable(SPECIALVARIABLE_HREF, savedHref);
-                }
-            }
-		}
-
-        private <T extends TestElement<T>> String getFirstChildHref(T element) {
-            String href = element.getAttribute("href");
-            if (href != null) {
-                return href;
-            }
-            for (T child : element.getChildren()) {
-                href = getFirstChildHref(child);
-                if (href != null) {
-                    return href;
-                }
-            }
-            return null;
-        }
-
-        public <T extends TestElement<T>> Iterable<OgnlEvaluationContext> iterate(String expression, T element) {
-			String variable, collectionExpression;
-			try {
-				int colon = expression.indexOf(':');
-				variable = expression.substring(0, colon).trim();
-				collectionExpression = expression.substring(colon + 1).trim();
-				if (variable.charAt(0) == '#') {
-					variable = variable.substring(1);
-				}
-			} catch (StringIndexOutOfBoundsException e) {
-				// TODO
-				throw new RuntimeException("malformed iteration expression: " + expression);
-			}
-
-			final Iterable collection = Coercions.toIterable(eval(collectionExpression, element));
-			final String variableName  = variable;
-
-			return new WrappingIterable<Object, OgnlEvaluationContext>(collection) {
-				protected OgnlEvaluationContext wrap(Object base) {
-					OgnlEvaluationContext result = subContext();
-					result.setVariable(variableName, base);
-					return result;
-				}
-			};
-		}
-
-        final static private Pattern FOREIGN_CHARACTERS = Pattern.compile("[^\\w#]");
-
-        public <T extends TestElement<T>> Object set(String expression, T element) {
-            Object value = getValue(element, null);
-			expression = expression.trim();
-
-            if (!FOREIGN_CHARACTERS.matcher(expression).find()) {
-				if (expression.charAt(0) == '#') {
-					expression = expression.substring(1);
-				}
-				context.put(expression, value);
-			} else {
-				eval(expression, element);
-			}
-            return value;
-        }
-
-		public OgnlEvaluationContext subContext() {
-			return new OgnlEvaluationContext(root, new OgnlContext(context), ignoreState);
 		}
 
 		public Object getVariable(String name) {
@@ -148,58 +45,32 @@ public class Ognl implements EvaluationContextFactory<Ognl.OgnlEvaluationContext
 			context.put(name, value);
 		}
 
-        public <T extends TestElement<T>> Object getValue(T element, Class asClass) {
-            Object value = element.getValue();
-            if (value != null && asClass != null && !value.getClass().isAssignableFrom(asClass)) {
-                if (asClass.isAssignableFrom(String.class)) {
-                    return value.toString();
-                }
-                
-                // does target class have a one-arg constructor taking an argument assignable from value?
-                // failing that, does target class have a one-arg constructor taking a String?
-                Constructor bestOneArg = null, stringOneArg = null;
-                for (Constructor c : asClass.getConstructors()) {
-                    Class[] paramClasses = c.getParameterTypes();
-                    if (paramClasses.length != 1) {
-                        continue;
-                    }
-                    if (paramClasses[0].equals(value.getClass())) {
-                        bestOneArg = c;
-                        break;
-                    } else if (paramClasses[0].isAssignableFrom(value.getClass()) &&
-                            (bestOneArg == null || !bestOneArg.getParameterTypes()[0].isAssignableFrom(paramClasses[0]))) {
-                        bestOneArg = c;
-                    } else if (paramClasses[0].isAssignableFrom(String.class)) {
-                        stringOneArg = c;
-                    }
-                }
-                try {
-                    if (bestOneArg != null) {
-                        return bestOneArg.newInstance(value);
-                    } else if (stringOneArg != null) {
-                        return stringOneArg.newInstance(value.toString());
-                    }
-                } catch (InstantiationException e) {
-                    // TODO
-                    throw new RuntimeException(e);
-                } catch (IllegalAccessException e) {
-                    // TODO
-                    throw new RuntimeException(e);
-                } catch (InvocationTargetException e) {
-                    // TODO
-                    throw new RuntimeException(e);
-                }
-            }
-            return element.getValue();
-        }
-
-        public IgnoreState getIgnoreState() {
-            return ignoreState;
-        }
-
         public OgnlEvaluationContext withIgnoreState(IgnoreState ignoreState) {
             return new OgnlEvaluationContext(root, new OgnlContext(context), ignoreState);
         }
-    }
+
+        final static private Pattern VARIABLE_NAME = Pattern.compile("^#?\\w+$");
+
+		protected boolean isOnlyVariableName(String expression) {
+			return VARIABLE_NAME.matcher(expression).matches();
+		}
+
+		protected String mungeVariableName(String variable) {
+			if (variable.charAt(0) == '#') {
+				variable = variable.substring(1);
+			}
+			return variable;
+		}
+
+		protected Object doEval(String expression) {
+			try {
+				return ognl.Ognl.getValue(expression, context, root);
+			} catch (OgnlException e) {
+				// TODO
+				throw new RuntimeException(e);
+			}
+		}
+
+	}
 
 }
