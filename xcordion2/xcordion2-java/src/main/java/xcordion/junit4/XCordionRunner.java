@@ -1,4 +1,4 @@
-package xcordion.test;
+package xcordion.junit4;
 
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;

@@ -1,7 +1,7 @@
 package xcordion.test;
 
-import org.junit.Test;
 import org.junit.runner.RunWith;
+import xcordion.junit4.XCordionRunner;
 
 import java.util.HashMap;
 import java.util.HashSet;
