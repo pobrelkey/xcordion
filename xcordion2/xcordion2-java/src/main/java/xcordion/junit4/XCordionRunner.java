@@ -32,7 +32,7 @@ public class XCordionRunner extends BlockJUnit4ClassRunner {
          }
  	}
 
-    // used to generate a magic Method reference to stand in for running the actual test specification (see MAGIC_METHOD field)
+    // used to generate a magic Method reference as a placeholder for the process of running the HTML test specification
     private Method xcordionSpecification() {
         if (MAGIC_METHOD_REFERENCE == null) {
             try {
