@@ -1,0 +1,39 @@
+<html xmlns:r="urn:xcordion:v1"><head>
+    <title>Simple Happy Path Xcordion Test</title>
+</head><body>
+    <h1>JUnit 4</h1>
+
+    <p>This is a simple test to check that the JUnit 4 test runner works.</p>
+
+    <table r:do="#dummy = new java.lang.Object()">
+        <tr>
+            <th r:set="#song">Song</th>
+            <th r:isTrue="artistDoesSong(#VALUE, #song)">Artist</th>
+        </tr>
+        <tr>
+            <td>My Sharona</td>
+            <td>The Knack</td>
+        </tr>
+        <tr>
+            <td>My Sharona</td>
+            <td>Nirvana</td>
+        </tr>
+        <tr r:ignore="yes">
+            <td>My Sharona</td>
+            <td>Rolf Harris</td>
+        </tr>
+        <tr>
+            <td>Big River</td>
+            <td>Johnny Cash</td>
+        </tr>
+        <tr>
+            <td>Big River</td>
+            <td>Grateful Dead</td>
+        </tr>
+        <tr r:ignore="yes">
+            <td>Big River</td>
+            <td>The Shaggs</td>
+        </tr>
+    </table>
+</body>
+</html>
