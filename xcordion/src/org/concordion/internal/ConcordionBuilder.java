@@ -8,11 +8,13 @@ import org.concordion.internal.util.Check;
 import org.concordion.internal.util.IOUtil;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ConcordionBuilder {
 
-    public static final String NAMESPACE_CONCORDION_2007    = "http://www.concordion.org/2007/concordion";
-    public static final String NAMESPACE_CONCORDION_OLD     = "http://concordion.org";
+    public static final String NAMESPACE_CONCORDION_2007 = "http://www.concordion.org/2007/concordion";
+    public static final String NAMESPACE_CONCORDION_OLD = "http://concordion.org";
     public static final String NAMESPACE_CONCORDION_ANCIENT = "http://concordion.org/namespace/concordion-1.0";
 
     private static final String PROPERTY_OUTPUT_DIR = "concordion.output.dir";
@@ -35,6 +37,7 @@ public class ConcordionBuilder {
     private AssertBooleanCommand assertFalseCommand = new AssertBooleanCommand(false);
     private ThrowableCatchingDecorator throwableCatchingDecorator = new ThrowableCatchingDecorator();
     private SetCommand setCommand = new SetCommand();
+    private final Map<Predicate, Renderer> renderers = new HashMap<Predicate, Renderer>();
 
     {
         baseOutputDir = getBaseOutputDir();
@@ -46,20 +49,21 @@ public class ConcordionBuilder {
         withApprovedCommand(NAMESPACE_CONCORDION_2007, "assertEquals", assertEqualsCommand);
         withApprovedCommand(NAMESPACE_CONCORDION_2007, "verifyRows", verifyRowsCommand);
         withApprovedCommand(NAMESPACE_CONCORDION_2007, "assertFalse", assertFalseCommand);
-        withApprovedCommand(NAMESPACE_CONCORDION_2007, "assertTrue",  assertTrueCommand);
+        withApprovedCommand(NAMESPACE_CONCORDION_2007, "assertTrue", assertTrueCommand);
 
         withApprovedCommand(NAMESPACE_CONCORDION_OLD, "execute", executeCommand);
         withApprovedCommand(NAMESPACE_CONCORDION_OLD, "set", setCommand);
         withApprovedCommand(NAMESPACE_CONCORDION_OLD, "assertEquals", assertEqualsCommand);
 
         withApprovedCommand(NAMESPACE_CONCORDION_OLD, "assertFalse", assertFalseCommand);
-        withApprovedCommand(NAMESPACE_CONCORDION_OLD, "assertTrue",  assertTrueCommand);
-        withApprovedCommand(NAMESPACE_CONCORDION_OLD, "forEach",     verifyRowsCommand);
-        withApprovedCommand(NAMESPACE_CONCORDION_OLD, "insertText",  new InsertTextCommand());
+        withApprovedCommand(NAMESPACE_CONCORDION_OLD, "assertTrue", assertTrueCommand);
+        withApprovedCommand(NAMESPACE_CONCORDION_OLD, "forEach", verifyRowsCommand);
+        withApprovedCommand(NAMESPACE_CONCORDION_OLD, "insertText", new InsertTextCommand());
+        withApprovedCommand(NAMESPACE_CONCORDION_OLD, "render", new RenderCommand(renderers));
 
         withApprovedCommand(NAMESPACE_CONCORDION_ANCIENT, "execute", executeCommand);
-        withApprovedCommand(NAMESPACE_CONCORDION_ANCIENT, "param",   setCommand);
-        withApprovedCommand(NAMESPACE_CONCORDION_ANCIENT, "verify",  assertEqualsCommand);
+        withApprovedCommand(NAMESPACE_CONCORDION_ANCIENT, "param", setCommand);
+        withApprovedCommand(NAMESPACE_CONCORDION_ANCIENT, "verify", assertEqualsCommand);
 
         withCommandDecorator(throwableCatchingDecorator);
         withCommandDecorator(new LocalValueAndHrefDecorator());
@@ -73,6 +77,11 @@ public class ConcordionBuilder {
         documentParser.addDocumentParsingListener(new StylesheetEmbedder(stylesheetContent));
         assertTrueCommand.addAssertBooleanListener(new AssertBooleanResultRenderer());
         assertFalseCommand.addAssertBooleanListener(new AssertBooleanResultRenderer());
+    }
+
+    public ConcordionBuilder withRenderer(Predicate where, Renderer renderer) {
+        renderers.put(where, renderer);
+        return this;
     }
 
     public ConcordionBuilder withSource(Source source) {
@@ -111,7 +120,7 @@ public class ConcordionBuilder {
         Check.notNull(command, "Command is null");
         Check.isFalse(namespaceURI.contains("concordion.org"),
                 "The namespace URI for user-contributed command '" + commandName + "' "
-              + "must not contain 'concordion.org'. Use your own domain name instead.");
+                        + "must not contain 'concordion.org'. Use your own domain name instead.");
         return withApprovedCommand(namespaceURI, commandName, command);
     }
 

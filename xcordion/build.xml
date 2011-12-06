@@ -1,6 +1,6 @@
 <project name="concordion" default="build" basedir=".">
 
-    <property name="version" value="1.2.0-4"/>
+    <property name="version" value="1.3"/>
     <property name="productName" value="xcordion"/>
     <property name="ProductName" value="XCordion"/>
 
@@ -15,12 +15,12 @@
     </path>
 
     <target name="build"
-        description="Builds everything from scratch"
-        depends="compile, run.tests, build.jar, build.srczip"
-    />
+            description="Builds everything from scratch"
+            depends="compile, run.tests, build.jar, build.srczip"
+            />
 
     <target name="clean">
-        <delete dir="${dir.build}" />
+        <delete dir="${dir.build}"/>
         <delete dir="${dir.test.output}"/>
         <delete dir="${dir.concordion.output}"/>
         <delete dir="${dir.classes}"/>
@@ -37,12 +37,12 @@
                failonerror="yes"
                source="1.5"
                target="1.5"
-        />
+                />
 
         <copy todir="${dir.classes}">
-            <fileset dir="src" excludes="**/*.java" />
-            <fileset dir="test" excludes="**/*.java" />
-            <fileset dir="spec" excludes="**/*.java" />
+            <fileset dir="src" excludes="**/*.java"/>
+            <fileset dir="test" excludes="**/*.java"/>
+            <fileset dir="spec" excludes="**/*.java"/>
         </copy>
     </target>
 
@@ -58,7 +58,7 @@
                 <pathelement location="${dir.classes}"/>
             </classpath>
 
-            <formatter type="plain" />
+            <formatter type="plain"/>
 
             <batchtest todir="${dir.test.output}">
                 <fileset dir="test">
@@ -77,8 +77,8 @@
         <mkdir dir="${dir.dist}"/>
 
         <jar destfile="${dir.dist}/${productName}-${version}.jar"
-                basedir="${dir.classes}"
-                compress="false">
+             basedir="${dir.classes}"
+             compress="false">
             <exclude name="spec/**"/>
             <exclude name="test/**"/>
         </jar>
@@ -88,18 +88,18 @@
         <mkdir dir="${dir.dist}"/>
 
         <zip destfile="${dir.dist}/${productName}-${version}-src.zip"
-                basedir="src"
-                compress="false">
+             basedir="src"
+             compress="false">
         </zip>
     </target>
 
     <target name="dist" depends="clean,build">
         <zip destfile="${dir.dist}/${productName}-${version}.zip" compress="true">
-        	<zipfileset prefix="${productName}-${version}" dir=".">
-	            <exclude name="dist/*-src.zip"/>
-	            <exclude name="build/**"/>
-	            <exclude name="bin/**"/>
-        	</zipfileset>
+            <zipfileset prefix="${productName}-${version}" dir=".">
+                <exclude name="dist/*-src.zip"/>
+                <exclude name="build/**"/>
+                <exclude name="bin/**"/>
+            </zipfileset>
         </zip>
     </target>
 
